@@ -1,0 +1,61 @@
+/** Cümle üretecinin malzemesi (prototipten birebir, orijinal içerik). */
+import type { Fiil, Ikili, Ozne } from "./tipler";
+
+export const M_SUBJ: Ozne[] = [
+  { en: "I", tr: "Ben", p: 0 },
+  { en: "You", tr: "Sen", p: 1 },
+  { en: "He", tr: "O (erkek)", p: 2 },
+  { en: "She", tr: "O (kadın)", p: 2 },
+  { en: "We", tr: "Biz", p: 3 },
+  { en: "They", tr: "Onlar", p: 5 },
+  { en: "My friend", tr: "Arkadaşım", p: 2, nz: 1 },
+  { en: "The teacher", tr: "Öğretmen", p: 2, nz: 1 },
+];
+
+export const M_ADJ: Ikili[] = [
+  ["tired", "yorgun"],
+  ["happy", "mutlu"],
+  ["hungry", "aç"],
+  ["thirsty", "susamış"],
+  ["sad", "üzgün"],
+  ["angry", "kızgın", ["mad"]],
+  ["nervous", "gergin"],
+  ["relaxed", "rahat", ["comfortable", "calm"]],
+  ["scared", "korkmuş", ["afraid"]],
+  ["bored", "sıkılmış"],
+  ["sick", "hasta", ["ill"]],
+  ["ready", "hazır"],
+  ["sleepy", "uykulu"],
+  ["worried", "endişeli"],
+  ["excited", "heyecanlı"],
+  ["lonely", "yalnız"],
+  ["fine", "iyi", ["good", "okay", "ok"]],
+  ["at home", "evde"],
+  ["at work", "işte"],
+  ["at school", "okulda"],
+  ["in the office", "ofiste", ["at the office"]],
+  ["in the park", "parkta"],
+];
+
+export const M_VERB: Fiil[] = [
+  { en: "work", en3: "works", past: "worked", stem: "çalış", aor: "çalışır", cs: [["at home", "evde"], ["a lot", "çok"], ["every day", "her gün"], ["at night", "gece"], ["on Monday", "pazartesi"]] },
+  { en: "drink", en3: "drinks", past: "drank", irr: 1, stem: "iç", aor: "içer", cs: [["coffee", "kahve"], ["tea", "çay"], ["water", "su"], ["milk", "süt"]] },
+  { en: "walk", en3: "walks", past: "walked", stem: "yürü", aor: "yürür", cs: [["every day", "her gün"], ["to work", "işe"], ["in the park", "parkta"]] },
+  { en: "sleep", en3: "sleeps", past: "slept", irr: 1, stem: "uyu", aor: "uyur", cs: [["well", "iyi"], ["a lot", "çok"], ["early", "erken"], ["late", "geç"]] },
+  { en: "eat", en3: "eats", past: "ate", irr: 1, stem: "ye", aor: "yer", cs: [["a lot", "çok"], ["bread", "ekmek"], ["fish", "balık"], ["apples", "elma"]] },
+  { en: "go", en3: "goes", past: "went", irr: 1, stem: "git", aor: "gider", cs: [["to work", "işe"], ["home", "eve"], ["to school", "okula"], ["to the park", "parka"]] },
+  { en: "like", en3: "likes", past: "liked", stem: "sev", aor: "sever", cs: [["football", "futbol"], ["tea", "çay"], ["music", "müzik"], ["cats", "kedi"]], noModal: 1 },
+  { en: "sit", en3: "sits", past: "sat", irr: 1, stem: "otur", aor: "oturur", cs: [["a lot", "çok"], ["at home", "evde"]], noModal: 1 },
+  { en: "run", en3: "runs", past: "ran", irr: 1, stem: "koş", aor: "koşar", cs: [["every morning", "her sabah"], ["fast", "hızlı"], ["in the park", "parkta"]] },
+  { en: "exercise", en3: "exercises", past: "exercised", stem: "spor yap", aor: "spor yapar", cs: [["two times a week", "haftada iki kez", ["twice a week"]], ["every day", "her gün"], ["at home", "evde"]] },
+  { en: "read", en3: "reads", past: "read", irr: 1, stem: "oku", aor: "okur", cs: [["books", "kitap"], ["the newspaper", "gazete"], ["every night", "her gece"]] },
+  { en: "watch", en3: "watches", past: "watched", stem: "izle", aor: "izler", cs: [["TV", "televizyon"], ["films", "film", ["movies"]], ["football", "futbol"]] },
+  { en: "speak", en3: "speaks", past: "spoke", irr: 1, stem: "konuş", aor: "konuşur", cs: [["English", "İngilizce"], ["Turkish", "Türkçe"], ["a lot", "çok"]] },
+  { en: "listen", en3: "listens", past: "listened", stem: "dinle", aor: "dinler", cs: [["to music", "müzik"]] },
+  { en: "drive", en3: "drives", past: "drove", irr: 1, stem: "araba kullan", aor: "araba kullanır", cs: [["to work", "işe"], ["fast", "hızlı"], ["every day", "her gün"]] },
+  { en: "play", en3: "plays", past: "played", stem: "oyna", aor: "oynar", cs: [["football", "futbol"], ["tennis", "tenis"], ["games", "oyun"]] },
+  { en: "write", en3: "writes", past: "wrote", irr: 1, stem: "yaz", aor: "yazar", cs: [["emails", "e-posta"], ["a lot", "çok"]] },
+  { en: "swim", en3: "swims", past: "swam", irr: 1, stem: "yüz", aor: "yüzer", cs: [["well", "iyi"], ["in the sea", "denizde"], ["every summer", "her yaz"]] },
+  { en: "cook", en3: "cooks", past: "cooked", stem: "yemek yap", aor: "yemek yapar", cs: [["at home", "evde"], ["every day", "her gün"]] },
+  { en: "study", en3: "studies", past: "studied", stem: "ders çalış", aor: "ders çalışır", cs: [["at night", "gece"], ["every day", "her gün"], ["at home", "evde"]] },
+];

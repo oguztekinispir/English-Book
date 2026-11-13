@@ -1,0 +1,17 @@
+{
+  "name": "@ti/motor",
+  "version": "0.1.0",
+  "description": "Türkçe ek yapısından giden İngilizce cümle motoru: üreteç, Türkçe çekim, parçalama, hata teşhisi",
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "typescript": "^5.9.3",
+    "vitest": "^2.1.9"
+  }
+}
