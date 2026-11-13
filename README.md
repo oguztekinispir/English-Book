@@ -23,18 +23,31 @@ turkce-ingilizce/
 │           ├── turkce.test.ts      Okunabilir örnekler (uyumadık, gideceğim, yiyebilirim…)
 │           ├── prototip.test.ts    Eski defterle birebir uyum (216 örnek)
 │           └── araclar/            Prototiple büyük karşılaştırma araçları
-└── apps/web/               ← (sıradaki adım) Next.js uygulaması
+└── apps/web/               ← Next.js uygulaması (ana sayfa + pratik)
+    ├── app/page.tsx          Ana sayfa: canlı "ek → kelime" gösterisi, 3 adım, cümle yolu
+    ├── app/pratik/           Cümle yolu (19 seviye) + serbest antrenman + kelime ara + ek rehberi
+    └── components/           SoruKarti, Parcalama, KelimeSirasi, Ogretmen, Hero…
 ```
+
+İlerleme şimdilik tarayıcıda (localStorage, `ti:` anahtarları). Supabase 4. haftada gelecek.
 
 Motor **Lengedu içeriği içermiyor**. Hepsi Oğuz + Claude tarafından üretilen orijinal kod ve veri.
 
 ## Komutlar
 
 ```bash
-npm install          # ilk seferde
-npm test             # bütün testler
-npm run typecheck    # tip kontrolü
+npm install                      # ilk seferde (kök klasörde)
+npm test                         # bütün testler
+npm run typecheck                # tip kontrolü
+npm run dev -w @ti/web           # siteyi bilgisayarda aç: http://localhost:3000
+npm run build -w @ti/web         # yayın derlemesi
 ```
+
+## Vercel ayarı
+
+- Import: `oguztekinispir/English-Book`
+- **Root Directory:** `apps/web` (Framework: Next.js, gerisi varsayılan)
+- Domain: `ingilizce.objectflowtech.com` → DNS'e `CNAME ingilizce → cname.vercel-dns.com`
 
 Prototiple büyük karşılaştırma (prototip dosyası gerekir, depoda yok):
 
@@ -66,7 +79,7 @@ trSeg(soru.meta);                                 // [["Sen","kim → You","pers
 | Hafta | İş | Sonuç |
 |---|---|---|
 | 1 ✅ | Motoru prototipten çıkar, TypeScript paketi + testler | Bu depo |
-| 2 | GitHub deposu, Next.js iskeleti, Vercel'e yayın. Cümle motoru + cümle yolu sayfası. Giriş yok, ilerleme tarayıcıda. | **Öğretmene gösterilebilen ilk link** |
+| 2 ✅ | GitHub deposu, Next.js iskeleti, Vercel'e yayın. Cümle motoru + cümle yolu sayfası. Giriş yok, ilerleme tarayıcıda. | **Öğretmene gösterilebilen ilk link** |
 | 3 | Kendi A1 kelime seti (Lengedu'suz) + Günlük tekrar (SRS) + 3 oyun | Temiz sürüm tamam |
 | 4 | Supabase: giriş (e-posta / Google), bulut kayıt, `attempts` tablosu | Telefon + bilgisayar senkron |
 | 5 | Bugün sayfası, seri, yazma günlüğü. Yapay zekâ (Anthropic API, sunucu tarafında, kullanıcı başına kota) | Prototipteki her şey yeni platformda |

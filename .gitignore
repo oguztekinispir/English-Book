@@ -8,3 +8,4 @@ dist/
 # Lengedu içerikli kişisel prototip depoya girmez
 prototip/
 *.html.bak
+*.tsbuildinfo
