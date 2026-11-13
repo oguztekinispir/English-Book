@@ -80,6 +80,8 @@ trSeg(soru.meta);                                 // [["Sen","kim → You","pers
 |---|---|---|
 | 1 ✅ | Motoru prototipten çıkar, TypeScript paketi + testler | Bu depo |
 | 2 ✅ | GitHub deposu, Next.js iskeleti, Vercel'e yayın. Cümle motoru + cümle yolu sayfası. Giriş yok, ilerleme tarayıcıda. | **Öğretmene gösterilebilen ilk link** |
+
+> Plan genişledi: öğretmen + öğrenci platformu. Güncel plan için `docs/PLAN.md`.
 | 3 | Kendi A1 kelime seti (Lengedu'suz) + Günlük tekrar (SRS) + 3 oyun | Temiz sürüm tamam |
 | 4 | Supabase: giriş (e-posta / Google), bulut kayıt, `attempts` tablosu | Telefon + bilgisayar senkron |
 | 5 | Bugün sayfası, seri, yazma günlüğü. Yapay zekâ (Anthropic API, sunucu tarafında, kullanıcı başına kota) | Prototipteki her şey yeni platformda |
