@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { EKI_BUL, EKI_BUL_SIKLARI, type Kart } from "@ti/icerik";
+import { ekiBulHavuzu, UNITELER, type EkiBulSorusu, type Kart } from "@ti/icerik";
 import { useKalici } from "@/lib/depo";
 import { konus, sesVar } from "@/lib/ses";
 import { cevapKaydet } from "@/lib/kayit";
@@ -43,7 +43,7 @@ export function Oyunlar() {
       ) : (
         <HenuzDersYok ne="Eşleştirme ve dinle-bul oyunları" />
       )}
-      <EkiBul />
+      <EkiBul acilan={acilan} />
     </>
   );
 }
@@ -295,21 +295,25 @@ function DinleBul({ kelimeler, rekorAnahtar }: { kelimeler: Kart[]; rekorAnahtar
 
 /* ---------- Eki bul ---------- */
 
-const TUR = 10;
 
-function EkiBul() {
-  const [rekor, setRekor] = useKalici<number | null>("rekor-eki-bul", null);
-  const [deste, setDeste] = useState<typeof EKI_BUL | null>(null);
+function EkiBul({ acilan }: { acilan: string[] }) {
+  const enUst = Math.max(0, ...UNITELER.filter((u) => u.dersler.some((d) => acilan.includes(d.kod))).map((u) => u.sira));
+  const [hepsi, setHepsi] = useKalici("eki-bul-hepsi", false);
+  const havuz = ekiBulHavuzu(hepsi || enUst === 0 ? 14 : enUst);
+  const siklar = [...new Set(havuz.map((x) => x.a))];
+  const TUR = Math.min(10, havuz.length);
+  const [rekor, setRekor] = useKalici<number | null>(`rekor-eki-bul-${hepsi ? "hepsi" : enUst}`, null);
+  const [deste, setDeste] = useState<EkiBulSorusu[] | null>(null);
   const [i, setI] = useState(0);
   const [puan, setPuan] = useState(0);
   const [secim, setSecim] = useState<string | null>(null);
   const [son, setSon] = useState<number | null>(null);
   const s = deste?.[i];
-  const secenekler = useMemo(() => (s ? karistir([s.a, ...karistir(EKI_BUL_SIKLARI.filter((x) => x !== s.a)).slice(0, 3)]) : []), [s]);
+  const secenekler = useMemo(() => (s ? karistir([s.a, ...karistir(siklar.filter((x) => x !== s.a)).slice(0, 3)]) : []), [s]); // eslint-disable-line react-hooks/exhaustive-deps
   const kayit = useRef(0);
 
   const basla = () => {
-    setDeste(karistir(EKI_BUL).slice(0, TUR));
+    setDeste(karistir(havuz).slice(0, TUR));
     setI(0);
     setPuan(0);
     setSecim(null);
@@ -349,7 +353,15 @@ function EkiBul() {
   return (
     <section className="calisma-blok yaprak" aria-labelledby="eb-baslik">
       <h2 id="eb-baslik">Eki bul</h2>
-      <p className="not">Türkçede ek olan şey İngilizcede ayrı bir kelimedir. İşaretli kelime Türkçede hangi ekin yerini tutuyor? {TUR} soru, A1&apos;in bütün ekleri.</p>
+      <p className="not">
+        Türkçede ek olan şey İngilizcede ayrı bir kelimedir. İşaretli kelime Türkçede hangi ekin yerini tutuyor? {TUR} soru,{" "}
+        {hepsi || enUst === 0 ? "A1'in bütün ekleri (henüz görmediklerin de var)." : `Ünite ${enUst}'e kadar öğrendiğin ekler.`}
+      </p>
+      {enUst > 0 && enUst < 14 && !deste && (
+        <label className="alan yatay">
+          <input type="checkbox" checked={hepsi} onChange={(e) => setHepsi(e.target.checked)} /> Henüz görmediğim ekleri de sor
+        </label>
+      )}
       {!deste || !s ? (
         <>
           {son !== null && (

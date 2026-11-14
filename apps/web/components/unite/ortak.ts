@@ -5,6 +5,7 @@ import { useKalici } from "@/lib/depo";
 /** Ünite ilerlemesi (tarayıcıda; giriş yapılmışsa cevaplar ayrıca buluta gider) */
 export interface UniteIlerleme {
   kart?: number; // kart modunda bilinen kelime sayısı (en iyi)
+  bilinen?: number; // "biliyorum" denen kelime sayısı
   bosluk?: number;
   siralama?: number;
   eslestirme?: boolean;

@@ -133,3 +133,33 @@ export async function buluttanBirlestir(): Promise<boolean> {
     return false;
   }
 }
+
+/* ---------- "Biliyorum" işaretleri ---------- */
+
+/** Öğrencinin "biliyorum" dediği kartlar (kart anahtarları) */
+export const bilinenler = (): string[] => oku<string[]>("bilinen", []);
+
+/**
+ * "Biliyorum" ya da "Geri al".
+ * Biliyorum: kart tekrar sırasına 2 gün sonrası için girer (gerçekten biliyor mu, kart sorunca anlaşılır).
+ * Geri al: kart bugün yeniden çalışılacaklara döner.
+ */
+export function biliyorumDe(anahtar: string, evet: boolean) {
+  const b = new Set(bilinenler());
+  if (evet) b.add(anahtar);
+  else b.delete(anahtar);
+  yaz("bilinen", [...b]);
+  const s = durumOku(),
+    T = bugunN();
+  if (evet && (!s[anahtar] || s[anahtar].b < 2)) s[anahtar] = { b: 2, d: T + ARALIK[2] };
+  else if (!evet) s[anahtar] = { b: 0, d: T };
+  else return;
+  durumYaz(s);
+  bulutaYaz(anahtar, s[anahtar]);
+}
+
+export type KartDurumu = "yeni" | "ogreniliyor" | "ogrenildi";
+export function kartDurumu(x: { b: number; d: number } | undefined): KartDurumu {
+  if (!x) return "yeni";
+  return x.b >= 3 ? "ogrenildi" : "ogreniliyor";
+}

@@ -119,3 +119,30 @@
 .konu-no { font-family: var(--f-baslik); font-weight: 800; color: var(--kobalt); }
 .konu-ad { font-weight: 600; }
 .konu-ic { padding: 0 16px 16px; display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
+
+/* Kelimelerim */
+.durum-cubuk { display: flex; height: 12px; border-radius: 999px; overflow: hidden; background: #eef1f9; }
+.durum-cubuk i { display: block; height: 100%; }
+.durum-cubuk .ogrenildi { background: var(--tamam); }
+.durum-cubuk .ogreniliyor { background: var(--ek); }
+.durum-cubuk .yeni { background: #dde3f3; }
+.durum-suzgec { display: flex; flex-wrap: wrap; gap: 6px; }
+.ds { font: inherit; font-size: 14px; font-weight: 600; background: var(--yuzey); color: var(--murekkep); border: 1.5px solid var(--cizgi); border-radius: 999px; padding: 5px 12px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+.ds b { font-variant-numeric: tabular-nums; }
+.ds[aria-pressed="true"] { background: var(--murekkep); color: #fff; border-color: var(--murekkep); }
+.ds-ogrenildi::before, .ds-ogreniliyor::before, .ds-yeni::before { content: ""; width: 9px; height: 9px; border-radius: 999px; }
+.ds-ogrenildi::before { background: var(--tamam); }
+.ds-ogreniliyor::before { background: var(--ek); }
+.ds-yeni::before { background: #c3cbe2; }
+.kl-ders h3 { font-size: 16px; margin: 4px 0 6px; }
+.kl-liste { list-style: none; margin: 0; padding: 0; border: 1.5px solid var(--cizgi); border-radius: 14px; overflow: hidden; }
+.kl-liste li { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.4fr) auto 6.5em; gap: 4px 12px; align-items: baseline; padding: 8px 12px; border-bottom: 1px solid var(--cizgi); font-size: 15px; }
+.kl-liste li:last-child { border-bottom: none; }
+.kl-liste b { font-family: var(--f-baslik); }
+.kl-tr { color: var(--soluk); }
+.kl-durum { font-size: 12.5px; font-weight: 700; border-radius: 999px; padding: 1px 9px; white-space: nowrap; }
+.kl-durum.yeni { background: #eef1f9; color: var(--soluk); }
+.kl-durum.ogreniliyor { background: var(--ek-yumusak); color: var(--ek-koyu); }
+.kl-durum.ogrenildi { background: var(--tamam-acik); color: #0b5e3c; }
+.kl-sonra { font-size: 12.5px; color: var(--soluk); text-align: right; }
+@media (max-width: 560px) { .kl-liste li { grid-template-columns: minmax(0, 1fr) auto; } .kl-tr { grid-column: 1; } .kl-sonra { grid-column: 2; } }

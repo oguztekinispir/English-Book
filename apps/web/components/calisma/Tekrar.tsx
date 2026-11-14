@@ -4,7 +4,8 @@ import type { Kart } from "@ti/icerik";
 import { useKalici } from "@/lib/depo";
 import { konus, sesVar, soyle, sustur, trSesVar } from "@/lib/ses";
 import { cevapKaydet } from "@/lib/kayit";
-import { buluttanBirlestir, havuz, istatistik, notla, oturumKartlari, TEKRAR_OTURUM, YENI_OTURUM, type Suzgec } from "@/lib/tekrar";
+import { bugunN, buluttanBirlestir, havuz, istatistik, kartDurumu, notla, oturumKartlari, TEKRAR_OTURUM, YENI_OTURUM, type Durum, type KartDurumu, type Suzgec } from "@/lib/tekrar";
+import { dersBul } from "@ti/icerik";
 import { SesDugmesi } from "@/components/Kucukler";
 import { HenuzDersYok, UniteSecimi, useAcilanlar } from "./ortak";
 
@@ -24,6 +25,7 @@ export function Tekrar() {
   return (
     <>
       <HatirlaKartlari acilan={acilan} />
+      <Kelimelerim acilan={acilan} />
       <Dinleme acilan={acilan} />
     </>
   );
@@ -308,6 +310,102 @@ function Dinleme({ acilan }: { acilan: string[] }) {
           <p className="not">{liste.length} öğe hazır. Başlat&apos;a bas, telefonu bırak, dinle ve sesli tekrar et.</p>
         )}
       </div>
+    </section>
+  );
+}
+
+/* ---------- 3. Kelimelerim: hangi kartı öğrendim? ---------- */
+
+const DURUM_AD: Record<KartDurumu, string> = { yeni: "Yeni", ogreniliyor: "Öğreniliyor", ogrenildi: "Öğrenildi" };
+type Suz = "hepsi" | KartDurumu | "biliyorum";
+
+function sonrakiMetin(d: number, T: number) {
+  const f = d - T;
+  if (f <= 0) return "bugün";
+  if (f === 1) return "yarın";
+  return `${f} gün sonra`;
+}
+
+function Kelimelerim({ acilan }: { acilan: string[] }) {
+  const [srs] = useKalici<Durum>("srs", {});
+  const [bilinen] = useKalici<string[]>("bilinen", []);
+  const [suz, setSuz] = useState<Suz>("hepsi");
+  const [acik, setAcik] = useState(false);
+  const T = bugunN();
+  const b = new Set(bilinen);
+  const kartlar = havuz({ unite: "all", tur: "all" }).map((k) => ({ k, x: srs[k.anahtar], durum: kartDurumu(srs[k.anahtar]), biliyorum: b.has(k.anahtar) }));
+  const say = (f: Suz) => kartlar.filter((r) => f === "hepsi" || (f === "biliyorum" ? r.biliyorum : r.durum === f)).length;
+  const gorunen = kartlar.filter((r) => suz === "hepsi" || (suz === "biliyorum" ? r.biliyorum : r.durum === suz));
+  const dersler = [...new Set(gorunen.map((r) => r.k.dersKod))];
+  const n = { yeni: say("yeni"), ogreniliyor: say("ogreniliyor"), ogrenildi: say("ogrenildi") };
+  const top = kartlar.length || 1;
+
+  return (
+    <section className="calisma-blok yaprak" aria-labelledby="kl-baslik">
+      <h2 id="kl-baslik">Kelimelerim</h2>
+      <p className="not">
+        Açtığın derslerdeki bütün kelime ve kalıplar. Bir kart, tekrar kartlarında üst üste bilindikçe ilerler; 7 gün arayla da bilince <b>öğrenildi</b> sayılır.
+      </p>
+      <div className="durum-cubuk" aria-hidden="true">
+        <i className="ogrenildi" style={{ width: `${(n.ogrenildi / top) * 100}%` }} />
+        <i className="ogreniliyor" style={{ width: `${(n.ogreniliyor / top) * 100}%` }} />
+        <i className="yeni" style={{ width: `${(n.yeni / top) * 100}%` }} />
+      </div>
+      <div className="durum-suzgec" role="group" aria-label="Kelimeleri süz">
+        {(["hepsi", "ogrenildi", "ogreniliyor", "yeni", "biliyorum"] as Suz[]).map((f) => (
+          <button
+            key={f}
+            type="button"
+            aria-pressed={suz === f}
+            className={`ds ds-${f}`}
+            onClick={() => {
+              setSuz(f);
+              setAcik(true);
+            }}
+          >
+            {f === "hepsi" ? "Hepsi" : f === "biliyorum" ? "Biliyorum dediklerim" : DURUM_AD[f]} <b>{say(f)}</b>
+          </button>
+        ))}
+      </div>
+      {acik ? (
+        <>
+          {dersler.map((dk) => {
+            const bul = dersBul(dk);
+            return (
+              <div key={dk} className="kl-ders">
+                <h3>
+                  {bul ? `Ders ${bul.u.sira}.${bul.d.no}: ${bul.d.baslik}` : dk}
+                </h3>
+                <ul className="kl-liste">
+                  {gorunen
+                    .filter((r) => r.k.dersKod === dk)
+                    .map((r) => (
+                      <li key={r.k.anahtar}>
+                        <b lang="en">{r.k.en}</b>
+                        <span className="kl-tr">{r.k.tr}</span>
+                        <span className={`kl-durum ${r.durum}`}>
+                          {DURUM_AD[r.durum]}
+                          {r.biliyorum && " ✓"}
+                        </span>
+                        <span className="kl-sonra">{r.x ? sonrakiMetin(r.x.d, T) : ""}</span>
+                      </li>
+                    ))}
+                </ul>
+              </div>
+            );
+          })}
+          {!gorunen.length && <p className="not">Bu grupta kelime yok.</p>}
+          <button type="button" className="dugme sade kucuk" onClick={() => setAcik(false)}>
+            Listeyi kapat
+          </button>
+        </>
+      ) : (
+        <div className="dugmeler">
+          <button type="button" className="dugme" onClick={() => setAcik(true)}>
+            Listeyi aç ({kartlar.length})
+          </button>
+        </div>
+      )}
     </section>
   );
 }

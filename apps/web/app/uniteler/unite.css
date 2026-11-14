@@ -222,3 +222,21 @@ li.kotu .bosluk.dolu { background: var(--tamam-acik); border-color: var(--tamam)
 .di-durum.tamam { color: var(--tamam); }
 @media (max-width: 560px) { .ders-karti { grid-template-columns: auto 1fr; } .di-durum { grid-column: 2; } }
 .ders-gecis { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; border-top: 1.5px solid var(--cizgi); padding-top: 18px; }
+
+/* Biliyorum */
+.kelime-arac { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+.kelime-arac .dugmeler { margin: 0; }
+.kelime-sayac { margin: 0; font-size: 15px; }
+.kelime-sayac b { font-family: var(--f-baslik); font-size: 20px; color: var(--kobalt); }
+.kelime-sayac small { color: var(--soluk); }
+.kelime-karti { transition: opacity 0.2s, background 0.2s; }
+.kelime-karti.biliyor { opacity: 0.55; background: var(--kagit); }
+.kelime-karti.biliyor:hover, .kelime-karti.biliyor:focus-within { opacity: 0.85; }
+.kk-acik { display: flex; flex-direction: column; gap: 4px; animation: belir 0.2s ease-out; }
+.kk-ac { align-self: stretch; text-align: left; font: inherit; font-size: 15px; color: var(--soluk); background: repeating-linear-gradient(-45deg, #f6f8fd, #f6f8fd 6px, #fff 6px, #fff 12px); border: 1.5px dashed var(--cizgi); border-radius: 10px; padding: 8px 10px; cursor: pointer; }
+.kk-ac:hover { border-color: var(--kobalt); color: var(--kobalt); }
+.kk-bil { margin-top: auto; align-self: flex-start; font: inherit; font-size: 14px; font-weight: 700; color: var(--tamam); background: none; border: 1.5px solid #b5ead2; border-radius: 999px; padding: 4px 12px; cursor: pointer; }
+.kk-bil:hover { background: var(--tamam-acik); }
+.kk-bil.geri { color: var(--soluk); border-color: var(--cizgi); }
+.kelime-karti { min-height: 150px; }
+@media (prefers-reduced-motion: reduce) { .kk-acik { animation: none; } }

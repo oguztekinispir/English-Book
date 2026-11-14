@@ -25,7 +25,10 @@ export function dersBolumleri(d: Ders): Bolum[] {
 export function bolumBitti(id: string, p: UniteIlerleme, d: Ders): boolean {
   switch (id) {
     case "kelimeler":
-      return (p.kart ?? 0) >= Math.min(10, d.kelimeGruplari[0]?.kelimeler.length ?? 0);
+      return (
+        (p.kart ?? 0) >= Math.min(10, d.kelimeGruplari[0]?.kelimeler.length ?? 0) ||
+        (p.bilinen ?? 0) >= Math.ceil(d.kelimeGruplari.reduce((t, g) => t + g.kelimeler.length, 0) * 0.8)
+      );
     case "okuma":
       return !!d.okuma && (p.okuma ?? 0) >= d.okuma.sorular.length - 1;
     case "alistirmalar":

@@ -1,7 +1,8 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
 import type { Ders, Kelime, Unite } from "@ti/icerik";
-import { bilemedi } from "@/lib/tekrar";
+import { bilemedi, biliyorumDe } from "@/lib/tekrar";
+import { useKalici } from "@/lib/depo";
 import { konus } from "@/lib/ses";
 import { cevapKaydet } from "@/lib/kayit";
 import { SesDugmesi } from "../Kucukler";
@@ -10,13 +11,43 @@ import { karistir, useIlerleme } from "./ortak";
 export function Kelimeler({ u, d }: { u: Unite; d: Ders }) {
   const [grup, setGrup] = useState(0);
   const [kartModu, setKartModu] = useState(false);
+  const [bilinen, setBilinen] = useKalici<string[]>("bilinen", []);
+  const [trAcik, setTrAcik] = useKalici<boolean>("kelime-tr-acik", false);
+  const [acilan, setAcilan] = useState<Set<string>>(new Set());
+  const [sira, setSira] = useState<Kelime[] | null>(null);
+  const [, setIlerleme] = useIlerleme(d.kod);
   const g = d.kelimeGruplari[grup];
+  const liste = sira ?? g.kelimeler;
+  const anahtar = (k: Kelime) => `${u.kod}:${k.en}`;
+  const bilinenSet = new Set(bilinen);
+  const tumu = d.kelimeGruplari.flatMap((x) => x.kelimeler);
+  const grupBilinen = g.kelimeler.filter((k) => bilinenSet.has(anahtar(k))).length;
+  const dersBilinen = tumu.filter((k) => bilinenSet.has(anahtar(k))).length;
+
+  const isaretle = (k: Kelime) => {
+    const a = anahtar(k);
+    const evet = !bilinenSet.has(a);
+    biliyorumDe(a, evet);
+    const yeni = evet ? [...bilinen, a] : bilinen.filter((x) => x !== a);
+    setBilinen(yeni);
+    setIlerleme((p) => ({ ...p, bilinen: tumu.filter((x) => yeni.includes(anahtar(x))).length }));
+  };
+  const ac = (en: string) => setAcilan((s) => new Set(s).add(en));
 
   return (
     <div className="kelimeler">
       <div className="grup-sekme" role="tablist" aria-label="Kelime grupları">
         {d.kelimeGruplari.map((x, i) => (
-          <button key={x.ad} role="tab" aria-selected={grup === i} onClick={() => setGrup(i)}>
+          <button
+            key={x.ad}
+            role="tab"
+            aria-selected={grup === i}
+            onClick={() => {
+              setGrup(i);
+              setSira(null);
+              setAcilan(new Set());
+            }}
+          >
             {x.ad} <small>{x.kelimeler.length}</small>
           </button>
         ))}
@@ -27,14 +58,47 @@ export function Kelimeler({ u, d }: { u: Unite; d: Ders }) {
       ) : (
         <>
           <div className="kelime-ust">
-            <p className="not">Kelimeye ya da hoparlöre dokununca sesini duyarsın. Okunuş Türkçe harflerle yazıldı; th sesini kelimenin notunda anlattık.</p>
+            <p className="not">
+              {trAcik ? "Kelimeye dokununca sesini duyarsın." : "Önce kendin tahmin et, sonra karta dokun: Türkçesi açılsın."} Bildiğin kelimeye <b>Biliyorum</b> de; kart soluklaşır ve 2 gün sonra
+              tekrar kartında sorulur.
+            </p>
             <button type="button" className="dugme ana" onClick={() => setKartModu(true)}>
               Kendini dene: {g.ad.toLocaleLowerCase("tr")}
             </button>
           </div>
+          <div className="kelime-arac">
+            <p className="kelime-sayac" aria-live="polite">
+              <b>
+                {grupBilinen} / {g.kelimeler.length}
+              </b>{" "}
+              biliyorum
+              {d.kelimeGruplari.length > 1 && (
+                <small>
+                  {" "}
+                  (bu derste {dersBilinen} / {tumu.length})
+                </small>
+              )}
+            </p>
+            <div className="dugmeler">
+              <button type="button" className="dugme kucuk" onClick={() => setSira(karistir(g.kelimeler))}>
+                Karıştır
+              </button>
+              <button
+                type="button"
+                className="dugme kucuk"
+                aria-pressed={trAcik}
+                onClick={() => {
+                  setTrAcik(!trAcik);
+                  setAcilan(new Set());
+                }}
+              >
+                {trAcik ? "Türkçeleri gizle" : "Türkçeleri göster"}
+              </button>
+            </div>
+          </div>
           <ul className="kelime-izgara">
-            {g.kelimeler.map((k) => (
-              <KelimeKarti key={k.en} k={k} />
+            {liste.map((k) => (
+              <KelimeKarti key={k.en} k={k} trGorunur={trAcik || acilan.has(k.en)} ac={() => ac(k.en)} biliyor={bilinenSet.has(anahtar(k))} isaretle={() => isaretle(k)} />
             ))}
           </ul>
         </>
@@ -43,9 +107,9 @@ export function Kelimeler({ u, d }: { u: Unite; d: Ders }) {
   );
 }
 
-function KelimeKarti({ k }: { k: Kelime }) {
+function KelimeKarti({ k, trGorunur, ac, biliyor, isaretle }: { k: Kelime; trGorunur: boolean; ac: () => void; biliyor: boolean; isaretle: () => void }) {
   return (
-    <li className="kelime-karti">
+    <li className={`kelime-karti${biliyor ? " biliyor" : ""}`}>
       <button type="button" className="kk-ust" onClick={() => konus(k.en)} aria-label={`${k.en}, dinle`}>
         <b lang="en">{k.en}</b>
         <span className="kk-ok">{k.ok}</span>
@@ -56,15 +120,26 @@ function KelimeKarti({ k }: { k: Kelime }) {
           </svg>
         </span>
       </button>
-      <p className="kk-tr">{k.tr}</p>
-      {k.ornek && (
-        <p className="kk-ornek">
-          <span lang="en">{k.ornek[0]}</span>
-          <SesDugmesi metin={k.ornek[0]} />
-          <small>{k.ornek[1]}</small>
-        </p>
+      {trGorunur ? (
+        <div className="kk-acik">
+          <p className="kk-tr">{k.tr}</p>
+          {k.ornek && (
+            <p className="kk-ornek">
+              <span lang="en">{k.ornek[0]}</span>
+              <SesDugmesi metin={k.ornek[0]} />
+              <small>{k.ornek[1]}</small>
+            </p>
+          )}
+          {k.ipucu && <p className="kk-ipucu">{k.ipucu}</p>}
+        </div>
+      ) : (
+        <button type="button" className="kk-ac" onClick={ac}>
+          Türkçesi?
+        </button>
       )}
-      {k.ipucu && <p className="kk-ipucu">{k.ipucu}</p>}
+      <button type="button" className={`kk-bil${biliyor ? " geri" : ""}`} aria-pressed={biliyor} onClick={isaretle}>
+        {biliyor ? "↺ Geri al" : "✓ Biliyorum"}
+      </button>
     </li>
   );
 }
