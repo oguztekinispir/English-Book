@@ -27,7 +27,7 @@ export function Kelimeler({ u, d }: { u: Unite; d: Ders }) {
       ) : (
         <>
           <div className="kelime-ust">
-            <p className="not">Karta dokununca sesi duyarsın. Okunuş Türkçe harflerle yazıldı; th sesini kelimenin notunda anlattık.</p>
+            <p className="not">Kelimeye ya da hoparlöre dokununca sesini duyarsın. Okunuş Türkçe harflerle yazıldı; th sesini kelimenin notunda anlattık.</p>
             <button type="button" className="dugme ana" onClick={() => setKartModu(true)}>
               Kendini dene: {g.ad.toLocaleLowerCase("tr")}
             </button>
@@ -49,6 +49,12 @@ function KelimeKarti({ k }: { k: Kelime }) {
       <button type="button" className="kk-ust" onClick={() => konus(k.en)} aria-label={`${k.en}, dinle`}>
         <b lang="en">{k.en}</b>
         <span className="kk-ok">{k.ok}</span>
+        <span className="kk-ses" aria-hidden="true">
+          <svg viewBox="0 0 16 16" fill="currentColor">
+            <path d="M2 6h2.5L8 3v10L4.5 10H2z" />
+            <path d="M10.5 5.2a3.8 3.8 0 0 1 0 5.6M12.4 3.4a6.3 6.3 0 0 1 0 9.2" stroke="currentColor" strokeWidth="1.4" fill="none" strokeLinecap="round" />
+          </svg>
+        </span>
       </button>
       <p className="kk-tr">{k.tr}</p>
       {k.ornek && (

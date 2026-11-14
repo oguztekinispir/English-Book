@@ -62,7 +62,11 @@
 .kelime-ust .not { max-width: 56ch; }
 .kelime-izgara { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); }
 .kelime-karti { background: var(--yuzey); border: 1.5px solid var(--cizgi); border-radius: 16px; padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 4px; }
-.kk-ust { display: flex; flex-direction: column; align-items: flex-start; border: none; background: none; padding: 0; text-align: left; cursor: pointer; }
+.kk-ust { position: relative; display: flex; flex-direction: column; align-items: flex-start; border: none; background: none; padding: 0 40px 0 0; text-align: left; cursor: pointer; color: inherit; font: inherit; }
+.kk-ses { position: absolute; top: 0; right: 0; width: 32px; height: 32px; border-radius: 999px; background: var(--kobalt-acik); color: var(--kobalt); display: grid; place-items: center; transition: background 0.15s, color 0.15s; }
+.kk-ses svg { width: 17px; height: 17px; }
+.kk-ust:hover .kk-ses, .kk-ust:focus-visible .kk-ses { background: var(--kobalt); color: #fff; }
+.kk-ust:focus-visible { outline: 3px solid var(--kobalt-acik); outline-offset: 4px; border-radius: 8px; }
 .kk-ust b { font-family: var(--f-baslik); font-size: 23px; font-weight: 800; line-height: 1.15; }
 .kk-ust:hover b { color: var(--kobalt); }
 .kk-ok { font-size: 13.5px; color: var(--kobalt-koyu); font-weight: 600; }
