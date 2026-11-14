@@ -2,6 +2,7 @@ import Link from "next/link";
 import { CAMP_L, M_SUBJ, M_VERB, aorTR, diagnose, isaretParcala, type Soru } from "@ti/motor";
 import { Ust } from "@/components/Ust";
 import { Hero } from "@/components/Hero";
+import { oturum } from "@/lib/supabase/sunucu";
 import "./ana.css";
 
 // "Nasıl çalışır" örneği: gerçek motor çıktısı (sunucuda hesaplanır)
@@ -30,7 +31,9 @@ function Vurgulu({ metin }: { metin: string }) {
   );
 }
 
-export default function Ana() {
+export default async function Ana() {
+  const { user } = await oturum().catch(() => ({ user: null }));
+  const basla = user ? { href: "/uniteler", ad: "Derslere devam et" } : { href: "/kayit", ad: "Ücretsiz kayıt ol" };
   return (
     <div className="sayfa">
       <Ust aktif="ana" />
@@ -43,8 +46,8 @@ export default function Ana() {
               ekleriyle anlatır.
             </p>
             <div className="cta">
-              <Link href="/pratik" className="dugme ana buyuk">
-                Pratiğe başla
+              <Link href={basla.href} className="dugme ana buyuk">
+                {basla.ad}
               </Link>
               <a href="#nasil" className="dugme buyuk">
                 Nasıl çalıştığını gör
@@ -126,13 +129,13 @@ export default function Ana() {
               </div>
             ))}
           </div>
-          <Link href="/pratik" className="dugme ana buyuk">
-            Yola başla
+          <Link href={basla.href} className="dugme ana buyuk">
+            {basla.ad}
           </Link>
         </section>
 
         <footer className="alt">
-          <p>Motor kurallarla çalışır, yapay zekâ gerekmez. İnternet olmadan da çalışır. Şimdilik ilerlemen bu tarayıcıda saklanır, hesap açman gerekmez.</p>
+          <p>Motor kurallarla çalışır, yapay zekâ gerekmez. İnternet olmadan da çalışır. İlerlemen hesabına kaydedilir; öğretmenin varsa o da görür.</p>
           <p className="not">Deneme sürümü, 2026.</p>
         </footer>
       </main>

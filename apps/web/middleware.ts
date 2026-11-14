@@ -2,7 +2,8 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { SUPABASE_KEY, SUPABASE_URL } from "./lib/supabase/config";
 
-const KORUMALI = ["/panel", "/ogrenci", "/ogretmen", "/hesap"];
+/** Giriş yapmadan açılmayan sayfalar. Açık olanlar: ana sayfa, giriş, kayıt, şifre, KVKK. */
+const KORUMALI = ["/panel", "/ogrenci", "/ogretmen", "/hesap", "/uniteler", "/tekrar", "/oyun", "/gramer", "/pratik"];
 
 export async function middleware(req: NextRequest) {
   // Sadece geliştirmede, sahte verili önizleme (bkz. lib/supabase/onizleme.ts)

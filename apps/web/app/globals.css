@@ -159,3 +159,5 @@ mark { background: var(--ek); color: var(--murekkep); padding: 0 0.2em; border-r
   .ust nav { order: 2; width: 100%; overflow-x: auto; scrollbar-width: none; margin: 0 -4px; padding: 2px 4px; }
   .ust nav::-webkit-scrollbar { display: none; }
 }
+.ust nav a.ust-kayit { background: var(--kobalt); color: #fff; }
+.ust nav a.ust-kayit:hover, .ust nav a.ust-kayit[aria-current="page"] { background: var(--kobalt-koyu); color: #fff; }

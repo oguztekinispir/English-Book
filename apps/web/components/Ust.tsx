@@ -19,6 +19,8 @@ export async function Ust({ aktif }: { aktif: Aktif }) {
             Nasıl çalışır
           </Link>
         )}
+        {user && (
+          <>
         <Link href="/uniteler" aria-current={aktif === "uniteler" ? "page" : undefined}>
           Üniteler
         </Link>
@@ -34,6 +36,8 @@ export async function Ust({ aktif }: { aktif: Aktif }) {
         <Link href="/pratik" aria-current={aktif === "pratik" ? "page" : undefined}>
           Pratik
         </Link>
+          </>
+        )}
         {user ? (
           <>
             <Link href="/panel" aria-current={aktif === "panel" ? "page" : undefined}>
@@ -44,9 +48,14 @@ export async function Ust({ aktif }: { aktif: Aktif }) {
             </Link>
           </>
         ) : (
-          <Link href="/giris" aria-current={aktif === "giris" || aktif === "kayit" ? "page" : undefined}>
-            Giriş yap
-          </Link>
+          <>
+            <Link href="/giris" aria-current={aktif === "giris" ? "page" : undefined}>
+              Giriş yap
+            </Link>
+            <Link href="/kayit" aria-current={aktif === "kayit" ? "page" : undefined} className="ust-kayit">
+              Ücretsiz kayıt ol
+            </Link>
+          </>
         )}
       </nav>
     </header>
