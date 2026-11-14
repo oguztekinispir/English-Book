@@ -33,7 +33,12 @@ export default async function OgrenciPaneli() {
   const gunler = new Set(cevaplar.map((c) => (c.zaman as string).slice(0, 10))).size;
   const yol = (durum.data?.yol_en_ust as number | undefined) ?? 0;
   const zorlar = (zayif.data || []).filter((z) => (z.hata as number) > 0);
-  const kucuk = profil?.dogum_yili && new Date().getFullYear() - profil.dogum_yili < 18;
+  const kucuk = (() => {
+    if (!profil?.dogum_tarihi) return false;
+    const d = new Date(profil.dogum_tarihi);
+    const on8 = new Date(d.getFullYear() + 18, d.getMonth(), d.getDate());
+    return on8 > new Date();
+  })();
   const otomatikKod = (user.user_metadata?.ogretmen_kodu as string | undefined) || undefined;
 
   return (

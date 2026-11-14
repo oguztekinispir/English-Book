@@ -26,6 +26,7 @@ export interface Profil {
   rol: Rol;
   davet_kodu: string | null;
   dogum_yili: number | null;
+  dogum_tarihi: string | null;
   veli_eposta: string | null;
   veli_onayi_at: string | null;
 }
