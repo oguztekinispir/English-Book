@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { CAMP_L, M_SUBJ, M_VERB, aorTR, diagnose, isaretParcala, type Soru } from "@ti/motor";
+import { A1_PLAN, UNITELER } from "@ti/icerik";
 import { Ust } from "@/components/Ust";
 import { Hero } from "@/components/Hero";
 import { oturum } from "@/lib/supabase/sunucu";
@@ -42,8 +43,8 @@ export default async function Ana() {
           <div className="kahraman-metin">
             <h1 id="baslik">Türkçedeki ek, İngilizcede ayrı bir kelimedir.</h1>
             <p className="giris">
-              Türkçe düşünen biri için yazılmış bir İngilizce defteri. Cümleyi Türkçe görürsün, İngilizcesini yazarsın. Yanlış yaparsan nedenini kendi dilinin
-              ekleriyle anlatır.
+              Türkçe düşünenler için sıfırdan İngilizce. Hikâyeli dersler, sesli diyaloglar ve günlük tekrar kartlarıyla öğrenirsin; yanlış yaptığında nedenini kendi
+              dilinin ekleriyle anlarsın.
             </p>
             <div className="cta">
               <Link href={basla.href} className="dugme ana buyuk">
@@ -53,6 +54,7 @@ export default async function Ana() {
                 Nasıl çalıştığını gör
               </a>
             </div>
+            {!user && <p className="not kahraman-not">Erken erişim: ücretsiz, kart gerekmez.</p>}
           </div>
           <div className="kahraman-gosteri yaprak">
             <Hero />
@@ -101,41 +103,104 @@ export default async function Ana() {
           </ol>
         </section>
 
-        <section className="yol-onizleme" aria-labelledby="yol-baslik">
-          <div className="yol-onizleme-ust">
-            <h2 id="yol-baslik">Cümle yolu: basitten zora 19 seviye</h2>
+        <section className="icinde" aria-labelledby="icinde-baslik">
+          <h2 id="icinde-baslik">İçinde ne var?</h2>
+          <p className="giris">Sıfırdan başlayan biri için A1 programı. Her ders yaklaşık 30 dakika; telefonda da bilgisayarda da çalışır.</p>
+          <ul className="ozellikler">
+            <li>
+              <h3>Hikâyeli dersler</h3>
+              <p>Moda Apartmanı'na taşınan Deniz ve komşuları. Her ders hikâyenin bir bölümü; aynı kişiler, aynı kelimeler tekrar tekrar karşına çıkar.</p>
+            </li>
+            <li>
+              <h3>Diyalog: dinle, oku, doldur, konuş</h3>
+              <p>Her diyaloğu dört adımda çalışırsın. Son adımda karakterin yerine sen konuşursun. Derste görmediğin kelime çıkmaz.</p>
+            </li>
+            <li>
+              <h3>Günlük tekrar kartları</h3>
+              <p>Bildiğin kelime 1, 2, 4, 7, 14 gün sonra tekrar sorulur; bilemediğin aynı gün döner. Günde 10 dakika yeter.</p>
+            </li>
+            <li>
+              <h3>Cümle motoru</h3>
+              <p>Türkçe cümleyi görür, İngilizcesini yazarsın. Yanlışında neyi neden yanlış yaptığını Türkçedeki eklerle açıklar.</p>
+            </li>
+            <li>
+              <h3>Okunuş ve sesler</h3>
+              <p>Her kelime sesli. Okunuşlar sözlüklerdeki standart yazıyla (IPA) verilir; Türkçede olmayan sesler ayrıca anlatılır.</p>
+            </li>
+            <li>
+              <h3>Öğretmenin seni görür</h3>
+              <p>Öğretmeninin koduyla bağlanırsın; hangi derste olduğunu, nerede zorlandığını o da görür. Öğretmenin yoksa tek başına da çalışırsın.</p>
+            </li>
+          </ul>
+        </section>
+
+        <section className="program" aria-labelledby="program-baslik">
+          <h2 id="program-baslik">A1 programı: {A1_PLAN.length} ünite, {A1_PLAN.reduce((t, x) => t + x.dersSayisi, 0)} ders</h2>
+          <p className="giris">Her ünite bir konu ve Türkçedeki bir ekin İngilizce karşılığı. Program yazıldıkça açılıyor.</p>
+          <ol className="program-liste">
+            {A1_PLAN.map((x) => {
+              const hazir = UNITELER.some((u) => u.kod === x.kod);
+              return (
+                <li key={x.kod} className={hazir ? "hazir" : ""}>
+                  <span className="pl-no">{x.sira}</span>
+                  <span className="pl-govde">
+                    <b>{x.baslik}</b>
+                    <small>{x.gramerEtiketi}</small>
+                  </span>
+                  <span className="pl-durum">{hazir ? "Hazır" : "Hazırlanıyor"}</span>
+                </li>
+              );
+            })}
+          </ol>
+        </section>
+
+        <section className="ogretmenlere" aria-labelledby="ogr-baslik">
+          <div>
+            <h2 id="ogr-baslik">Öğretmen misiniz?</h2>
             <p>
-              am / is / are ile başlar, will ile biter. Her seviyede üst üste 5 doğru yapınca sıradaki açılır. Bildiğin yerleri hızlı geçersin, takıldığın yerde
-              motor durup öğretir.
+              Öğretmen hesabı ücretsiz. Öğrencileriniz kodunuzla bağlanır; her öğrencinin hangi derste olduğunu, kaç gün çalıştığını, hangi kelimelerde ve hangi kuralda zorlandığını
+              görürsünüz. Derste neyin üzerinde duracağınızı önceden bilirsiniz.
             </p>
           </div>
-          <div className="yol-serit">
-            {GRUPLAR.map((g) => (
-              <div className="yol-grup" key={g}>
-                <h3>{g}</h3>
-                <ol>
-                  {CAMP_L.map((x, i) =>
-                    x.g === g ? (
-                      <li key={i}>
-                        <span className="sev-no">{i + 1}</span>
-                        <span>
-                          <b>{x.t}</b>
-                          <small>{x.d}</small>
-                        </span>
-                      </li>
-                    ) : null,
-                  )}
-                </ol>
-              </div>
-            ))}
-          </div>
-          <Link href={basla.href} className="dugme ana buyuk">
-            {basla.ad}
+          <Link href="/kayit" className="dugme buyuk">
+            Öğretmen hesabı aç
           </Link>
         </section>
 
+        <section className="sss" aria-labelledby="sss-baslik">
+          <h2 id="sss-baslik">Sık sorulanlar</h2>
+          <details>
+            <summary>Ücretli mi?</summary>
+            <p>Şu an erken erişim dönemindeyiz ve her şey ücretsiz. Kart bilgisi istenmez. Ücretli üyelik başlarsa önceden haber veririz; kendiliğinden ödeme alınmaz.</p>
+          </details>
+          <details>
+            <summary>Hiç İngilizce bilmiyorum, uygun mu?</summary>
+            <p>Evet. Program “Hello” ile başlar. Her şey Türkçe anlatılır ve her derste sadece o derse kadar öğrendiğin kelimeler kullanılır.</p>
+          </details>
+          <details>
+            <summary>Günde ne kadar zaman ayırmalıyım?</summary>
+            <p>Bir ders yaklaşık 30 dakika. Ders yapmadığın günlerde 10 dakikalık tekrar kartları yeterli. Az ama sık çalışmak, haftada bir uzun çalışmaktan daha kalıcıdır.</p>
+          </details>
+          <details>
+            <summary>Telefonda çalışır mı?</summary>
+            <p>Evet, uygulama indirmeden tarayıcıda çalışır. Sesli okuma ve konuşarak cevap verme için Android'de Chrome önerilir.</p>
+          </details>
+          <details>
+            <summary>Verilerim ne oluyor?</summary>
+            <p>
+              Sadece çalışma kayıtların tutulur; öğretmenin dışında kimseyle paylaşılmaz. Hesabım sayfasından bütün verini indirebilir, hesabını kalıcı olarak silebilirsin. 18 yaşından
+              küçükler için veli onayı istenir.
+            </p>
+          </details>
+          <Link href={basla.href} className="dugme ana buyuk">
+            {basla.ad}
+          </Link>
+          {!user && <p className="not">Ücretsiz. Kart gerekmez.</p>}
+        </section>
+
+
         <footer className="alt">
-          <p>Motor kurallarla çalışır, yapay zekâ gerekmez. İnternet olmadan da çalışır. İlerlemen hesabına kaydedilir; öğretmenin varsa o da görür.</p>
+          <p>İlerlemen hesabına kaydedilir; telefonda başladığın derse bilgisayarda devam edersin.</p>
           <p className="not">Deneme sürümü, 2026.</p>
         </footer>
       </main>

@@ -89,7 +89,11 @@ export function diagnose(it: Soru, user: string): Ipucu[] {
     if (has("do") || has("does") || has("did"))
       add(`Durum cümlesinde (yorgun, mutlu, evde) ${mk("do / does / did")} kullanılmaz. Bunlar fiiller (çalışmak, içmek) içindir. Durum için ${mk(past ? "was / were" : "am / is / are")} kullan.`, ["do", "does", "did"]);
     if (!uBe.length)
-      add(`${mk(m.be!)} eksik. Türkçede “${m.compTr}” kelimesine gelen ek (${past ? "-dı / -dum" : "-ım / -sın / -dır"}) İngilizcede ayrı bir kelimedir: ${mk(m.be!)}. Bu kelime olmadan İngilizce durum cümlesi olmaz.`);
+      add(
+        m.dogal
+          ? `${mk(m.be!)} eksik. Türkçede “${m.dogal}” bir fiil gibi söylenir, ama İngilizcede bu bir durumdur: ${mk(m.be!)} + ${mk(m.comp)}. ${mk(m.be!)} olmadan cümle olmaz.`
+          : `${mk(m.be!)} eksik. Türkçede “${m.compTr}” kelimesine gelen ek (${past ? "-dı / -dum" : "-ım / -sın / -dır"}) İngilizcede ayrı bir kelimedir: ${mk(m.be!)}. Bu kelime olmadan İngilizce durum cümlesi olmaz.`,
+      );
     else if (uBe[0] !== m.be) {
       const w = uBe[0],
         wPast = w === "was" || w === "were";

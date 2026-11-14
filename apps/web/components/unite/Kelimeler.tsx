@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { Ders, Kelime, Unite } from "@ti/icerik";
 import { bilemedi, biliyorumDe } from "@/lib/tekrar";
 import { useKalici } from "@/lib/depo";
+import { Okunus } from "@/components/Okunus";
 import { konus } from "@/lib/ses";
 import { cevapKaydet } from "@/lib/kayit";
 import { SesDugmesi } from "../Kucukler";
@@ -60,7 +61,7 @@ export function Kelimeler({ u, d }: { u: Unite; d: Ders }) {
           <div className="kelime-ust">
             <p className="not">
               {trAcik ? "Kelimeye dokununca sesini duyarsın." : "Önce kendin tahmin et, sonra karta dokun: Türkçesi açılsın."} Bildiğin kelimeye <b>Biliyorum</b> de; kart soluklaşır ve 2 gün sonra
-              tekrar kartında sorulur.
+              tekrar kartında sorulur. Eğik çizgiler arasındaki yazı okunuştur (IPA): <a href="/sesler">işaretler ne demek?</a>
             </p>
             <button type="button" className="dugme ana" onClick={() => setKartModu(true)}>
               Kendini dene: {g.ad.toLocaleLowerCase("tr")}
@@ -112,7 +113,7 @@ function KelimeKarti({ k, trGorunur, ac, biliyor, isaretle }: { k: Kelime; trGor
     <li className={`kelime-karti${biliyor ? " biliyor" : ""}`}>
       <button type="button" className="kk-ust" onClick={() => konus(k.en)} aria-label={`${k.en}, dinle`}>
         <b lang="en">{k.en}</b>
-        <span className="kk-ok">{k.ok}</span>
+        <Okunus en={k.en} />
         <span className="kk-ses" aria-hidden="true">
           <svg viewBox="0 0 16 16" fill="currentColor">
             <path d="M2 6h2.5L8 3v10L4.5 10H2z" />
@@ -223,7 +224,9 @@ function KartModu({ u, d, kelimeler, kapat }: { u: Unite; d: Ders; kelimeler: Ke
           <p className="km-en" lang="en">
             {k.en} <SesDugmesi metin={k.en} />
           </p>
-          <p className="kk-ok">{k.ok}</p>
+          <p className="kk-ok">
+            <Okunus en={k.en} etiket />
+          </p>
           <div className="dugmeler orta">
             <button type="button" className="dugme bildim" autoFocus onClick={() => cevap(true)}>
               Bildim

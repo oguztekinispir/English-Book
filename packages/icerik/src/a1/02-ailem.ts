@@ -187,6 +187,7 @@ export const A1_02: Unite = {
           yer: "sinif",
           onceki: "Deniz ilk dersinde Lisa ile tanıştı ve yaşını söyledi. Bugün ikinci dersi var.",
           anahtar: ["my", "her", "his", "family", "mother", "father"],
+          sorular: [{ en: "Ayşe is his mother.", dogru: true }, { en: "His father is Ali.", dogru: false }, { en: "Ela is two years old.", dogru: true }],
           kisiler: { L: { ad: "Lisa", ses: "kadin" }, D: { ad: "Deniz", ses: "erkek" } },
           satirlar: [
             { kim: "L", en: "Deniz, who is this?", tr: "Deniz, bu kim?" },
@@ -361,6 +362,7 @@ export const A1_02: Unite = {
           yer: "okul",
           onceki: "Deniz, ailesini Lisa'ya tanıttı. Şimdi şehrin öbür ucunda, bir okuldayız: Emre'nin kız kardeşi Selin veli toplantısında.",
           anahtar: ["job", "nurse", "an", "engineer", "at"],
+          sorular: [{ en: "Selin is a nurse.", dogru: true }, { en: "Mark is a doctor.", dogru: false }, { en: "His wife is at work now.", dogru: true }],
           kisiler: { M: { ad: "Mark", ses: "erkek" }, S: { ad: "Selin", ses: "kadin" } },
           satirlar: [
             { kim: "M", en: "Hello! I'm Mark. My son is a student at this school.", tr: "Merhaba! Ben Mark. Oğlum bu okulda öğrenci." },
@@ -547,6 +549,7 @@ export const A1_02: Unite = {
           yer: "telefon",
           onceki: "Selin ile Mark veli toplantısında tanıştı. Selin'in ağabeyi Emre'yi hatırlıyor musun? Dil kafesindeki Emre.",
           anahtar: ["are", "not", "isn't", "busy"],
+          sorular: [{ en: "Emre is at home.", dogru: false }, { en: "Emre is busy.", dogru: true }, { en: "His mother is at home.", dogru: true }],
           kisiler: { A: { ad: "Anna", ses: "kadin" }, E: { ad: "Emre", ses: "erkek" } },
           satirlar: [
             { kim: "A", en: "Hello, Emre! Are you at home?", tr: "Merhaba Emre! Evde misin?" },
@@ -568,6 +571,7 @@ export const A1_02: Unite = {
           yer: "dugun",
           onceki: "Emre işte ve çok meşgul. Hafta sonu ise bir düğün var.",
           anahtar: ["that", "isn't", "married", "single"],
+          sorular: [{ en: "Emre is an engineer.", dogru: true }, { en: "Emre is married.", dogru: false }, { en: "Emre is not busy.", dogru: false }],
           kisiler: { M: { ad: "Mark", ses: "erkek" }, S: { ad: "Selin", ses: "kadin" } },
           satirlar: [
             { kim: "M", en: "Selin, who's that?", tr: "Selin, şu kim?" },

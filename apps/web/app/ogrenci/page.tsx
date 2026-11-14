@@ -47,9 +47,14 @@ export default async function OgrenciPaneli() {
       <main className="panel">
         <div className="panel-baslik">
           <h1>Merhaba {profil?.ad?.split(" ")[0] || ""}</h1>
-          <Link href="/pratik" className="dugme ana buyuk">
-            Pratiğe devam et
-          </Link>
+          <div className="dugmeler">
+            <Link href="/tekrar" className="dugme buyuk">
+              Günlük tekrar
+            </Link>
+            <Link href="/uniteler" className="dugme ana buyuk">
+              Derse devam et
+            </Link>
+          </div>
         </div>
 
         {kucuk && !profil?.veli_onayi_at && (

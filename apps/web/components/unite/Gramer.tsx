@@ -1,3 +1,5 @@
+"use client";
+import { useState } from "react";
 import type { GramerBolum, HazirKalip } from "@ti/icerik";
 import { SesDugmesi } from "../Kucukler";
 
@@ -18,15 +20,25 @@ function Vurgu({ metin }: { metin: string }) {
   );
 }
 
-export function Gramer({ bolumler }: { bolumler: GramerBolum[] }) {
+export function Gramer({ bolumler, kesfet = false }: { bolumler: GramerBolum[]; kesfet?: boolean }) {
   return (
     <div className="gramer">
       {bolumler.map((g, i) => (
-        <section key={i} className="gramer-bolum yaprak">
+        <GramerBolumu key={i} g={g} kesfet={kesfet} />
+      ))}
+    </div>
+  );
+}
+
+/** Önce örnekler: öğrenci kuralı kendisi tahmin eder, sonra açıklamayı açar. */
+function GramerBolumu({ g, kesfet }: { g: GramerBolum; kesfet: boolean }) {
+  const tahmin = kesfet && !!g.ornekler?.length;
+  const [acik, setAcik] = useState(!tahmin);
+  return (
+        <section className="gramer-bolum yaprak">
           <h3>{g.baslik}</h3>
-          {g.metin.map((m, j) => (
-            <p key={j}>{m}</p>
-          ))}
+          {tahmin && !acik && <p className="gramer-soru">Önce örneklere bak. Sarı kısımlar neye dönüşüyor? Sence kural ne?</p>}
+          {acik && !tahmin && g.metin.map((m, j) => <p key={j}>{m}</p>)}
           {g.ornekler && (
             <ul className="gramer-ornek">
               {g.ornekler.map((o, j) => {
@@ -48,7 +60,19 @@ export function Gramer({ bolumler }: { bolumler: GramerBolum[] }) {
               })}
             </ul>
           )}
-          {g.notlar && (
+          {tahmin && !acik && (
+            <button type="button" className="dugme" onClick={() => setAcik(true)}>
+              Tahmin ettim, kuralı göster
+            </button>
+          )}
+          {tahmin && acik && (
+            <div className="gramer-kural">
+              {g.metin.map((m, j) => (
+                <p key={j}>{m}</p>
+              ))}
+            </div>
+          )}
+          {acik && g.notlar && (
             <ul className="gramer-not">
               {g.notlar.map((n) => (
                 <li key={n}>{n}</li>
@@ -56,8 +80,6 @@ export function Gramer({ bolumler }: { bolumler: GramerBolum[] }) {
             </ul>
           )}
         </section>
-      ))}
-    </div>
   );
 }
 

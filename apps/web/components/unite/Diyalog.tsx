@@ -24,7 +24,7 @@ const NOT: Record<Adim, string> = {
   dinle: "Önce sadece dinle. Kim konuşuyor, ne anlıyorsun? Gerekirse iki kez dinle, sonra Oku adımına geç.",
   oku: "Ses çalarken okunan kelime sarı yanar. Anlamadığın kelimeye dokun: anlamı üstte çıkar.",
   bosluk: "Önemli kelimeler gizlendi. Dinle ve boşluklara yaz, sonra Kontrol et'e bas.",
-  rol: "Bir kişiyi seç. Diğer kişi konuşur; sıra sana gelince Türkçe ipucuna bakıp İngilizcesini söyle ya da yaz.",
+  rol: "Bir kişiyi seç. Diğer kişi konuşur; sıra sana gelince cevabını İngilizce söyle ya da yaz. Önce Türkçesini düşünmeden dene.",
 };
 
 const temiz = (w: string) => w.replace(/[.,!?;:"“”]/g, "");
@@ -257,6 +257,7 @@ export function DiyalogCalis({ u, d, x, kompakt = false }: { u: Unite; d: Ders; 
             })}
           </ol>
         )}
+        {x.sorular?.length && (adim === "oku" || adim === "dinle") ? <Anladinmi key={x.baslik} u={u} d={d} x={x} /> : null}
         {x.bonus?.length ? (
           <p className="dyl-bonus">
             Bonus kelime:{" "}
@@ -426,6 +427,8 @@ function RolYap({
   const [yazi, setYazi] = useState("");
   const [sonuc, setSonuc] = useState<null | "dogru" | "yanlis" | "goster">(null);
   const [dinliyor, setDinliyor] = useState(false);
+  // İlk ünitede Türkçe ipucu açık; sonra öğrenci isterse açar (Türkçeden çevirmeden cevap vermeye alışsın)
+  const [ipucu, setIpucu] = useState(u.sira < 2);
   const [Tanima, setTanima] = useState<(new () => Konusma) | null>(null);
   const tanima = useRef<Konusma | null>(null);
   useEffect(() => setTanima(() => tanimaVar()), []);
@@ -517,7 +520,16 @@ function RolYap({
                 <Avatar ad={ad} />
                 <div className="dyl-balon">
                   <span className="dyl-ad">{ad} (sen)</span>
-                  <p className="rol-ipucu">İpucu: {s.tr}</p>
+                  {ipucu ? (
+                    <p className="rol-ipucu">İpucu: {s.tr}</p>
+                  ) : (
+                    <p className="rol-ipucu">
+                      Sıra sende. Ne dersin?{" "}
+                      <button type="button" className="rol-ipucu-ac" onClick={() => setIpucu(true)}>
+                        Türkçe ipucu
+                      </button>
+                    </p>
+                  )}
                   <form
                     className="rol-form"
                     onSubmit={(e) => {
@@ -635,5 +647,46 @@ function MiniKart({ d, m, acik, ac }: { d: Ders; m: Diyalog; acik: boolean; ac: 
         {acik ? "Kapat" : "Çalış"}
       </button>
     </article>
+  );
+}
+
+/* ---------- Anladın mı? (Türkçesiz) ---------- */
+function Anladinmi({ u, d, x }: { u: Unite; d: Ders; x: Diyalog }) {
+  const [cev, setCev] = useState<Record<number, boolean>>({});
+  const sorular = x.sorular ?? [];
+  return (
+    <section className="dyl-anladin" aria-label="Anladın mı?">
+      <h4>Anladın mı?</h4>
+      <p className="not">Dinledikten sonra cevapla. Türkçeye çevirmeden, doğrudan İngilizce düşün.</p>
+      <ol>
+        {sorular.map((q, i) => {
+          const c = cev[i];
+          const bitti = c !== undefined;
+          return (
+            <li key={i} className={bitti ? (c === q.dogru ? "iyi" : "kotu") : ""}>
+              <span lang="en">{q.en}</span>
+              <span className="dyl-anladin-dugme">
+                {[true, false].map((b) => (
+                  <button
+                    key={String(b)}
+                    type="button"
+                    lang="en"
+                    className={`dugme kucuk${bitti && c === b ? " secildi" : ""}`}
+                    disabled={bitti}
+                    onClick={() => {
+                      setCev({ ...cev, [i]: b });
+                      cevapKaydet({ kaynak: "alistirma", dogru: b === q.dogru, soru: `${x.baslik}: ${q.en}`, cevap: b ? "True" : "False", beklenen: q.dogru ? "True" : "False", unite_id: u.id, ders: d.kod });
+                    }}
+                  >
+                    {b ? "True" : "False"}
+                  </button>
+                ))}
+                {bitti && <b className="dyl-anladin-sonuc">{c === q.dogru ? "✓" : `✗ ${q.dogru ? "True" : "False"}`}</b>}
+              </span>
+            </li>
+          );
+        })}
+      </ol>
+    </section>
   );
 }

@@ -162,6 +162,11 @@ export function SoruKarti({ soru, seviye, formulGoster, malzeme, onSecim, onKont
             {soru.alts.length > 0 && <p className="not">Bu da doğru: {soru.alts.join(" / ")}</p>}
           </div>
 
+          {!sonuc.ok && <Ogretmen soru={soru} cevap={sonuc.cevap} malzeme={malzeme} bolum="teshis" />}
+
+          {/* Destek isteyince açılır: önce kendin düşün */}
+          <details className="daha-acikla">
+            <summary>{sonuc.ok ? "Neden böyle? Türkçeyi parçala, kuralı gör" : "Daha fazla açıkla: Türkçeyi parçala, kuralı ve örnekleri gör"}</summary>
           <Parcalama soru={soru} />
 
           <section className="bolum">
@@ -178,7 +183,8 @@ export function SoruKarti({ soru, seviye, formulGoster, malzeme, onSecim, onKont
             </div>
           </section>
 
-          {!sonuc.ok && <Ogretmen soru={soru} cevap={sonuc.cevap} malzeme={malzeme} />}
+          {!sonuc.ok && <Ogretmen soru={soru} cevap={sonuc.cevap} malzeme={malzeme} bolum="kural" />}
+          </details>
 
           <div className="dugmeler son">{aksiyonlar(sonuc.ok)}</div>
         </div>

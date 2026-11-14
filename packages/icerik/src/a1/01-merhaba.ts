@@ -320,6 +320,7 @@ export const A1_01: Unite = {
           yer: "kafe",
           onceki: "Ece ile John apartmanda tanıştı. Şimdi köşedeki dil kafesindeyiz.",
           anahtar: ["from", "where", "my", "student", "teacher"],
+          sorular: [{ en: "Anna is from Germany.", dogru: true }, { en: "Emre is from England.", dogru: false }, { en: "Lisa is a teacher.", dogru: true }],
           kisiler: { A: { ad: "Anna", ses: "kadin" }, E: { ad: "Emre", ses: "erkek" }, L: { ad: "Lisa", ses: "kadin" } },
           satirlar: [
             { kim: "A", en: "Hello! I'm Anna.", tr: "Merhaba! Ben Anna." },
@@ -482,6 +483,7 @@ export const A1_01: Unite = {
           yer: "sinif",
           onceki: "Lisa dil kafesinde İngilizce öğretiyor. Bugün yeni bir öğrencisi var: Moda Apartmanı'na yeni taşınan Deniz.",
           anahtar: ["name", "how", "old", "nineteen", "years"],
+          sorular: [{ en: "Deniz is nineteen years old.", dogru: true }, { en: "Lisa is a student.", dogru: false }, { en: "Deniz is fine.", dogru: true }],
           kisiler: { L: { ad: "Lisa", ses: "kadin" }, D: { ad: "Deniz", ses: "erkek" } },
           satirlar: [
             { kim: "L", en: "Good morning!", tr: "Günaydın!" },

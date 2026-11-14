@@ -64,6 +64,11 @@ export function trSeg(m: Meta | null | undefined): Parcalanmis | null {
       ...((P === 0 ? [["m", "-m: ben (I)", "pers"]] : P === 1 ? [["n", "-n: sen (you)", "pers"]] : P === 3 ? [["k", "-k: biz (we)", "pers"]] : []) as Parca[]),
     ];
   };
+  if ((m.form === "be" || m.form === "bePast") && m.dogal) {
+    // Türkçede fiille söylenen durum: ek ek değil, bütün olarak eşleşir
+    const en = m.pol === "q" ? `${m.be![0].toUpperCase() + m.be!.slice(1)} … ${m.comp}?` : `${m.be}${m.pol === "neg" ? " not" : ""} ${m.comp}`;
+    return [subj, [[m.dogal, `${m.dogal} → ${en} (Türkçede fiil, İngilizcede ${m.be} + sıfat)`, "root"]]];
+  }
   if (m.form === "be" || m.form === "bePast") {
     const past = m.form === "bePast",
       pl = "-dı: geçmiş → was / were";

@@ -70,3 +70,34 @@
   .gosteri-tr { margin-top: 8px; }
   .g-parca i { font-size: 11px; }
 }
+
+/* İçinde ne var, program, öğretmenler, SSS */
+.kahraman-not { margin-top: 10px; }
+.icinde, .program, .sss { padding: 24px 0 56px; }
+.icinde h2, .program h2, .sss h2, .ogretmenlere h2 { font-size: clamp(28px, 3.6vw, 40px); font-weight: 800; letter-spacing: -0.025em; }
+.icinde .giris, .program .giris { max-width: 62ch; margin: 8px 0 22px; font-size: 18px; color: var(--soluk); }
+.ozellikler { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 0; border-top: 2px solid var(--murekkep); }
+.ozellikler li { padding: 20px 24px 22px 0; border-bottom: 1.5px solid var(--cizgi); }
+.ozellikler h3 { font-size: 21px; margin-bottom: 6px; }
+.ozellikler p { margin: 0; color: #39415c; max-width: 44ch; }
+.program-liste { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 8px 16px; }
+.program-liste li { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border: 1.5px solid var(--cizgi); border-radius: 14px; background: var(--yuzey); }
+.program-liste li.hazir { border-color: #b5ead2; background: var(--tamam-acik); }
+.pl-no { font-family: var(--f-baslik); font-weight: 800; font-size: 22px; color: var(--kobalt); min-width: 1.4em; }
+.pl-govde { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+.pl-govde small { color: var(--soluk); font-size: 13px; }
+.pl-durum { font-size: 12.5px; font-weight: 700; color: var(--soluk); white-space: nowrap; }
+.program-liste li.hazir .pl-durum { color: #0b5e3c; }
+.ogretmenlere { display: flex; flex-wrap: wrap; gap: 20px 40px; align-items: center; justify-content: space-between; background: var(--murekkep); color: #fff; border-radius: 28px; padding: 32px 36px; margin-bottom: 56px; }
+.ogretmenlere h2 { color: #fff; }
+.ogretmenlere p { margin: 8px 0 0; max-width: 62ch; color: #d5daec; font-size: 17px; }
+.ogretmenlere .dugme { background: var(--ek); border-color: var(--ek); color: var(--murekkep); }
+.sss details { border-bottom: 1.5px solid var(--cizgi); max-width: 760px; }
+.sss details:first-of-type { border-top: 2px solid var(--murekkep); margin-top: 16px; }
+.sss summary { cursor: pointer; padding: 14px 0; font-family: var(--f-baslik); font-weight: 700; font-size: 19px; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+.sss summary::-webkit-details-marker { display: none; }
+.sss summary::after { content: "+"; color: var(--kobalt); font-weight: 800; }
+.sss details[open] summary::after { content: "−"; }
+.sss details p { margin: 0 0 16px; max-width: 64ch; color: #39415c; }
+.sss > .dugme { margin-top: 24px; }
+@media (max-width: 560px) { .ogretmenlere { padding: 24px 20px; border-radius: 22px; } .ozellikler li { padding-right: 0; } }

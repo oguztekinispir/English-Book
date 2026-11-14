@@ -16,7 +16,7 @@ export const SLOT: Record<Slot, [string, string, string]> = {
 };
 
 export const slotOf = (c: string): Slot =>
-  /^(every|at night|on |early$|late$|two times|twice)/.test(c) ? "zaman" : /^(at |to |in |home$)/.test(c) ? "yer" : /^(well|fast|a lot)$/.test(c) ? "nasil" : "ne";
+  /^(every|at night|on |early$|late$|two times|twice|yesterday$)/.test(c) ? "zaman" : /^(at |to |in |home$)/.test(c) ? "yer" : /^(well|fast|a lot)$/.test(c) ? "nasil" : "ne";
 
 export type Kutu = [kelime: string, slot: Slot];
 

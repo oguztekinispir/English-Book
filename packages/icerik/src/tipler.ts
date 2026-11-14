@@ -75,6 +75,8 @@ export interface Diyalog {
   anahtar?: string[];
   /** En fazla 2 bonus kelime */
   bonus?: Bonus[];
+  /** Anladın mı? İngilizce doğru / yanlış cümleleri (Türkçesiz) */
+  sorular?: { en: string; dogru: boolean }[];
 }
 
 export interface Okuma {

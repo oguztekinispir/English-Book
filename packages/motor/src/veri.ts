@@ -52,7 +52,7 @@ export const M_VERB: Fiil[] = [
   { en: "watch", en3: "watches", past: "watched", stem: "izle", aor: "izler", cs: [["TV", "televizyon"], ["films", "film", ["movies"]], ["football", "futbol"]] },
   { en: "speak", en3: "speaks", past: "spoke", irr: 1, stem: "konuş", aor: "konuşur", cs: [["English", "İngilizce"], ["Turkish", "Türkçe"], ["a lot", "çok"]] },
   { en: "listen", en3: "listens", past: "listened", stem: "dinle", aor: "dinler", cs: [["to music", "müzik"]] },
-  { en: "drive", en3: "drives", past: "drove", irr: 1, stem: "araba kullan", aor: "araba kullanır", cs: [["to work", "işe"], ["fast", "hızlı"], ["every day", "her gün"]] },
+  { en: "drive", en3: "drives", past: "drove", irr: 1, stem: "araba kullan", aor: "araba kullanır", cs: [["at night", "gece"], ["fast", "hızlı"], ["every day", "her gün"]] },
   { en: "play", en3: "plays", past: "played", stem: "oyna", aor: "oynar", cs: [["football", "futbol"], ["tennis", "tenis"], ["games", "oyun"]] },
   { en: "write", en3: "writes", past: "wrote", irr: 1, stem: "yaz", aor: "yazar", cs: [["emails", "e-posta"], ["a lot", "çok"]] },
   { en: "swim", en3: "swims", past: "swam", irr: 1, stem: "yüz", aor: "yüzer", cs: [["well", "iyi"], ["in the sea", "denizde"], ["every summer", "her yaz"]] },

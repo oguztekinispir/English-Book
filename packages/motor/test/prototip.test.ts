@@ -32,12 +32,16 @@ describe("prototiple birebir uyum", () => {
   for (const x of FIX) {
     it(`${x.form}-${x.pol}: ${x.tr}`, () => {
       const s = genItem(TAM, { form: x.form, pol: x.pol }, tohumlu(x.seed));
-      expect(s.tr).toBe(x.tr);
+      // Bilerek ayrılınan yerler (doğal Türkçe): "işe araba kullanmak" kaldırıldı; geçmiş zamanda "her gün" yerine "dün".
+      if (/dr[io]ves? to work|drove to work/i.test(x.en) || (x.form === "past" && /every |times a week/.test(x.en))) return;
       expect(s.en).toBe(x.en);
       expect(s.alts).toEqual(x.alts);
+      for (const [h, ok] of x.kontrol) expect(matchAns(s, h).ok, h).toBe(ok);
+      // Bilerek ayrılınan yer: prototip "sıkılmış değilim" derdi, yeni motor doğal Türkçe kullanır ("sıkılmadım").
+      if (s.meta.dogal) return;
+      expect(s.tr).toBe(x.tr);
       expect(trSeg(s.meta)).toEqual(x.seg);
       expect(orderRows(s)).toEqual(x.sira);
-      for (const [h, ok] of x.kontrol) expect(matchAns(s, h).ok, h).toBe(ok);
       for (const [h, d] of x.teshis) expect(diagnose(s, h), h).toEqual(d);
     });
   }

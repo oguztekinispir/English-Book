@@ -161,3 +161,21 @@ mark { background: var(--ek); color: var(--murekkep); padding: 0 0.2em; border-r
 }
 .ust nav a.ust-kayit { background: var(--kobalt); color: #fff; }
 .ust nav a.ust-kayit:hover, .ust nav a.ust-kayit[aria-current="page"] { background: var(--kobalt-koyu); color: #fff; }
+
+/* Okunuş (IPA) */
+.okunus { display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; font-size: 14.5px; }
+.okunus-ipa { font-family: "IBM Plex Sans", "Noto Sans", "Lucida Sans Unicode", "DejaVu Sans", sans-serif; color: var(--kobalt-koyu); letter-spacing: 0.01em; }
+.okunus-ac { font-size: 11.5px; font-weight: 700; color: var(--soluk); border: 1.5px solid var(--cizgi); border-radius: 999px; padding: 0 7px; cursor: pointer; background: var(--yuzey); }
+.okunus-ac:hover { border-color: var(--kobalt); color: var(--kobalt); }
+.okunus-tr { font-size: 13px; color: var(--soluk); }
+
+/* Destek: isteyince açılır */
+.daha-acikla { border-top: 1.5px dashed var(--cizgi); padding-top: 12px; }
+.daha-acikla > summary { cursor: pointer; font-weight: 600; color: var(--kobalt); font-size: 15px; list-style: none; display: inline-flex; align-items: center; gap: 6px; }
+.daha-acikla > summary::-webkit-details-marker { display: none; }
+.daha-acikla > summary::before { content: "+"; display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 999px; background: var(--kobalt-acik); font-weight: 800; }
+.daha-acikla[open] > summary::before { content: "−"; }
+.daha-acikla[open] > summary { margin-bottom: 12px; }
+.daha-acikla > * + * { margin-top: 14px; }
+.gramer-soru { background: var(--ek-yumusak); border-radius: 10px; padding: 8px 12px; font-weight: 600; }
+.gramer-kural { border-left: 4px solid var(--ek); padding-left: 12px; }

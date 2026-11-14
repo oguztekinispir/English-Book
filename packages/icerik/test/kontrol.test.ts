@@ -4,7 +4,7 @@
  */
 import { describe, expect, it } from "vitest";
 import { createFreshGen, matchAns, trSeg } from "@ti/motor";
-import { A1_PLAN, EKI_BUL, UNITELER, bilinmeyenler, dersKelimeleri, tumKartlar, uniteKelimeleri } from "../src";
+import { A1_PLAN, EKI_BUL, SES_REHBERI, UNITELER, bilinmeyenler, ipaBul, ipaTurkce, dersKelimeleri, tumKartlar, uniteKelimeleri } from "../src";
 
 const rngYap = (t: number) => {
   let a = t;
@@ -53,6 +53,7 @@ describe.each(UNITELER.map((u, i) => [u.kod, u, UNITELER.slice(0, i)] as const))
           expect(x.kisiler[s.kim!], `konuşan: ${s.kim}`).toBeDefined();
           bak(x.baslik, s.en, bonus);
         });
+        (x.sorular ?? []).forEach((q) => bak(`${x.baslik} sorusu`, q.en, bonus));
         // Boşluklu adımın anahtar kelimeleri diyalogda geçmeli
         const metin = x.satirlar.map((s) => s.en.toLowerCase()).join(" ");
         (x.anahtar ?? []).forEach((a) => expect(metin, `${x.baslik}: anahtar “${a}”`).toMatch(new RegExp(`\\b${a.toLowerCase()}\\b`)));
@@ -138,6 +139,24 @@ describe("bilinmeyen kelime kontrolü kendisi çalışıyor mu", () => {
     const u = UNITELER[0];
     expect(bilinmeyenler(u, "I am a teacher.", [], 1)).toEqual(["a", "teacher"]);
     expect(bilinmeyenler(u, "I am a teacher.", [], 2)).toEqual([]);
+  });
+});
+
+describe("okunuş (IPA)", () => {
+  it("her kelimenin, kalıbın ve bonus kelimenin IPA'sı var", () => {
+    for (const u of UNITELER)
+      for (const d of u.dersler) {
+        d.kelimeGruplari.forEach((g) => g.kelimeler.forEach((k) => expect(ipaBul(k.en), k.en).toBeTruthy()));
+        [...d.diyaloglar, ...(d.miniDiyaloglar ?? [])].forEach((x) => (x.bonus ?? []).forEach((b) => expect(ipaBul(b.en), b.en).toBeTruthy()));
+      }
+    SES_REHBERI.forEach((b) => b.sesler.forEach((s) => expect(ipaBul(s.ornek), s.ornek).toContain(s.ipa)));
+  });
+  it("IPA'dan Türkçe okunuş kurallı üretilir", () => {
+    expect(ipaBul("mother")).toBe("ˈmʌðə");
+    expect(ipaBul("good morning")).toBe("ɡʊd ˈmɔːnɪŋ");
+    expect(ipaTurkce("ˈmʌðə")).toBe("madhı");
+    expect(ipaTurkce("θæŋk")).toBe("thenk");
+    expect(ipaTurkce("dʒɒb")).toBe("cob");
   });
 });
 

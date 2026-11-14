@@ -7,6 +7,7 @@ import { cevapKaydet } from "@/lib/kayit";
 import { bugunN, buluttanBirlestir, havuz, istatistik, kartDurumu, notla, oturumKartlari, TEKRAR_OTURUM, YENI_OTURUM, type Durum, type KartDurumu, type Suzgec } from "@/lib/tekrar";
 import { dersBul } from "@ti/icerik";
 import { SesDugmesi } from "@/components/Kucukler";
+import { Okunus } from "@/components/Okunus";
 import { HenuzDersYok, UniteSecimi, useAcilanlar } from "./ortak";
 
 type Yon = "tr" | "en";
@@ -141,13 +142,21 @@ function HatirlaKartlari({ acilan }: { acilan: string[] }) {
             <p className="hk-soru" lang={trOnce ? "tr" : "en"}>
               {trOnce ? k.tr : k.en}
             </p>
-            {!trOnce && <p className="kk-ok">{k.ok}</p>}
+            {!trOnce && (
+              <p className="kk-ok">
+                <Okunus en={k.en} etiket />
+              </p>
+            )}
             {acik ? (
               <>
                 <p className="hk-cevap" lang={trOnce ? "en" : "tr"}>
                   {trOnce ? k.en : k.tr}
                 </p>
-                {trOnce && k.ok && <p className="kk-ok">{k.ok}</p>}
+                {trOnce && (
+                  <p className="kk-ok">
+                    <Okunus en={k.en} etiket />
+                  </p>
+                )}
                 {k.ornek && (
                   <p className="hk-ornek">
                     <span lang="en">{k.ornek[0]}</span> <span className="not">{k.ornek[1]}</span>

@@ -130,3 +130,37 @@ export const inf = (st: string): string => {
   const v = (st.match(/[aeıioöuü](?=[^aeıioöuü]*$)/) || ["e"])[0];
   return st + ("aıou".includes(v) ? "mak" : "mek");
 };
+
+/* ---------- Doğal Türkçe: fiille söylenen durumlar ----------
+ * "I am bored" Türkçede "sıkılmışım" değil "sıkıldım"; "I am not scared" "korkmuş değilim" değil "korkmuyorum".
+ * di:  şimdiki durum geçmiş zaman ekiyle söylenir (sıkıldım, susadım, acıktım)
+ * yor: şimdiki durum -yor ile söylenir (korkuyorum, üşüyorum)
+ * Geçmiş durum (was): ikisi de -mıştı ile (sıkılmıştım, korkmuştum).
+ */
+export const DOGAL: Record<string, { tip: "di" | "yor"; kok: string }> = {
+  sıkılmış: { tip: "di", kok: "sıkıl" },
+  susamış: { tip: "di", kok: "susa" },
+  acıkmış: { tip: "di", kok: "acık" },
+  yorulmuş: { tip: "di", kok: "yorul" },
+  korkmuş: { tip: "yor", kok: "kork" },
+  üşümüş: { tip: "yor", kok: "üşü" },
+};
+
+/** Fiille söylenen durumun doğal Türkçesi (özne hariç). Sıradan sıfat için null döner. */
+export function dogalDurum(sifat: string, p: Kisi, pol: "pos" | "neg" | "q", past: boolean): string | null {
+  const d = DOGAL[sifat];
+  if (!d) return null;
+  const k = d.kok,
+    f = { stem: k } as Fiil;
+  if (past) {
+    const olumsuz = pol === "neg" ? "m" + v2(k) : "";
+    const b = k + olumsuz + "m" + v4(k + olumsuz) + "ş"; // sıkılmış / sıkılmamış
+    return pol === "q" ? `${b} ${copPast("m" + v4(b), p)}` : copPast(b, p);
+  }
+  if (d.tip === "di") return pol === "q" ? pastQ(f, p) : pastTR(f, p, pol === "neg");
+  // -yor: ünlüyle biten kökte son ünlü daralır (üşü-yor), ünsüzle bitende araya ünlü girer (kork-u-yor)
+  const govde = pol === "neg" ? k + "m" + v4(k) : endsV(k) ? k.slice(0, -1) + v4(k) : k + v4(k);
+  const b = govde + "yor";
+  if (pol === "q") return `${b} mu${(["yum", "sun", "", "yuz", "", ""] as string[])[p]}`;
+  return b + (["um", "sun", "", "uz", "", "lar"] as string[])[p];
+}

@@ -6,7 +6,7 @@ import { Isaretli, SesDugmesi } from "./Kucukler";
 import { KelimeSirasi } from "./Parcalama";
 
 /** Yanlış cevaptan sonra: neyi yanlış yaptın + kural + aynı kuraldan örnekler. Yapay zekâsız. */
-export function Ogretmen({ soru, cevap, malzeme }: { soru: Soru; cevap: string; malzeme?: Malzeme }) {
+export function Ogretmen({ soru, cevap, malzeme, bolum }: { soru: Soru; cevap: string; malzeme?: Malzeme; bolum?: "teshis" | "kural" }) {
   const d = useMemo(() => (cevap ? diagnose(soru, cevap) : []), [soru, cevap]);
   const R = RULES[ruleKey(soru.meta)];
   const ornekler = useMemo(() => {
@@ -20,7 +20,7 @@ export function Ogretmen({ soru, cevap, malzeme }: { soru: Soru; cevap: string; 
 
   return (
     <div className="ogretmen">
-      {d.length ? (
+      {bolum === "kural" ? null : d.length ? (
         <section className="bolum">
           <h4>Neyi yanlış yaptın</h4>
           <ul className="teshis">
@@ -34,16 +34,18 @@ export function Ogretmen({ soru, cevap, malzeme }: { soru: Soru; cevap: string; 
       ) : (
         <section className="bolum">
           <h4>Bir dahaki sefere</h4>
-          <p className="ipucu-kutusu">Önce Türkçe cümledeki ekleri bul, sonra aşağıdaki formüle yerleştir.</p>
+          <p className="ipucu-kutusu">Doğru cümleyi sesli tekrar et. Takıldıysan aşağıdan açıklamayı aç.</p>
         </section>
       )}
-      {siraHatasi(d) && <KelimeSirasi soru={soru} />}
+      {bolum !== "kural" && siraHatasi(d) && <KelimeSirasi soru={soru} />}
+      {bolum !== "teshis" && (
       <section className="bolum kural">
         <h4>Kural: {R.t}</h4>
         <p className="formul">{R.f}</p>
         <p className="kural-metni">{R.r}</p>
       </section>
-      {ornekler.length > 0 && (
+      )}
+      {bolum !== "teshis" && ornekler.length > 0 && (
         <section className="bolum">
           <h4>Aynı kuraldan örnekler</h4>
           <ul className="ornekler">

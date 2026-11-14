@@ -355,3 +355,13 @@ li.kotu .bosluk.dolu { background: var(--tamam-acik); border-color: var(--tamam)
   .dyl-adimlar button:not(.bitti) .dyl-no { display: none; }
 }
 .dyl-adimlar button { justify-content: center; }
+.rol-ipucu-ac { font: inherit; font-size: 13px; font-weight: 600; color: var(--kobalt); background: none; border: 1.5px solid #9fc9e8; border-radius: 999px; padding: 1px 9px; cursor: pointer; }
+.dyl-anladin { border-top: 1.5px dashed var(--cizgi); padding-top: 12px; }
+.dyl-anladin h4 { font-family: var(--f-baslik); font-size: 18px; margin: 0; }
+.dyl-anladin .not { margin: 2px 0 8px; }
+.dyl-anladin ol { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.dyl-anladin li { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; padding: 8px 12px; border: 1.5px solid var(--cizgi); border-radius: 12px; font-size: 16.5px; }
+.dyl-anladin li.iyi { background: var(--tamam-acik); border-color: #b5ead2; }
+.dyl-anladin li.kotu { background: var(--hata-acik); border-color: #f3c2c4; }
+.dyl-anladin-dugme { display: inline-flex; gap: 6px; align-items: center; }
+.dyl-anladin-sonuc { font-size: 14px; }

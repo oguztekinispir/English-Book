@@ -119,6 +119,14 @@ export default function GramerSayfasi() {
             </div>
           </section>
 
+          <section className="calisma-blok yaprak" aria-labelledby="ses-b">
+            <h2 id="ses-b">Sesler ve okunuş</h2>
+            <p className="not">Kelimelerin yanındaki /ˈmʌðə/ gibi yazılar ne demek? Türkçede olmayan sesler hangileri?</p>
+            <Link href="/sesler" className="dugme">
+              Ses rehberini aç
+            </Link>
+          </section>
+
           <EkRehberi />
         </div>
       </main>

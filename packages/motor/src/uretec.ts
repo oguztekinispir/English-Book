@@ -3,8 +3,8 @@
  * Rastgelelik dışarıdan verilir (rng), böylece testlerde aynı sonuç alınır.
  */
 import { M_ADJ, M_SUBJ, M_VERB } from "./veri";
-import { aorQ, aorTR, canQ, canTR, copPast, copPres, pastQ, pastTR, v4 as v4q, willQ, willTR } from "./turkce";
-import type { Ayar, Cip, Kalip, Kutup, Malzeme, Meta, Rng, Soru } from "./tipler";
+import { aorQ, aorTR, canQ, canTR, copPast, copPres, dogalDurum, pastQ, pastTR, v4 as v4q, willQ, willTR } from "./turkce";
+import type { Ayar, Cip, Ikili, Kalip, Kutup, Malzeme, Meta, Rng, Soru } from "./tipler";
 
 export const pick = <T>(a: T[], rng: Rng = Math.random): T => a[Math.floor(rng() * a.length)];
 export const cap = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
@@ -61,11 +61,17 @@ export function genItem(set: Ayar, force?: Zorla | null, rng: Rng = Math.random,
       en = `${cap(be)} ${subjLow(s)} ${ae}?`;
       ek = [past ? "-mıydı (geçmiş soru)" : "-mı (soru)", cap(be) + " başa"];
     }
+    const dogal = dogalDurum(at, p, pol, past);
+    if (dogal) {
+      tr = `${s.tr} ${dogal}${pol === "q" ? "?" : "."}`;
+      meta.dogal = dogal;
+      ek = [`${dogal} (Türkçede fiille söylenir)`, pol === "q" ? cap(be) + " başa" : pol === "neg" ? be + " not" : be];
+    }
     meta.be = be;
     meta.comp = ae;
     meta.compTr = at;
     meta.alt = alt || [];
-    chips.push([at, ae]);
+    chips.push([dogal ?? at, dogal ? `${pol === "neg" ? be + " not " : be + " "}${ae}` : ae]);
     kind = past ? "Geçmiş durum · was / were" : "Şimdi durum · am / is / are";
   } else if (form === "can" || form === "will") {
     const v = pick(VERB.filter((x) => !x.noModal), rng),
@@ -104,7 +110,9 @@ export function genItem(set: Ayar, force?: Zorla | null, rng: Rng = Math.random,
   } else {
     const v = pick(VERB, rng),
       past = form === "past",
-      vc = pick(v.cs, rng),
+      vc0 = pick(v.cs, rng),
+      // "Her yaz yüzdü" gibi alışkanlık zarfı geçmiş zamanda doğal durmaz: dün ile değiştir
+      vc: Ikili = past && /^every |times a week/.test(vc0[0]) ? ["yesterday", "dün"] : vc0,
       [ce, ct] = vc;
     const trVerb = past ? (pol === "q" ? pastQ(v, p) : pastTR(v, p, pol === "neg")) : pol === "q" ? aorQ(v, p) : aorTR(v, p, pol === "neg");
     tr = `${s.tr} ${ct} ${trVerb}${pol === "q" ? "?" : "."}`;

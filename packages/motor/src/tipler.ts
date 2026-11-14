@@ -55,6 +55,8 @@ export interface Meta {
   v?: Fiil;
   comp: string;
   compTr: string;
+  /** Durum Türkçede fiille söyleniyorsa yüklemin tamamı: "sıkılmadım" */
+  dogal?: string;
   alt: string[];
 }
 

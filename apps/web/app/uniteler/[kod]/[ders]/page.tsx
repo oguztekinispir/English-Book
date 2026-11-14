@@ -81,7 +81,7 @@ export default async function DersSayfasi({ params }: P) {
             {d.gramer.length > 0 && (
               <section id="gramer" className="ub">
                 <Baslik id="gramer" />
-                <Gramer bolumler={d.gramer} />
+                <Gramer bolumler={d.gramer} kesfet={!d.tekrar} />
               </section>
             )}
             {d.diyaloglar.length > 0 && (
