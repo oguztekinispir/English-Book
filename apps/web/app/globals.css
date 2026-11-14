@@ -132,5 +132,10 @@ mark { background: var(--ek); color: var(--murekkep); padding: 0 0.2em; border-r
 @media (max-width: 480px) {
   .marka { font-size: 18px; }
   .ust nav a { padding: 7px 11px; font-size: 14px; }
-  .ust nav a:first-child:not([aria-current]) { display: none; }
 }
+.ust nav { align-items: center; }
+.ust-cikis { margin: 0; }
+.ust-cikis button { border: none; background: transparent; font-weight: 600; font-size: 15px; padding: 8px 12px; border-radius: 10px; cursor: pointer; color: var(--soluk); }
+.ust-cikis button:hover { background: var(--kobalt-acik); color: var(--murekkep); }
+@media (max-width: 480px) { .ust-ikincil { display: none; } .ust-cikis button { padding: 7px 8px; font-size: 14px; } }
+.kayit-cagri { border-top: 1.5px dashed var(--cizgi); padding-top: 10px; }

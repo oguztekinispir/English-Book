@@ -1,11 +1,14 @@
 "use client";
-import { useState } from "react";
-import { RULES, ruleKey, type Kalip, type Kutup, type Meta } from "@ti/motor";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { supabaseTarayici } from "@/lib/supabase/istemci";
+import { RULES, ruleKey, type Kalip, type Kutup, type Soru } from "@ti/motor";
 import { bugun, useKalici } from "@/lib/depo";
 import { CumleYolu } from "@/components/CumleYolu";
 import { Serbest, type Zorla } from "@/components/Serbest";
 import { KelimeAra } from "@/components/KelimeAra";
 import { EkRehberi } from "@/components/EkRehberi";
+import { cevapKaydet } from "@/lib/kayit";
 
 type Mod = "yol" | "serbest";
 
@@ -14,11 +17,19 @@ export function Pratik() {
   const [zayif, setZayif] = useKalici<Record<string, number>>("zayif", {});
   const [gun, setGun] = useKalici("gun", { d: "", ok: 0, n: 0 });
   const [zorla, setZorla] = useState<Zorla | null>(null);
+  const [girisli, setGirisli] = useState<boolean | null>(null);
+  useEffect(() => {
+    supabaseTarayici()
+      .auth.getSession()
+      .then(({ data }) => setGirisli(!!data.session))
+      .catch(() => setGirisli(false));
+  }, []);
 
   const bugunku = gun.d === bugun() ? gun : { d: bugun(), ok: 0, n: 0 };
 
-  const sonuc = (ok: boolean, m: Meta) => {
-    const k = ruleKey(m);
+  const sonuc = (ok: boolean, soru: Soru, cevap: string, kaynak: "yol" | "motor") => {
+    const k = ruleKey(soru.meta);
+    cevapKaydet({ kaynak, kural: k, dogru: ok, soru: soru.tr, cevap, beklenen: soru.en });
     setZayif((w) => {
       const x = { ...w };
       if (ok) {
@@ -79,6 +90,11 @@ export function Pratik() {
           {bugunku.n === 0 && <p className="not">Günde 15 cümle, ekleri yerine oturtur.</p>}
           {bugunku.n > 0 && bugunku.n < 15 && <p className="not">15 cümleye {15 - bugunku.n} kaldı.</p>}
           {bugunku.n >= 15 && <p className="not">Bugünkü 15 cümle tamam.</p>}
+          {girisli === false && (
+            <p className="not kayit-cagri">
+              İlerlemen şimdilik sadece bu cihazda. <Link href="/kayit">Hesap aç</Link> ya da <Link href="/giris">giriş yap</Link>, telefonda da devam et; öğretmenin varsa çalışmanı görsün.
+            </p>
+          )}
         </section>
 
         {zorlar.length > 0 && (

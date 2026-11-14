@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { createFreshGen, type Ayar, type Kalip, type Kutup, type Meta, type Soru } from "@ti/motor";
+import { createFreshGen, type Ayar, type Kalip, type Kutup, type Soru } from "@ti/motor";
 import { useKalici } from "@/lib/depo";
 import { SoruKarti } from "./SoruKarti";
 
@@ -15,6 +15,9 @@ const KUTULAR: [keyof Ayar, string][] = [
   ["q", "Soru"],
 ];
 
+/** Bir cevap verildiğinde: doğru mu, hangi soru, ne yazdı, nereden */
+export type Sonuc = (ok: boolean, soru: Soru, cevap: string, kaynak: "yol" | "motor") => void;
+
 export interface Zorla {
   form: Kalip;
   pol: Kutup;
@@ -22,7 +25,7 @@ export interface Zorla {
   n: number;
 }
 
-export function Serbest({ onSonuc, zorla }: { onSonuc: (ok: boolean, m: Meta) => void; zorla: Zorla | null }) {
+export function Serbest({ onSonuc, zorla }: { onSonuc: Sonuc; zorla: Zorla | null }) {
   const [ayar, setAyar, hazir] = useKalici<Ayar>("serbest-ayar", { be: true, bePast: true, simple: true, past: true, neg: true, q: true });
   const gen = useRef<ReturnType<typeof createFreshGen> | null>(null);
   const [soru, setSoru] = useState<Soru | null>(null);
@@ -73,9 +76,9 @@ export function Serbest({ onSonuc, zorla }: { onSonuc: (ok: boolean, m: Meta) =>
         <SoruKarti
           key={n}
           soru={soru}
-          onKontrol={(ok) => {
+          onKontrol={(ok, cevap) => {
             setSeri(ok ? seri + 1 : 0);
-            onSonuc(ok, soru.meta);
+            onSonuc(ok, soru, cevap, "motor");
           }}
           aksiyonlar={(ok) =>
             ok ? (

@@ -10,6 +10,8 @@
     "test": "echo \"web: test yok\""
   },
   "dependencies": {
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.119.0",
     "@ti/motor": "*",
     "next": "^15.1.0",
     "react": "^19.0.0",

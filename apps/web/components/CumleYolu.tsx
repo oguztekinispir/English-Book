@@ -1,14 +1,16 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { CAMP_L, createFreshGen, pick, type Meta, type Soru } from "@ti/motor";
+import { CAMP_L, createFreshGen, pick, type Soru } from "@ti/motor";
 import { useKalici } from "@/lib/depo";
 import { TAM } from "@/lib/motor-yardim";
+import { yolOku, yolYaz } from "@/lib/kayit";
+import type { Sonuc } from "./Serbest";
 import { SoruKarti } from "./SoruKarti";
 
 const GRUPLAR = [...new Set(CAMP_L.map((x) => x.g))];
 const HEDEF = 5;
 
-export function CumleYolu({ onSonuc }: { onSonuc: (ok: boolean, m: Meta) => void }) {
+export function CumleYolu({ onSonuc }: { onSonuc: Sonuc }) {
   const [yol, setYol, hazir] = useKalici("yol", { lvl: 0, max: 0 });
   const gen = useRef<ReturnType<typeof createFreshGen> | null>(null);
   const [soru, setSoru] = useState<Soru | null>(null);
@@ -25,9 +27,28 @@ export function CumleYolu({ onSonuc }: { onSonuc: (ok: boolean, m: Meta) => void
     setAtladi(false);
   };
   useEffect(() => {
-    if (hazir) yeni(yol.lvl);
+    if (!hazir) return;
+    yeni(yol.lvl);
+    // Giriş yapılmışsa buluttaki seviyeyle birleştir (hangisi ilerideyse)
+    yolOku().then((b) => {
+      if (!b) return;
+      if (b.max > yol.max) {
+        setYol({ lvl: b.lvl, max: b.max });
+        yeni(b.lvl);
+      } else if (yol.max > b.max) yolYaz(yol);
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hazir]);
+  // Seviye değişince buluta yaz
+  const ilk = useRef(true);
+  useEffect(() => {
+    if (!hazir) return;
+    if (ilk.current) {
+      ilk.current = false;
+      return;
+    }
+    yolYaz(yol);
+  }, [yol.lvl, yol.max, hazir]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const seviyeyeGit = (i: number) => {
     if (i > yol.max) return;
@@ -106,10 +127,10 @@ export function CumleYolu({ onSonuc }: { onSonuc: (ok: boolean, m: Meta) => void
           onSecim={(d) => {
             if (!d) setSeri(0);
           }}
-          onKontrol={(ok) => {
+          onKontrol={(ok, cevap) => {
             const s = ok ? seri + 1 : 0;
             setSeri(s);
-            onSonuc(ok, soru.meta);
+            onSonuc(ok, soru, cevap, "yol");
             if (s === HEDEF) {
               setAtladi(true);
               if (!sonSeviye && yol.max < yol.lvl + 1) setYol((y) => ({ ...y, max: y.lvl + 1 }));
