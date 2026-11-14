@@ -1,15 +1,16 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { createFreshGen, pick, ruleKey, type Soru } from "@ti/motor";
-import type { Unite } from "@ti/icerik";
+import type { Ders, Unite } from "@ti/icerik";
 import { cevapKaydet } from "@/lib/kayit";
 import { SesDugmesi } from "../Kucukler";
 import { SoruKarti } from "../SoruKarti";
 import { useIlerleme } from "./ortak";
 
 /* ---------------- Cümle kur (motor, ünite kelimeleriyle) ---------------- */
-export function UniteMotoru({ u }: { u: Unite }) {
-  const [, setIlerleme] = useIlerleme(u.kod);
+export function UniteMotoru({ u, d }: { u: Unite; d: Ders }) {
+  const [, setIlerleme] = useIlerleme(d.kod);
+  const motor = d.motor!;
   const gen = useRef<ReturnType<typeof createFreshGen> | null>(null);
   const [soru, setSoru] = useState<Soru | null>(null);
   const [n, setN] = useState(0);
@@ -18,8 +19,8 @@ export function UniteMotoru({ u }: { u: Unite }) {
 
   const yeni = () => {
     gen.current ??= createFreshGen();
-    const [form, pol] = pick(u.motor.kaliplar);
-    setSoru(gen.current({}, { form, pol }, u.motor.malzeme));
+    const [form, pol] = pick(motor.kaliplar);
+    setSoru(gen.current({}, { form, pol }, motor.malzeme));
     setN((x) => x + 1);
   };
   useEffect(yeni, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -27,20 +28,20 @@ export function UniteMotoru({ u }: { u: Unite }) {
   return (
     <div className="unite-motor">
       <p className="not">
-        {u.motor.aciklama} Bu oturumda {toplam} cümleden {dogru} doğru.
+        {motor.aciklama} Bu oturumda {toplam} cümleden {dogru} doğru.
       </p>
       {soru ? (
         <SoruKarti
           key={n}
           soru={soru}
-          malzeme={u.motor.malzeme}
+          malzeme={motor.malzeme}
           onKontrol={(ok, cevap) => {
             setToplam((t) => t + 1);
             if (ok) {
               setDogru((d) => d + 1);
               setIlerleme((p) => ({ ...p, motor: (p.motor ?? 0) + 1 }));
             }
-            cevapKaydet({ kaynak: "motor", kural: ruleKey(soru.meta), dogru: ok, soru: soru.tr, cevap, beklenen: soru.en, unite_id: u.id });
+            cevapKaydet({ kaynak: "motor", kural: ruleKey(soru.meta), dogru: ok, soru: soru.tr, cevap, beklenen: soru.en, unite_id: u.id, ders: d.kod });
           }}
           aksiyonlar={(ok) => (
             <button type="button" className="dugme ana" autoFocus onClick={yeni}>
@@ -56,12 +57,12 @@ export function UniteMotoru({ u }: { u: Unite }) {
 }
 
 /* ---------------- Konuşma ---------------- */
-export function Konusma({ u }: { u: Unite }) {
+export function Konusma({ d }: { d: Ders }) {
   return (
     <div className="konusma">
       <p className="not">Soruyu dinle, cevabını sesli söyle. Sonra örnek cevaba bak. Derste öğretmenin bu soruları sana soracak.</p>
       <ol className="konusma-liste">
-        {u.konusma.map((k, i) => (
+        {d.konusma.map((k, i) => (
           <KonusmaKart key={i} k={k} />
         ))}
       </ol>
@@ -69,7 +70,7 @@ export function Konusma({ u }: { u: Unite }) {
   );
 }
 
-function KonusmaKart({ k }: { k: Unite["konusma"][number] }) {
+function KonusmaKart({ k }: { k: Ders["konusma"][number] }) {
   const [tr, setTr] = useState(false);
   const [ornek, setOrnek] = useState(false);
   return (
@@ -97,12 +98,14 @@ function KonusmaKart({ k }: { k: Unite["konusma"][number] }) {
 }
 
 /* ---------------- Ünite testi ---------------- */
-export function UniteTesti({ u }: { u: Unite }) {
-  const [ilerleme, setIlerleme] = useIlerleme(u.kod);
+export function UniteTesti({ u, d }: { u: Unite; d: Ders }) {
+  const [ilerleme, setIlerleme] = useIlerleme(d.kod);
+  const sorular = d.test;
+  const n = sorular.length;
   const [cev, setCev] = useState<Record<number, number>>({});
   const [tur, setTur] = useState(0);
-  const bitti = Object.keys(cev).length === u.test.length;
-  const puan = u.test.filter((t, i) => cev[i] === t.dogru).length;
+  const bitti = Object.keys(cev).length === n;
+  const puan = sorular.filter((t, i) => cev[i] === t.dogru).length;
   useEffect(() => {
     if (bitti) setIlerleme((p) => ({ ...p, test: Math.max(p.test ?? 0, puan) }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -111,11 +114,11 @@ export function UniteTesti({ u }: { u: Unite }) {
   return (
     <div className="test" key={tur}>
       <p className="not">
-        10 soru. Her sorunun cevabını hemen görürsün.
-        {ilerleme.test !== undefined && ` En iyi sonucun: ${ilerleme.test} / 10.`}
+        {n} soru. Her sorunun cevabını hemen görürsün.
+        {ilerleme.test !== undefined && ` En iyi sonucun: ${ilerleme.test} / ${n}.`}
       </p>
       <ol className="test-liste">
-        {u.test.map((t, i) => {
+        {sorular.map((t, i) => {
           const c = cev[i];
           const cevaplandi = c !== undefined;
           return (
@@ -130,7 +133,7 @@ export function UniteTesti({ u }: { u: Unite }) {
                     disabled={cevaplandi}
                     onClick={() => {
                       setCev((x) => ({ ...x, [i]: j }));
-                      cevapKaydet({ kaynak: "test", dogru: j === t.dogru, soru: t.soru, cevap: s, beklenen: t.secenekler[t.dogru], unite_id: u.id });
+                      cevapKaydet({ kaynak: "test", dogru: j === t.dogru, soru: t.soru, cevap: s, beklenen: t.secenekler[t.dogru], unite_id: u.id, ders: d.kod });
                     }}
                   >
                     {s}
@@ -143,12 +146,16 @@ export function UniteTesti({ u }: { u: Unite }) {
         })}
       </ol>
       {bitti && (
-        <div className={`test-sonuc ${puan >= 8 ? "iyi" : "orta"}`} role="status">
-          <b>{puan} / 10</b>
+        <div className={`test-sonuc ${puan >= n * 0.8 ? "iyi" : "orta"}`} role="status">
+          <b>
+            {puan} / {n}
+          </b>
           <span>
-            {puan === 10
-              ? "Ünitenin hepsini biliyorsun. Bir sonraki üniteye hazırsın."
-              : puan >= 8
+            {puan === n
+              ? d.tekrar
+                ? "Ünitenin hepsini biliyorsun. Bir sonraki üniteye hazırsın."
+                : "Hepsi doğru. Sıradaki derse geçebilirsin."
+              : puan >= n * 0.8
                 ? "Çok iyi. Yanlış yaptığın sorulara bir daha bak."
                 : "Kelimelere ve gramere bir daha bakıp testi tekrar çöz."}
           </span>

@@ -1,15 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { A1_PLAN, uniteBul, uniteKelimeleri } from "@ti/icerik";
+import { A1_PLAN, dersKelimeleri, uniteBul, uniteKelimeleri } from "@ti/icerik";
 import { Ust } from "@/components/Ust";
-import { Kelimeler } from "@/components/unite/Kelimeler";
-import { Gramer, Kaliplar } from "@/components/unite/Gramer";
-import { DiyalogOkuyucu, OkumaOkuyucu } from "@/components/unite/Metin";
-import { BoslukDoldur, Eslestir, SiraylaKur } from "@/components/unite/Alistirmalar";
-import { Konusma, UniteMotoru, UniteTesti } from "@/components/unite/Digerleri";
-import { UniteGezgin } from "@/components/unite/UniteGezgin";
-import "../../pratik/pratik.css";
+import { DersIlerleme } from "@/components/unite/UniteGezgin";
 import "../unite.css";
 
 export async function generateMetadata({ params }: { params: Promise<{ kod: string }> }): Promise<Metadata> {
@@ -48,96 +42,37 @@ export default async function UniteSayfasi({ params }: { params: Promise<{ kod: 
             </ul>
           </div>
           <p className="not">
-            {uniteKelimeleri(u).length} kelime, {u.kaliplar.length} kalıp, {u.diyaloglar.length} diyalog, 1 okuma, {u.alistirmalar.bosluk.length + u.alistirmalar.siralama.length}{" "}
-            alıştırma, 10 soruluk test.
+            {u.dersler.length} ders, her biri yaklaşık 30 dakika. Toplam {uniteKelimeleri(u).length} kelime. Gramer: {u.gramerEtiketi}.
           </p>
         </header>
 
-        <div className="unite-duzen">
-          <UniteGezgin u={u} />
-          <div className="unite-icerik">
-            <section id="kelimeler" className="ub">
-              <h2>
-                <span className="ub-no">1</span>Kelimeler
-              </h2>
-              <Kelimeler u={u} />
-            </section>
+        <ol className="ders-listesi">
+          {u.dersler.map((d) => (
+            <li key={d.kod}>
+              <Link href={`/uniteler/${u.kod}/${d.no}`} className={`ders-karti yaprak${d.tekrar ? " tekrar" : ""}`}>
+                <span className="dk-no">
+                  {u.sira}.{d.no}
+                </span>
+                <span className="dk-govde">
+                  <b>{d.baslik}</b>
+                  <span>{d.hedef}</span>
+                  <small>
+                    {d.tekrar
+                      ? `Okuma, konuşma ve ${d.test.length} soruluk ünite testi`
+                      : `${dersKelimeleri(d).length} kelime, ${d.kaliplar.length} kalıp${d.diyaloglar.length ? `, ${d.diyaloglar.length} diyalog` : ""}, ${d.test.length} soruluk mini test`}
+                  </small>
+                </span>
+                <DersIlerleme d={d} />
+              </Link>
+            </li>
+          ))}
+        </ol>
 
-            <section id="kaliplar" className="ub">
-              <h2>
-                <span className="ub-no">2</span>Hazır kalıplar
-              </h2>
-              <p className="not ub-giris">Bunları tek parça ezberle. Gramerini sonra öğreneceksin, şimdilik kullan.</p>
-              <Kaliplar kaliplar={u.kaliplar} />
-            </section>
-
-            <section id="gramer" className="ub">
-              <h2>
-                <span className="ub-no">3</span>Gramer: {u.gramerEtiketi}
-              </h2>
-              <Gramer bolumler={u.gramer} />
-            </section>
-
-            <section id="diyaloglar" className="ub">
-              <h2>
-                <span className="ub-no">4</span>Diyaloglar
-              </h2>
-              <p className="not ub-giris">Önce dinle, sonra oku. Anlamadığın satırda Çöz'e bas: her kelimenin altında Türkçesi çıkar.</p>
-              <div className="ub-yigin">
-                {u.diyaloglar.map((d) => (
-                  <DiyalogOkuyucu key={d.baslik} u={u} d={d} />
-                ))}
-              </div>
-            </section>
-
-            <section id="okuma" className="ub">
-              <h2>
-                <span className="ub-no">5</span>Okuma
-              </h2>
-              <div className="ub-yigin">
-                <OkumaOkuyucu u={u} o={u.okuma} />
-              </div>
-            </section>
-
-            <section id="alistirmalar" className="ub">
-              <h2>
-                <span className="ub-no">6</span>Alıştırmalar
-              </h2>
-              <div className="ub-yigin">
-                <BoslukDoldur u={u} />
-                <SiraylaKur u={u} />
-                <Eslestir u={u} />
-              </div>
-            </section>
-
-            <section id="cumle" className="ub">
-              <h2>
-                <span className="ub-no">7</span>Cümle kur
-              </h2>
-              <UniteMotoru u={u} />
-            </section>
-
-            <section id="konusma" className="ub">
-              <h2>
-                <span className="ub-no">8</span>Konuşma
-              </h2>
-              <Konusma u={u} />
-            </section>
-
-            <section id="test" className="ub">
-              <h2>
-                <span className="ub-no">9</span>Ünite testi
-              </h2>
-              <UniteTesti u={u} />
-            </section>
-
-            {sonraki && (
-              <p className="sonraki-unite">
-                Sıradaki: <b>Ünite {sonraki.sira}, {sonraki.baslik}</b>. {sonraki.hedef} (hazırlanıyor)
-              </p>
-            )}
-          </div>
-        </div>
+        {sonraki && (
+          <p className="sonraki-unite">
+            Sıradaki ünite: <b>{sonraki.sira}. {sonraki.baslik}</b>. {sonraki.hedef} (hazırlanıyor)
+          </p>
+        )}
       </main>
     </div>
   );

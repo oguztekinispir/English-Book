@@ -95,6 +95,31 @@ export interface TestSorusu {
   aciklama: string;
 }
 
+/** Bir ders: yaklaşık 30 dakikalık çalışma (öğretmenin bir dersi kadar) */
+export interface Ders {
+  /** "a1-01-2" */
+  kod: string;
+  /** ünite içindeki sırası: 1, 2, 3… */
+  no: number;
+  baslik: string;
+  /** Tek cümlelik hedef: "Adını ve nereli olduğunu söylersin." */
+  hedef: string;
+  /** Tekrar dersi: yeni kelime yok, okuma + konuşma + ünite testi */
+  tekrar?: boolean;
+  /** Bu derste yeni öğrenilen kelimeler */
+  kelimeGruplari: KelimeGrubu[];
+  kaliplar: HazirKalip[];
+  gramer: GramerBolum[];
+  diyaloglar: Diyalog[];
+  okuma?: Okuma;
+  alistirmalar: { bosluk: Bosluk[]; siralama: Siralama[] };
+  /** Motor pratiği (yoksa bu derste "Cümle kur" bölümü olmaz) */
+  motor?: { kaliplar: [MotorKalip, Kutup][]; malzeme: Malzeme; aciklama: string };
+  konusma: KonusmaSorusu[];
+  /** Ders sonu mini test (5 soru); tekrar dersinde ünite testi (10 soru) */
+  test: TestSorusu[];
+}
+
 export interface Unite {
   /** Veritabanındaki sabit kimlik */
   id: string;
@@ -107,16 +132,7 @@ export interface Unite {
   hedefler: string[];
   /** Kısa gramer etiketi: "am / is / are" */
   gramerEtiketi: string;
-  kelimeGruplari: KelimeGrubu[];
-  kaliplar: HazirKalip[];
-  gramer: GramerBolum[];
-  diyaloglar: Diyalog[];
-  okuma: Okuma;
-  alistirmalar: { bosluk: Bosluk[]; siralama: Siralama[] };
-  /** Motor pratiği: hangi kalıplar, hangi kelimelerle */
-  motor: { kaliplar: [MotorKalip, Kutup][]; malzeme: Malzeme; aciklama: string };
-  konusma: KonusmaSorusu[];
-  test: TestSorusu[];
+  dersler: Ders[];
   /** Metinlerde geçen özel isimler (kelime kontrolünde bilinmeyen sayılmaz) */
   ozelIsimler: string[];
 }
@@ -124,6 +140,8 @@ export interface Unite {
 /** Henüz yazılmamış üniteler için liste kaydı */
 export interface UniteTaslak {
   kod: string;
+  /** Planlanan ders sayısı */
+  dersSayisi: number;
   seviye: Seviye;
   sira: number;
   baslik: string;

@@ -1,41 +1,21 @@
 "use client";
 import { useEffect, useState } from "react";
-import type { Unite } from "@ti/icerik";
-import { useIlerleme, type UniteIlerleme } from "./ortak";
+import type { Ders } from "@ti/icerik";
+import { dersAcildi } from "@/lib/tekrar";
+import { useIlerleme } from "./ortak";
+import { bolumBitti, dersBolumleri } from "./bolumler";
 
-export const BOLUMLER = [
-  { id: "kelimeler", ad: "Kelimeler" },
-  { id: "kaliplar", ad: "Kalıplar" },
-  { id: "gramer", ad: "Gramer" },
-  { id: "diyaloglar", ad: "Diyaloglar" },
-  { id: "okuma", ad: "Okuma" },
-  { id: "alistirmalar", ad: "Alıştırmalar" },
-  { id: "cumle", ad: "Cümle kur" },
-  { id: "konusma", ad: "Konuşma" },
-  { id: "test", ad: "Test" },
-] as const;
 
-function tamam(id: string, p: UniteIlerleme, u: Unite): boolean {
-  switch (id) {
-    case "kelimeler":
-      return (p.kart ?? 0) >= 10;
-    case "okuma":
-      return (p.okuma ?? 0) >= u.okuma.sorular.length - 1;
-    case "alistirmalar":
-      return (p.bosluk ?? 0) >= u.alistirmalar.bosluk.length - 1 && (p.siralama ?? 0) >= u.alistirmalar.siralama.length - 1;
-    case "cumle":
-      return (p.motor ?? 0) >= 10;
-    case "test":
-      return (p.test ?? 0) >= 8;
-    default:
-      return false; // okuma bölümleri (kalıp, gramer, diyalog, konuşma): işaret yok
-  }
-}
 
-/** Yapışkan bölüm menüsü: hangi bölümdesin, hangileri bitti */
-export function UniteGezgin({ u }: { u: Unite }) {
-  const [p] = useIlerleme(u.kod);
-  const [aktif, setAktif] = useState<string>("kelimeler");
+const ISARETLI = ["kelimeler", "okuma", "alistirmalar", "cumle", "test"];
+
+/** Yapışkan bölüm menüsü: hangi bölümdesin, hangileri bitti. Dersi "açılan dersler"e de ekler. */
+export function DersGezgin({ d }: { d: Ders }) {
+  const [p] = useIlerleme(d.kod);
+  const bolumler = dersBolumleri(d);
+  const [aktif, setAktif] = useState<string>(bolumler[0].id);
+
+  useEffect(() => dersAcildi(d.kod), [d.kod]);
 
   useEffect(() => {
     const gozlem = new IntersectionObserver(
@@ -45,31 +25,50 @@ export function UniteGezgin({ u }: { u: Unite }) {
       },
       { rootMargin: "-20% 0px -70% 0px" },
     );
-    BOLUMLER.forEach((b) => {
+    bolumler.forEach((b) => {
       const el = document.getElementById(b.id);
       if (el) gozlem.observe(el);
     });
     return () => gozlem.disconnect();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [d.kod]);
 
-  const biten = BOLUMLER.filter((b) => tamam(b.id, p, u)).length;
-  const isaretli = BOLUMLER.filter((b) => ["kelimeler", "okuma", "alistirmalar", "cumle", "test"].includes(b.id)).length;
+  const isaretli = bolumler.filter((b) => ISARETLI.includes(b.id));
+  const biten = isaretli.filter((b) => bolumBitti(b.id, p, d)).length;
 
   return (
-    <nav className="unite-gezgin" aria-label="Ünite bölümleri">
+    <nav className="unite-gezgin" aria-label="Ders bölümleri">
       <ol>
-        {BOLUMLER.map((b, i) => (
-          <li key={b.id}>
-            <a href={`#${b.id}`} aria-current={aktif === b.id ? "true" : undefined} className={tamam(b.id, p, u) ? "bitti" : ""}>
-              <span className="ug-no">{tamam(b.id, p, u) ? "✓" : i + 1}</span>
-              {b.ad}
-            </a>
-          </li>
-        ))}
+        {bolumler.map((b, i) => {
+          const ok = bolumBitti(b.id, p, d);
+          return (
+            <li key={b.id}>
+              <a href={`#${b.id}`} aria-current={aktif === b.id ? "true" : undefined} className={ok ? "bitti" : ""}>
+                <span className="ug-no">{ok ? "✓" : i + 1}</span>
+                {b.ad}
+              </a>
+            </li>
+          );
+        })}
       </ol>
       <p className="ug-ozet">
-        {biten} / {isaretli} hedef tamam
+        {biten} / {isaretli.length} hedef tamam
       </p>
     </nav>
+  );
+}
+
+/** Ünite sayfasındaki ders kartında ilerleme */
+export function DersIlerleme({ d }: { d: Ders }) {
+  const [p, , hazir] = useIlerleme(d.kod);
+  if (!hazir) return null;
+  const isaretli = dersBolumleri(d).filter((b) => ISARETLI.includes(b.id));
+  const biten = isaretli.filter((b) => bolumBitti(b.id, p, d)).length;
+  if (!biten && p.test === undefined) return <span className="di-durum">Başlamadın</span>;
+  return (
+    <span className={`di-durum${biten === isaretli.length ? " tamam" : ""}`}>
+      {biten === isaretli.length ? "Tamamlandı" : `${biten} / ${isaretli.length} hedef`}
+      {p.test !== undefined && `, test ${p.test}/${d.test.length}`}
+    </span>
   );
 }

@@ -13,8 +13,9 @@ export interface UniteIlerleme {
   test?: number; // en iyi test puanı (10 üzerinden)
 }
 
-export function useIlerleme(kod: string) {
-  return useKalici<UniteIlerleme>(`unite:${kod}`, {});
+/** Ders ilerlemesi (anahtar: ders kodu, "a1-01-2") */
+export function useIlerleme(dersKod: string) {
+  return useKalici<UniteIlerleme>(`ders:${dersKod}`, {});
 }
 
 /** Fisher–Yates; sonuç orijinal sırayla aynıysa bir kez daha karıştırır */

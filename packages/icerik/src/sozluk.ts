@@ -30,22 +30,24 @@ export interface SozlukKaydi {
   ok?: string;
 }
 
-/** Ünitenin tek kelimelik sözlüğü (çok kelimeli girişlerin her kelimesi de eklenir) */
-export function uniteSozlugu(u: Unite, onceki: Unite[] = []): Map<string, SozlukKaydi> {
+/**
+ * Sözlük: önceki ünitelerin tamamı + bu ünitenin ilk `dersNo` dersi (verilmezse hepsi).
+ * Çok kelimeli girişlerin parçaları da eklenir (good morning → good, morning).
+ */
+export function uniteSozlugu(u: Unite, onceki: Unite[] = [], dersNo?: number): Map<string, SozlukKaydi> {
   const m = new Map<string, SozlukKaydi>();
-  const ekle = (k: Kelime) => {
-    const anahtar = k.en.toLowerCase();
-    if (!m.has(anahtar)) m.set(anahtar, { en: k.en, tr: k.tr, ok: k.ok });
-  };
-  for (const x of [...onceki, u]) x.kelimeGruplari.forEach((g) => g.kelimeler.forEach(ekle));
-  // Çok kelimeli girişlerin parçaları (good morning → good, morning) bilinen sayılır
-  for (const x of [...onceki, u])
-    x.kelimeGruplari.forEach((g) =>
-      g.kelimeler.forEach((k) => {
-        const p = k.en.toLowerCase().split(" ");
-        if (p.length > 1) p.forEach((w) => m.has(w) || m.set(w, { en: w, tr: `(${k.en}: ${k.tr})` }));
-      }),
-    );
+  const kelimeler: Kelime[] = [
+    ...onceki.flatMap((x) => x.dersler.flatMap((d) => d.kelimeGruplari.flatMap((g) => g.kelimeler))),
+    ...u.dersler.filter((d) => dersNo === undefined || d.no <= dersNo).flatMap((d) => d.kelimeGruplari.flatMap((g) => g.kelimeler)),
+  ];
+  for (const k of kelimeler) {
+    const a = k.en.toLowerCase();
+    if (!m.has(a)) m.set(a, { en: k.en, tr: k.tr, ok: k.ok });
+  }
+  for (const k of kelimeler) {
+    const p = k.en.toLowerCase().split(" ");
+    if (p.length > 1) p.forEach((w) => m.has(w) || m.set(w, { en: w, tr: `(${k.en}: ${k.tr})` }));
+  }
   return m;
 }
 
@@ -56,10 +58,11 @@ export function sozlukteBul(sozluk: Map<string, SozlukKaydi>, kelime: string): S
 }
 
 /**
- * Metindeki bilinmeyen kelimeler. Özel isimler ve önceki ünitelerin kelimeleri bilinen sayılır.
+ * Metindeki bilinmeyen kelimeler: öğrenci bu derse kadar görmediyse bilinmeyen sayılır.
+ * Özel isimler bilinen sayılır.
  */
-export function bilinmeyenler(u: Unite, metin: string, onceki: Unite[] = []): string[] {
-  const s = uniteSozlugu(u, onceki);
+export function bilinmeyenler(u: Unite, metin: string, onceki: Unite[] = [], dersNo?: number): string[] {
+  const s = uniteSozlugu(u, onceki, dersNo);
   const ozel = new Set([...onceki.flatMap((x) => x.ozelIsimler), ...u.ozelIsimler].map((x) => x.toLowerCase()));
   return kelimelereBol(metin).filter((w) => !ozel.has(w.toLowerCase()) && !sozlukteBul(s, w));
 }

@@ -15,11 +15,11 @@ export function DiyalogOkuyucu({ u, d }: { u: Unite; d: Diyalog }) {
   return <Okuyucu u={u} baslik={d.baslik} sahne={d.sahne} satirlar={d.satirlar} kisiler={d.kisiler} />;
 }
 
-export function OkumaOkuyucu({ u, o }: { u: Unite; o: Okuma }) {
+export function OkumaOkuyucu({ u, o, dersKod }: { u: Unite; o: Okuma; dersKod: string }) {
   return (
     <>
       <Okuyucu u={u} baslik={o.baslik} satirlar={o.satirlar} duzMetin />
-      <DogruYanlis u={u} o={o} />
+      <DogruYanlis u={u} o={o} dersKod={dersKod} />
     </>
   );
 }
@@ -163,8 +163,8 @@ function SatirGoster({ u, s, kisi, turkce, caliyor }: { u: Unite; s: Satir; kisi
   );
 }
 
-function DogruYanlis({ u, o }: { u: Unite; o: Okuma }) {
-  const [, setIlerleme] = useIlerleme(u.kod);
+function DogruYanlis({ u, o, dersKod }: { u: Unite; o: Okuma; dersKod: string }) {
+  const [, setIlerleme] = useIlerleme(dersKod);
   const [cev, setCev] = useState<Record<number, boolean>>({});
   const bitti = Object.keys(cev).length === o.sorular.length;
   const dogru = o.sorular.filter((s, i) => cev[i] === s.dogru).length;
@@ -192,7 +192,7 @@ function DogruYanlis({ u, o }: { u: Unite; o: Okuma }) {
                     disabled={cevaplandi}
                     onClick={() => {
                       setCev((x) => ({ ...x, [i]: b }));
-                      cevapKaydet({ kaynak: "alistirma", dogru: b === s.dogru, soru: s.en, cevap: b ? "Doğru" : "Yanlış", beklenen: s.dogru ? "Doğru" : "Yanlış", unite_id: u.id });
+                      cevapKaydet({ kaynak: "alistirma", dogru: b === s.dogru, soru: s.en, cevap: b ? "Doğru" : "Yanlış", beklenen: s.dogru ? "Doğru" : "Yanlış", unite_id: u.id, ders: dersKod });
                     }}
                   >
                     {b ? "Doğru" : "Yanlış"}

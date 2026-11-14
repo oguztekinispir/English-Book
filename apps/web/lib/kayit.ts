@@ -23,6 +23,8 @@ export interface CevapKaydi {
   beklenen?: string;
   sure_ms?: number;
   unite_id?: string;
+  /** "a1-01-2" */
+  ders?: string;
 }
 
 export async function cevapKaydet(k: CevapKaydi): Promise<void> {
@@ -32,6 +34,11 @@ export async function cevapKaydet(k: CevapKaydi): Promise<void> {
   let { error } = await sb.from("cevaplar").insert({ ...k, ogrenci_id: id, cevap: k.cevap || null });
   // Ünite henüz veritabanına yüklenmediyse (yabancı anahtar hatası) ünitesiz kaydet
   if (error?.code === "23503" && k.unite_id) ({ error } = await sb.from("cevaplar").insert({ ...k, unite_id: null, ogrenci_id: id, cevap: k.cevap || null }));
+  // 0004 göçü henüz çalıştırılmadıysa "ders" sütunu yoktur: dersiz kaydet
+  if (error && k.ders && /ders/.test(error.message)) {
+    const { ders: _, ...kalan } = k;
+    ({ error } = await sb.from("cevaplar").insert({ ...kalan, ogrenci_id: id, cevap: k.cevap || null }));
+  }
   if (error) console.warn("Cevap kaydedilemedi:", error.message);
 }
 

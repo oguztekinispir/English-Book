@@ -55,3 +55,39 @@ export function sustur() {
     /* yok say */
   }
 }
+
+function dilSesi(dil: string) {
+  const l = dil.toLowerCase();
+  const vs = speechSynthesis.getVoices();
+  return vs.find((v) => v.lang?.toLowerCase().replace("_", "-") === l) ?? vs.find((v) => v.lang?.toLowerCase().startsWith(l.slice(0, 2)));
+}
+
+/** Bu cihazda Türkçe ses var mı (dinleme modunda Türkçesini de okumak için) */
+export const trSesVar = () => sesVar() && !!dilSesi("tr-TR");
+
+/** Okur ve bitince çözülür. Ses takılırsa süre dolunca yine çözülür. */
+export function soyle(t: string, dil: "en-US" | "tr-TR" = "en-US", hiz = 0.75): Promise<void> {
+  return new Promise((coz) => {
+    if (!sesVar()) return coz();
+    let bitti = false;
+    const son = () => {
+      if (!bitti) {
+        bitti = true;
+        coz();
+      }
+    };
+    try {
+      const u = new SpeechSynthesisUtterance(t);
+      u.lang = dil;
+      u.rate = hiz;
+      const v = dil === "en-US" ? sesSec() : dilSesi(dil);
+      if (v) u.voice = v;
+      u.onend = son;
+      u.onerror = son;
+      setTimeout(son, Math.max(4000, t.length * 260));
+      speechSynthesis.speak(u);
+    } catch {
+      son();
+    }
+  });
+}

@@ -76,3 +76,13 @@ Güvenlik (RLS) testi: `supabase/tests/0001_guvenlik_testi.sql` (öğrenci / ö�
 - Ürün adı ve alan adı
 - Ödeme modeli (öğretmen başı / öğrenci başı / ücretsiz + ücretli özellik)
 - Yapay ses servisi seçimi
+
+## Güncelleme (Kasım 2026): ders yapısı, tekrar, oyun, gramer
+
+- **A1 = 14 ünite, 53 ders.** Her ünite 3-4 ders; her ders ~30 dakika, en çok 30 yeni kelime. Son ders tekrar + ünite testi.
+- Ders sayfası: `/uniteler/<ünite>/<no>`. Sadece dersin içerdiği bölümler görünür. İçerik testi her dersin metinlerinde o derse kadar öğretilmemiş kelime olmadığını kontrol eder.
+- **Günlük tekrar** (`/tekrar`): Leitner 0-1-2-4-7-14 gün, oturumda 25 tekrar + 8 yeni kart, bilemediğin kart oturumda 2 kez daha gelir. Kartlar sadece açılan derslerden gelir. Dinleme modu: EN → TR → EN, ekran açık kalır. Giriş yapılmışsa `tekrar_kartlari` tablosuna yazılır (kimlik = md5('<ünite>:<kelime>')::uuid).
+- **Oyun** (`/oyun`): Eşleştir (süre + rekor), Dinle-bul (3 can), Eki bul (10 soru). Oyunlarda bilinemeyen kelime bugünkü tekrara düşer.
+- **Gramer** (`/gramer`): ek anahtarı, kelime kelime çöz, derslerdeki gramer konuları, Türkçe ek rehberi.
+- Göç `0004_dersler.sql`: `unite_bolumleri.tur` içine 'ders', `cevaplar.ders` sütunu.
+- Sırada: öğrenci "Bugün" sayfası (günlük hedefler + seri), Ünite 2.

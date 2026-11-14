@@ -204,3 +204,17 @@ li.kotu .bosluk.dolu { background: var(--tamam-acik); border-color: var(--tamam)
 .unite-motor { display: flex; flex-direction: column; gap: 10px; }
 .unite-duzen > * { min-width: 0; }
 .unite-gezgin { max-width: 100%; }
+.ui-ders { font-size: 13px; color: var(--soluk); margin-top: 2px; }
+.ders-hedef { font-size: 18px; max-width: 60ch; }
+.ders-listesi { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-direction: column; gap: 10px; max-width: 860px; }
+.ders-karti { display: grid; grid-template-columns: auto 1fr auto; gap: 6px 16px; align-items: center; padding: 16px 18px; text-decoration: none; color: inherit; }
+.ders-karti:hover { border-color: var(--kobalt); }
+.ders-karti.tekrar { background: var(--ek-yumusak); border-color: var(--ek); }
+.dk-no { font-family: var(--f-baslik); font-weight: 800; font-size: 28px; color: var(--kobalt); min-width: 2.4ch; }
+.dk-govde { display: flex; flex-direction: column; gap: 2px; }
+.dk-govde b { font-family: var(--f-baslik); font-size: 20px; }
+.dk-govde small { color: var(--soluk); font-size: 13.5px; }
+.di-durum { font-size: 13.5px; font-weight: 600; color: var(--soluk); white-space: nowrap; }
+.di-durum.tamam { color: var(--tamam); }
+@media (max-width: 560px) { .ders-karti { grid-template-columns: auto 1fr; } .di-durum { grid-column: 2; } }
+.ders-gecis { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; border-top: 1.5px solid var(--cizgi); padding-top: 18px; }

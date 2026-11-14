@@ -1,15 +1,16 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
-import { uniteKelimeleri, type Bosluk, type Siralama, type Unite } from "@ti/icerik";
+import { dersKelimeleri, uniteKelimeleri, type Bosluk, type Ders, type Siralama, type Unite } from "@ti/icerik";
+import { bilemedi } from "@/lib/tekrar";
 import { konus } from "@/lib/ses";
 import { cevapKaydet } from "@/lib/kayit";
 import { esit, useIlerleme, useKaristir } from "./ortak";
 
 /* ---------------- Boşluk doldurma ---------------- */
-export function BoslukDoldur({ u }: { u: Unite }) {
-  const [, setIlerleme] = useIlerleme(u.kod);
+export function BoslukDoldur({ u, d }: { u: Unite; d: Ders }) {
+  const [, setIlerleme] = useIlerleme(d.kod);
   const [cev, setCev] = useState<Record<number, string>>({});
-  const liste = u.alistirmalar.bosluk;
+  const liste = d.alistirmalar.bosluk;
   const bitti = Object.keys(cev).length === liste.length;
   const dogru = liste.filter((b, i) => cev[i] === b.cevap).length;
   useEffect(() => {
@@ -28,7 +29,7 @@ export function BoslukDoldur({ u }: { u: Unite }) {
             secim={cev[i]}
             sec={(s) => {
               setCev((x) => ({ ...x, [i]: s }));
-              cevapKaydet({ kaynak: "alistirma", dogru: s === b.cevap, soru: b.cumle, cevap: s, beklenen: b.cevap, unite_id: u.id });
+              cevapKaydet({ kaynak: "alistirma", dogru: s === b.cevap, soru: b.cumle, cevap: s, beklenen: b.cevap, unite_id: u.id, ders: d.kod });
               if (s === b.cevap) konus(b.cumle.replace("___", b.cevap));
             }}
           />
@@ -65,9 +66,9 @@ function BoslukSatir({ b, secim, sec }: { b: Bosluk; secim?: string; sec: (s: st
 }
 
 /* ---------------- Kelimeleri sıraya koy ---------------- */
-export function SiraylaKur({ u }: { u: Unite }) {
-  const [, setIlerleme] = useIlerleme(u.kod);
-  const liste = u.alistirmalar.siralama;
+export function SiraylaKur({ u, d }: { u: Unite; d: Ders }) {
+  const [, setIlerleme] = useIlerleme(d.kod);
+  const liste = d.alistirmalar.siralama;
   const [i, setI] = useState(0);
   const [puan, setPuan] = useState(0);
   const bitti = i >= liste.length;
@@ -96,7 +97,7 @@ export function SiraylaKur({ u }: { u: Unite }) {
           no={`${i + 1} / ${liste.length}`}
           bitir={(ok, cevap) => {
             if (ok) setPuan((p) => p + 1);
-            cevapKaydet({ kaynak: "alistirma", dogru: ok, soru: liste[i].tr, cevap, beklenen: liste[i].cevap, unite_id: u.id });
+            cevapKaydet({ kaynak: "alistirma", dogru: ok, soru: liste[i].tr, cevap, beklenen: liste[i].cevap, unite_id: u.id, ders: d.kod });
           }}
           sonraki={() => setI((x) => x + 1)}
         />
@@ -172,10 +173,10 @@ function SiraSoru({ s, no, bitir, sonraki }: { s: Siralama; no: string; bitir: (
 }
 
 /* ---------------- Eşleştir ---------------- */
-export function Eslestir({ u }: { u: Unite }) {
-  const [, setIlerleme] = useIlerleme(u.kod);
+export function Eslestir({ u, d }: { u: Unite; d: Ders }) {
+  const [, setIlerleme] = useIlerleme(d.kod);
   const [tur, setTur] = useState(0);
-  const tum = useMemo(() => uniteKelimeleri(u), [u]);
+  const tum = useMemo(() => (d.tekrar ? uniteKelimeleri(u) : dersKelimeleri(d)), [u, d]);
   const karisik = useKaristir(tum, tur);
   const kelimeler = useMemo(() => karisik.slice(0, 6), [karisik]);
   const sag = useKaristir(kelimeler, kelimeler);
@@ -191,7 +192,8 @@ export function Eslestir({ u }: { u: Unite }) {
   const sagSec = (en: string) => {
     if (!solSecili) return;
     const ok = solSecili === en;
-    cevapKaydet({ kaynak: "oyun", dogru: ok, soru: solSecili, cevap: kelimeler.find((k) => k.en === en)?.tr, beklenen: kelimeler.find((k) => k.en === solSecili)?.tr, unite_id: u.id });
+    cevapKaydet({ kaynak: "oyun", dogru: ok, soru: solSecili, cevap: kelimeler.find((k) => k.en === en)?.tr, beklenen: kelimeler.find((k) => k.en === solSecili)?.tr, unite_id: u.id, ders: d.kod });
+    if (!ok) bilemedi(`${u.kod}:${solSecili}`);
     if (ok) {
       setEslesen((x) => [...x, en]);
       setSolSecili(null);

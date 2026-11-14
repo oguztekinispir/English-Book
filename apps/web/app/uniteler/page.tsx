@@ -12,7 +12,7 @@ export default function Uniteler() {
       <Ust aktif="uniteler" />
       <main className="uniteler">
         <h1>Üniteler</h1>
-        <p className="not uniteler-giris">A1'de 12 ünite var. Her ünite bir konu ve bir gramer adımı. Ünite bitince o kalıp cümle yolunda da seni bekliyor olacak.</p>
+        <p className="not uniteler-giris">A1'de {A1_PLAN.length} ünite, {A1_PLAN.reduce((t, x) => t + x.dersSayisi, 0)} ders var. Her ders yaklaşık 30 dakika: yeni kelimeler, bir diyalog, alıştırmalar ve kısa bir test. Her ünitenin son dersi tekrar ve ünite testi.</p>
 
         <h2 className="seviye-baslik">A1, başlangıç</h2>
         <ol className="unite-izgara">
@@ -28,6 +28,7 @@ export default function Uniteler() {
                   </span>
                   <span className="ui-hedef">{p.hedef}</span>
                   <span className="ui-gramer">{p.gramerEtiketi}</span>
+                  <span className="ui-ders">{p.dersSayisi} ders</span>
                 </span>
                 {!hazir && <span className="ui-durum">Hazırlanıyor</span>}
               </>

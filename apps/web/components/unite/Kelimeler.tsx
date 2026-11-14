@@ -1,20 +1,21 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
-import type { Kelime, Unite } from "@ti/icerik";
+import type { Ders, Kelime, Unite } from "@ti/icerik";
+import { bilemedi } from "@/lib/tekrar";
 import { konus } from "@/lib/ses";
 import { cevapKaydet } from "@/lib/kayit";
 import { SesDugmesi } from "../Kucukler";
 import { karistir, useIlerleme } from "./ortak";
 
-export function Kelimeler({ u }: { u: Unite }) {
+export function Kelimeler({ u, d }: { u: Unite; d: Ders }) {
   const [grup, setGrup] = useState(0);
   const [kartModu, setKartModu] = useState(false);
-  const g = u.kelimeGruplari[grup];
+  const g = d.kelimeGruplari[grup];
 
   return (
     <div className="kelimeler">
       <div className="grup-sekme" role="tablist" aria-label="Kelime grupları">
-        {u.kelimeGruplari.map((x, i) => (
+        {d.kelimeGruplari.map((x, i) => (
           <button key={x.ad} role="tab" aria-selected={grup === i} onClick={() => setGrup(i)}>
             {x.ad} <small>{x.kelimeler.length}</small>
           </button>
@@ -22,7 +23,7 @@ export function Kelimeler({ u }: { u: Unite }) {
       </div>
 
       {kartModu ? (
-        <KartModu u={u} kelimeler={g.kelimeler} kapat={() => setKartModu(false)} />
+        <KartModu u={u} d={d} kelimeler={g.kelimeler} kapat={() => setKartModu(false)} />
       ) : (
         <>
           <div className="kelime-ust">
@@ -63,8 +64,8 @@ function KelimeKarti({ k }: { k: Kelime }) {
 }
 
 /** Türkçesini gör → İngilizcesini düşün → çevir → bildim / bilemedim */
-function KartModu({ u, kelimeler, kapat }: { u: Unite; kelimeler: Kelime[]; kapat: () => void }) {
-  const [, setIlerleme] = useIlerleme(u.kod);
+function KartModu({ u, d, kelimeler, kapat }: { u: Unite; d: Ders; kelimeler: Kelime[]; kapat: () => void }) {
+  const [, setIlerleme] = useIlerleme(d.kod);
   const deste = useMemo(() => karistir(kelimeler), [kelimeler]);
   const [sira, setSira] = useState(0);
   const [acik, setAcik] = useState(false);
@@ -78,7 +79,8 @@ function KartModu({ u, kelimeler, kapat }: { u: Unite; kelimeler: Kelime[]; kapa
   }, [bitti]);
 
   const cevap = (b: boolean) => {
-    cevapKaydet({ kaynak: "tekrar", dogru: b, soru: k.tr, beklenen: k.en, unite_id: u.id });
+    cevapKaydet({ kaynak: "tekrar", dogru: b, soru: k.tr, beklenen: k.en, unite_id: u.id, ders: d.kod });
+    if (!b) bilemedi(`${u.kod}:${k.en}`);
     if (b) setBildim((x) => [...x, k.en]);
     else setTekrar((x) => [...x, k]);
     setAcik(false);
