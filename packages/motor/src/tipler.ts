@@ -12,6 +12,8 @@ export interface Ozne {
   p: Kisi;
   /** "My friend", "The teacher" gibi isim özneler (zamir değil) */
   nz?: 1;
+  /** İyelik ekli öznede kök: "Annem" → "Anne" (parçalamada -m = my gösterilir) */
+  kok?: string;
 }
 
 /** [İngilizce, Türkçe, kabul edilen alternatifler] */

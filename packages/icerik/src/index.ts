@@ -1,5 +1,6 @@
 import type { Ders, Kelime, Unite, UniteTaslak } from "./tipler";
 import { A1_01 } from "./a1/01-merhaba";
+import { A1_02 } from "./a1/02-ailem";
 
 export * from "./tipler";
 export * from "./sozluk";
@@ -9,7 +10,7 @@ export * from "./gramerRehberi";
 /** A1 müfredatı: 14 ünite, ~50 ders. Yazılmış üniteler UNITELER'de, diğerleri taslak. */
 export const A1_PLAN: UniteTaslak[] = [
   { kod: "a1-01", dersSayisi: 4, seviye: "A1", sira: 1, baslik: "Merhaba", baslikEn: "Hello", hedef: "Kendini tanıtırsın, yaşını ve nereli olduğunu söylersin.", gramerEtiketi: "I am, you are, he is" },
-  { kod: "a1-02", dersSayisi: 4, seviye: "A1", sira: 2, baslik: "Ailem ve işim", baslikEn: "Family and work", hedef: "Aileni ve mesleğini anlatırsın.", gramerEtiketi: "is / are, olumsuz, soru, my / your" },
+  { kod: "a1-02", dersSayisi: 4, seviye: "A1", sira: 2, baslik: "Ailem ve işim", baslikEn: "Family and work", hedef: "Aileni ve mesleğini anlatırsın.", gramerEtiketi: "my / your / his / her, a / an, not, soru" },
   { kod: "a1-03", dersSayisi: 3, seviye: "A1", sira: 3, baslik: "Nasılsın?", baslikEn: "How are you?", hedef: "Duygunu ve durumunu söylersin, renkleri bilirsin.", gramerEtiketi: "am / is / are tamamı, sıfatlar" },
   { kod: "a1-04", dersSayisi: 4, seviye: "A1", sira: 4, baslik: "Neyim var?", baslikEn: "What have you got?", hedef: "Eşyalarını ve vücudunu anlatırsın.", gramerEtiketi: "have got / has got, çoğul -s" },
   { kod: "a1-05", dersSayisi: 4, seviye: "A1", sira: 5, baslik: "Evim", baslikEn: "My home", hedef: "Evini ve eşyaların yerini anlatırsın.", gramerEtiketi: "there is / there are, in / on / under" },
@@ -25,7 +26,7 @@ export const A1_PLAN: UniteTaslak[] = [
 ];
 
 /** Yazılmış (tam) üniteler, sırayla */
-export const UNITELER: Unite[] = [A1_01];
+export const UNITELER: Unite[] = [A1_01, A1_02];
 
 export const uniteBul = (kod: string): Unite | undefined => UNITELER.find((u) => u.kod === kod);
 

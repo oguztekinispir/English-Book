@@ -53,7 +53,7 @@ export function uniteSozlugu(u: Unite, onceki: Unite[] = [], dersNo?: number): M
 
 /** Bir kelimeyi sözlükte arar: tam hali, çoğul -s'siz hali, büyük/küçük harf farkı olmadan */
 export function sozlukteBul(sozluk: Map<string, SozlukKaydi>, kelime: string): SozlukKaydi | undefined {
-  const w = kelime.toLowerCase();
+  const w = kelime.toLowerCase().replace(/['’]s$/, ""); // iyelik: father's → father
   return sozluk.get(w) ?? (w.endsWith("s") ? sozluk.get(w.slice(0, -1)) : undefined) ?? (w.endsWith("es") ? sozluk.get(w.slice(0, -2)) : undefined);
 }
 
@@ -64,5 +64,5 @@ export function sozlukteBul(sozluk: Map<string, SozlukKaydi>, kelime: string): S
 export function bilinmeyenler(u: Unite, metin: string, onceki: Unite[] = [], dersNo?: number): string[] {
   const s = uniteSozlugu(u, onceki, dersNo);
   const ozel = new Set([...onceki.flatMap((x) => x.ozelIsimler), ...u.ozelIsimler].map((x) => x.toLowerCase()));
-  return kelimelereBol(metin).filter((w) => !ozel.has(w.toLowerCase()) && !sozlukteBul(s, w));
+  return kelimelereBol(metin).filter((w) => !ozel.has(w.toLowerCase().replace(/['’]s$/, "")) && !sozlukteBul(s, w));
 }

@@ -188,6 +188,7 @@ export function diagnose(it: Soru, user: string): Ipucu[] {
           m.comp === "a lot" || m.comp.startsWith("a lot")
             ? `${mk("a lot")} = çok. Buradaki “a” kalıbın parçası, tek başına anlamı yok.`
             : `Meslek ya da tek bir şey söylerken başına ${mk("a")} gelir: I am ${mk("a")} student, she is ${mk("a")} teacher. Türkçede karşılığı yok; “bir öğrenciyim” gibi düşün.`,
+        an: `Sesli harfle (a, e, i, o, u sesiyle) başlayan kelimeden önce ${mk("a")} değil ${mk("an")} gelir: ${mk("an")} engineer, ${mk("an")} actor. Söylemesi kolay olsun diye.`,
         from: `Türkçedeki -den / -dan eki (Türkiye'den, Almanya'dan → nereden?) İngilizcede ${mk("from")} olur ve yerin ÖNÜNE gelir: ${mk("from")} Turkey.`,
       };
       real.filter((w) => PREP[w]).forEach((w) => out.push({ tur: "ipucu", metin: PREP[w] }));

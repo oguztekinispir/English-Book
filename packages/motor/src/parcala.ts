@@ -22,6 +22,7 @@ const COMP_SPLIT: Record<string, Parca[]> = {
   okula: [["okul", "okul → school", "root"], ["a", "-a: nereye? → to", "suf"]],
   parka: [["park", "park → the park", "root"], ["a", "-a: nereye? → to", "suf"]],
   okulda: [["okul", "okul → school", "root"], ["da", "-da: nerede? → at", "suf"]],
+  burada: [["bura", "bura → here", "root"], ["da", "-da: nerede? (here ile at gelmez)", "suf"]],
   parkta: [["park", "park → the park", "root"], ["ta", "-ta: nerede? → in", "suf"]],
   ofiste: [["ofis", "ofis → the office", "root"], ["te", "-te: nerede? → in", "suf"]],
   denizde: [["deniz", "deniz → the sea", "root"], ["de", "-de: nerede? → in", "suf"]],
@@ -33,7 +34,15 @@ const COMP_SPLIT: Record<string, Parca[]> = {
 export function trSeg(m: Meta | null | undefined): Parcalanmis | null {
   if (!m) return null;
   const P = m.s.p,
-    subj: Parca[] = m.s.tr === "Arkadaşım" ? [["Arkadaş", "arkadaş → friend", "root"], ["ım", "-ım: benim → my", "pers"]] : [[m.s.tr, "kim → " + m.s.en, "pers"]];
+    subj: Parca[] =
+      m.s.tr === "Arkadaşım"
+        ? [["Arkadaş", "arkadaş → friend", "root"], ["ım", "-ım: benim → my", "pers"]]
+        : m.s.kok && m.s.tr.startsWith(m.s.kok)
+          ? [
+              [m.s.kok, `${m.s.kok.toLocaleLowerCase("tr")} → ${m.s.en.replace(/^my /i, "")}`, "root"],
+              [m.s.tr.slice(m.s.kok.length), `-${m.s.tr.slice(m.s.kok.length)}: benim → my`, "pers"],
+            ]
+          : [[m.s.tr, "kim → " + m.s.en, "pers"]];
   const cw: Parca[] = COMP_SPLIT[m.compTr] || [[m.compTr, m.compTr + " → " + m.comp, "root"]];
   const pc = (w: string, Q: number): Parca[] => {
     const y = endsV(w) ? "y" : "",
