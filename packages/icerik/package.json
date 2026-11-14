@@ -1,0 +1,15 @@
+{
+  "name": "@ti/icerik",
+  "version": "0.1.0",
+  "description": "A1–A2 müfredat içeriği (orijinal): üniteler, kelimeler, diyaloglar, alıştırmalar",
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "sql": "vite-node scripts/sql-uret.ts"
+  },
+  "dependencies": { "@ti/motor": "*" },
+  "devDependencies": { "typescript": "^5.6.0", "vitest": "^2.1.0", "@types/node": "^22.0.0" }
+}

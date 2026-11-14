@@ -22,14 +22,16 @@ export interface CevapKaydi {
   cevap?: string;
   beklenen?: string;
   sure_ms?: number;
+  unite_id?: string;
 }
 
 export async function cevapKaydet(k: CevapKaydi): Promise<void> {
   const id = await kullaniciId();
   if (!id) return;
-  const { error } = await supabaseTarayici()
-    .from("cevaplar")
-    .insert({ ...k, ogrenci_id: id, cevap: k.cevap || null });
+  const sb = supabaseTarayici();
+  let { error } = await sb.from("cevaplar").insert({ ...k, ogrenci_id: id, cevap: k.cevap || null });
+  // Ünite henüz veritabanına yüklenmediyse (yabancı anahtar hatası) ünitesiz kaydet
+  if (error?.code === "23503" && k.unite_id) ({ error } = await sb.from("cevaplar").insert({ ...k, unite_id: null, ogrenci_id: id, cevap: k.cevap || null }));
   if (error) console.warn("Cevap kaydedilemedi:", error.message);
 }
 

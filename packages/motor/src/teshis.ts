@@ -184,7 +184,11 @@ export function diagnose(it: Soru, user: string): Ipucu[] {
         in: `-de / -da eki (parkta, denizde, ofiste) bir yerin içini anlatırken ${mk("in")} olur: in the park.`,
         on: `Günlerle ${mk("on")} kullanılır: on Monday (pazartesi). Türkçede ek yok.`,
         the: `Belli bir yer için ${mk("the")} gelir: the park, the office, the sea, the newspaper. Türkçede karşılığı yok; kalıpla birlikte ezberle.`,
-        a: `${mk("a lot")} = çok. Buradaki “a” kalıbın parçası, tek başına anlamı yok.`,
+        a:
+          m.comp === "a lot" || m.comp.startsWith("a lot")
+            ? `${mk("a lot")} = çok. Buradaki “a” kalıbın parçası, tek başına anlamı yok.`
+            : `Meslek ya da tek bir şey söylerken başına ${mk("a")} gelir: I am ${mk("a")} student, she is ${mk("a")} teacher. Türkçede karşılığı yok; “bir öğrenciyim” gibi düşün.`,
+        from: `Türkçedeki -den / -dan eki (Türkiye'den, Almanya'dan → nereden?) İngilizcede ${mk("from")} olur ve yerin ÖNÜNE gelir: ${mk("from")} Turkey.`,
       };
       real.filter((w) => PREP[w]).forEach((w) => out.push({ tur: "ipucu", metin: PREP[w] }));
     }

@@ -68,5 +68,15 @@ export interface Soru {
   alts: string[];
 }
 
+/**
+ * Üretecin kullanacağı kelimeler. Verilmezse motorun kendi listeleri (veri.ts) kullanılır.
+ * Ünite pratiği için: o ünitenin özneleri, durumları ve fiilleri.
+ */
+export interface Malzeme {
+  ozne?: Ozne[];
+  durum?: Ikili[];
+  fiil?: Fiil[];
+}
+
 /** 0 ile 1 arasında sayı döndüren rastgele sayı kaynağı (Math.random gibi) */
 export type Rng = () => number;

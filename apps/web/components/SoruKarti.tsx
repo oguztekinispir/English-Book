@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { PK_ALL, PK_HINT, RULES, inf, kalipSecimiDogru, matchAns, ruleKey, type Kalip, type Seviye, type Soru } from "@ti/motor";
+import { PK_ALL, PK_HINT, RULES, inf, kalipSecimiDogru, matchAns, ruleKey, type Kalip, type Malzeme, type Seviye, type Soru } from "@ti/motor";
 import { konus } from "@/lib/ses";
 import { turParca } from "@/lib/motor-yardim";
 import { SesDugmesi } from "./Kucukler";
@@ -14,6 +14,8 @@ interface Props {
   /** Cümle yolu seviyesi. Karışık seviyelerde önce "hangi kalıp?" sorulur. */
   seviye?: Seviye;
   formulGoster?: boolean;
+  /** Örnek cümleler bu kelimelerle üretilsin (ünite pratiği) */
+  malzeme?: Malzeme;
   onSecim?: (dogru: boolean) => void;
   onKontrol: (ok: boolean, cevap: string) => void;
   /** Sonucun üstünde gösterilecek şey (seviye atladın vb.) */
@@ -22,7 +24,7 @@ interface Props {
   aksiyonlar: (ok: boolean) => React.ReactNode;
 }
 
-export function SoruKarti({ soru, seviye, formulGoster, onSecim, onKontrol, sonucUstu, aksiyonlar }: Props) {
+export function SoruKarti({ soru, seviye, formulGoster, malzeme, onSecim, onKontrol, sonucUstu, aksiyonlar }: Props) {
   const pk = seviye?.pk;
   const [adim, setAdim] = useState<Adim>(pk ? "sec" : "yaz");
   const [secim, setSecim] = useState<string | null>(null);
@@ -176,7 +178,7 @@ export function SoruKarti({ soru, seviye, formulGoster, onSecim, onKontrol, sonu
             </div>
           </section>
 
-          {!sonuc.ok && <Ogretmen soru={soru} cevap={sonuc.cevap} />}
+          {!sonuc.ok && <Ogretmen soru={soru} cevap={sonuc.cevap} malzeme={malzeme} />}
 
           <div className="dugmeler son">{aksiyonlar(sonuc.ok)}</div>
         </div>

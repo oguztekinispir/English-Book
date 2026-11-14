@@ -25,6 +25,9 @@ const COMP_SPLIT: Record<string, Parca[]> = {
   parkta: [["park", "park → the park", "root"], ["ta", "-ta: nerede? → in", "suf"]],
   ofiste: [["ofis", "ofis → the office", "root"], ["te", "-te: nerede? → in", "suf"]],
   denizde: [["deniz", "deniz → the sea", "root"], ["de", "-de: nerede? → in", "suf"]],
+  "Türkiye'den": [["Türkiye", "Türkiye → Turkey", "root"], ["'den", "-den: nereden? → from", "suf"]],
+  "İngiltere'den": [["İngiltere", "İngiltere → England", "root"], ["'den", "-den: nereden? → from", "suf"]],
+  "Almanya'dan": [["Almanya", "Almanya → Germany", "root"], ["'dan", "-dan: nereden? → from", "suf"]],
 };
 
 export function trSeg(m: Meta | null | undefined): Parcalanmis | null {

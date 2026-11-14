@@ -15,7 +15,8 @@
     "@ti/motor": "*",
     "next": "^15.1.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "@ti/icerik": "*"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

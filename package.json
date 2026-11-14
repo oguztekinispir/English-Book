@@ -1,9 +1,13 @@
 {
   "name": "turkce-ingilizce",
   "private": true,
-  "workspaces": ["packages/*", "apps/*"],
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
   "scripts": {
     "test": "npm test --workspaces",
-    "typecheck": "npm run typecheck --workspaces"
+    "typecheck": "npm run typecheck --workspaces",
+    "icerik:sql": "npm run sql -w @ti/icerik"
   }
 }

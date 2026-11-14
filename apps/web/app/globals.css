@@ -139,3 +139,16 @@ mark { background: var(--ek); color: var(--murekkep); padding: 0 0.2em; border-r
 .ust-cikis button:hover { background: var(--kobalt-acik); color: var(--murekkep); }
 @media (max-width: 480px) { .ust-ikincil { display: none; } .ust-cikis button { padding: 7px 8px; font-size: 14px; } }
 .kayit-cagri { border-top: 1.5px dashed var(--cizgi); padding-top: 10px; }
+@media (max-width: 480px) {
+  .ust { gap: 8px; }
+  .marka { font-size: 16.5px; }
+  .ust nav { gap: 2px; }
+  .ust nav a { padding: 7px 8px; font-size: 13.5px; }
+}
+@media (max-width: 360px) { .marka span:last-child { display: none; } }
+@media (max-width: 420px) {
+  .marka { font-size: 15px; }
+  .marka .marka-ek { padding: 0 3px; }
+  .ust nav a { padding: 6px 7px; font-size: 13px; }
+  .ust-cikis button { padding: 6px 6px; font-size: 13px; }
+}

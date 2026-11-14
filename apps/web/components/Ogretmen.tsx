@@ -1,22 +1,22 @@
 "use client";
 import { useMemo } from "react";
-import { RULES, diagnose, genItem, ruleKey, siraHatasi, type Soru } from "@ti/motor";
+import { RULES, diagnose, genItem, ruleKey, siraHatasi, type Malzeme, type Soru } from "@ti/motor";
 import { TAM } from "@/lib/motor-yardim";
 import { Isaretli, SesDugmesi } from "./Kucukler";
 import { KelimeSirasi } from "./Parcalama";
 
 /** Yanlış cevaptan sonra: neyi yanlış yaptın + kural + aynı kuraldan örnekler. Yapay zekâsız. */
-export function Ogretmen({ soru, cevap }: { soru: Soru; cevap: string }) {
+export function Ogretmen({ soru, cevap, malzeme }: { soru: Soru; cevap: string; malzeme?: Malzeme }) {
   const d = useMemo(() => (cevap ? diagnose(soru, cevap) : []), [soru, cevap]);
   const R = RULES[ruleKey(soru.meta)];
   const ornekler = useMemo(() => {
     const out: Soru[] = [];
     for (let i = 0; i < 14 && out.length < 2; i++) {
-      const x = genItem(TAM, { form: soru.meta.form, pol: soru.meta.pol });
+      const x = genItem(TAM, { form: soru.meta.form, pol: soru.meta.pol }, Math.random, malzeme);
       if (x.en !== soru.en && !out.some((y) => y.en === x.en)) out.push(x);
     }
     return out;
-  }, [soru]);
+  }, [soru, malzeme]);
 
   return (
     <div className="ogretmen">

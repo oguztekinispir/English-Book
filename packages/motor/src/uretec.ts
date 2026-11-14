@@ -4,7 +4,7 @@
  */
 import { M_ADJ, M_SUBJ, M_VERB } from "./veri";
 import { aorQ, aorTR, canQ, canTR, copPast, copPres, pastQ, pastTR, v4 as v4q, willQ, willTR } from "./turkce";
-import type { Ayar, Cip, Kalip, Kutup, Meta, Rng, Soru } from "./tipler";
+import type { Ayar, Cip, Kalip, Kutup, Malzeme, Meta, Rng, Soru } from "./tipler";
 
 export const pick = <T>(a: T[], rng: Rng = Math.random): T => a[Math.floor(rng() * a.length)];
 export const cap = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
@@ -15,7 +15,10 @@ export interface Zorla {
   pol: Kutup;
 }
 
-export function genItem(set: Ayar, force?: Zorla | null, rng: Rng = Math.random): Soru {
+export function genItem(set: Ayar, force?: Zorla | null, rng: Rng = Math.random, malzeme?: Malzeme): Soru {
+  const SUBJ = malzeme?.ozne ?? M_SUBJ,
+    ADJ = malzeme?.durum ?? M_ADJ,
+    VERB = malzeme?.fiil ?? M_VERB;
   const forms = (["be", "bePast", "simple", "past", "can", "will"] as Kalip[]).filter((f) => set[f]);
   if (!forms.length) forms.push("be");
   const pols: Kutup[] = ["pos"];
@@ -23,8 +26,11 @@ export function genItem(set: Ayar, force?: Zorla | null, rng: Rng = Math.random)
   if (set.q) pols.push("q");
   const form = force ? force.form : pick(forms, rng),
     pol = force ? force.pol : pick(pols, rng);
-  let s = pick(M_SUBJ, rng);
-  if (pol === "q" && (s.p === 0 || s.p === 3)) s = pick(M_SUBJ.filter((x) => x.p !== 0 && x.p !== 3), rng);
+  let s = pick(SUBJ, rng);
+  if (pol === "q" && (s.p === 0 || s.p === 3)) {
+    const uygun = SUBJ.filter((x) => x.p !== 0 && x.p !== 3);
+    if (uygun.length) s = pick(uygun, rng);
+  }
   const p = s.p,
     third = p === 2,
     chips: Cip[] = [[s.tr, s.en]];
@@ -35,7 +41,7 @@ export function genItem(set: Ayar, force?: Zorla | null, rng: Rng = Math.random)
   const meta = { form, pol, s, third } as Meta;
 
   if (form === "be" || form === "bePast") {
-    const [ae, at, alt] = pick(M_ADJ, rng),
+    const [ae, at, alt] = pick(ADJ, rng),
       past = form === "bePast";
     const beP = s.en === "I" ? "am" : third ? "is" : "are",
       beX = s.en === "I" || third ? "was" : "were",
@@ -62,7 +68,7 @@ export function genItem(set: Ayar, force?: Zorla | null, rng: Rng = Math.random)
     chips.push([at, ae]);
     kind = past ? "Geçmiş durum · was / were" : "Şimdi durum · am / is / are";
   } else if (form === "can" || form === "will") {
-    const v = pick(M_VERB.filter((x) => !x.noModal), rng),
+    const v = pick(VERB.filter((x) => !x.noModal), rng),
       vc = pick(v.cs, rng),
       [ce, ct] = vc,
       md = form,
@@ -96,7 +102,7 @@ export function genItem(set: Ayar, force?: Zorla | null, rng: Rng = Math.random)
     chips.push([ct, ce]);
     chips.push([v.stem, v.en]);
   } else {
-    const v = pick(M_VERB, rng),
+    const v = pick(VERB, rng),
       past = form === "past",
       vc = pick(v.cs, rng),
       [ce, ct] = vc;
@@ -158,10 +164,10 @@ export function genItem(set: Ayar, force?: Zorla | null, rng: Rng = Math.random)
 export function createFreshGen(rng: Rng = Math.random) {
   const RECENT: string[] = [],
     RECENTC: string[] = [];
-  return function genFresh(set: Ayar, force?: Zorla | null): Soru {
+  return function genFresh(set: Ayar, force?: Zorla | null, malzeme?: Malzeme): Soru {
     let it!: Soru;
     for (let i = 0; i < 30; i++) {
-      it = genItem(set, force, rng);
+      it = genItem(set, force, rng, malzeme);
       const c = it.meta.comp + "|" + (it.meta.v ? it.meta.v.en : "");
       if (!RECENT.includes(it.tr) && !RECENTC.slice(-3).includes(c)) break;
     }
