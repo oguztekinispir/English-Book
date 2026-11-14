@@ -12,7 +12,7 @@ export function dersBolumleri(d: Ders): Bolum[] {
   if (d.kelimeGruplari.length) b.push({ id: "kelimeler", ad: "Kelimeler" });
   if (d.kaliplar.length) b.push({ id: "kaliplar", ad: "Kalıplar" });
   if (d.gramer.length) b.push({ id: "gramer", ad: d.tekrar ? "Özet" : "Gramer" });
-  if (d.diyaloglar.length) b.push({ id: "diyaloglar", ad: d.diyaloglar.length > 1 ? "Diyaloglar" : "Diyalog" });
+  if (d.diyaloglar.length || d.miniDiyaloglar?.length) b.push({ id: "diyaloglar", ad: "Diyaloglar" });
   if (d.okuma) b.push({ id: "okuma", ad: "Okuma" });
   b.push({ id: "alistirmalar", ad: "Alıştırmalar" });
   if (d.motor) b.push({ id: "cumle", ad: "Cümle kur" });

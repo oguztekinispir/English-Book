@@ -4,7 +4,7 @@
  * Kelime anlamları ünite sözlüğünden otomatik gelir.
  */
 import { useEffect, useMemo, useRef, useState } from "react";
-import { acKisaltma, sozlukteBul, uniteSozlugu, type Diyalog, type Okuma, type Satir, type Unite } from "@ti/icerik";
+import { acKisaltma, sozlukteBul, uniteSozlugu, UNITELER, type Bonus, type Diyalog, type Okuma, type Satir, type Unite } from "@ti/icerik";
 import { konus, sustur } from "@/lib/ses";
 import { cevapKaydet } from "@/lib/kayit";
 import { useIlerleme } from "./ortak";
@@ -18,7 +18,7 @@ export function DiyalogOkuyucu({ u, d }: { u: Unite; d: Diyalog }) {
 export function OkumaOkuyucu({ u, o, dersKod }: { u: Unite; o: Okuma; dersKod: string }) {
   return (
     <>
-      <Okuyucu u={u} baslik={o.baslik} satirlar={o.satirlar} duzMetin />
+      <Okuyucu u={u} baslik={o.baslik} satirlar={o.satirlar} bonus={o.bonus} duzMetin />
       <DogruYanlis u={u} o={o} dersKod={dersKod} />
     </>
   );
@@ -30,6 +30,7 @@ function Okuyucu({
   sahne,
   satirlar,
   kisiler,
+  bonus,
   duzMetin,
 }: {
   u: Unite;
@@ -37,6 +38,7 @@ function Okuyucu({
   sahne?: string;
   satirlar: Satir[];
   kisiler?: Record<string, Kisi>;
+  bonus?: Bonus[];
   duzMetin?: boolean;
 }) {
   const [turkce, setTurkce] = useState(false);
@@ -94,18 +96,23 @@ function Okuyucu({
       </header>
       <ol className="satirlar">
         {satirlar.map((s, i) => (
-          <SatirGoster key={i} u={u} s={s} kisi={s.kim && kisiler ? kisiler[s.kim] : undefined} turkce={turkce} caliyor={calan === i} />
+          <SatirGoster key={i} u={u} s={s} bonus={bonus} kisi={s.kim && kisiler ? kisiler[s.kim] : undefined} turkce={turkce} caliyor={calan === i} />
         ))}
       </ol>
     </article>
   );
 }
 
-function SatirGoster({ u, s, kisi, turkce, caliyor }: { u: Unite; s: Satir; kisi?: Kisi; turkce: boolean; caliyor: boolean }) {
+function SatirGoster({ u, s, bonus, kisi, turkce, caliyor }: { u: Unite; s: Satir; bonus?: Bonus[]; kisi?: Kisi; turkce: boolean; caliyor: boolean }) {
   const [coz, setCoz] = useState(false);
   const [tr, setTr] = useState(false);
-  const sozluk = useMemo(() => uniteSozlugu(u), [u]);
-  const ozel = useMemo(() => new Set(u.ozelIsimler.map((x) => x.toLowerCase())), [u]);
+  const onceki = useMemo(() => UNITELER.filter((v) => v.sira < u.sira), [u]);
+  const sozluk = useMemo(() => {
+    const m = uniteSozlugu(u, onceki);
+    (bonus ?? []).forEach((b) => m.set(b.en.toLowerCase(), { en: b.en, tr: `${b.tr} (bonus)` }));
+    return m;
+  }, [u, onceki, bonus]);
+  const ozel = useMemo(() => new Set([...onceki, u].flatMap((v) => v.ozelIsimler.map((x) => x.toLowerCase()))), [u, onceki]);
   const parcalar = useMemo(() => {
     // Görünen kelimeler (kısaltmalar olduğu gibi) + her birinin açılımındaki anlamlar
     return s.en.split(/\s+/).map((w) => {

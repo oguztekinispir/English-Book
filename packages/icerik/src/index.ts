@@ -5,6 +5,7 @@ import { A1_02 } from "./a1/02-ailem";
 export * from "./tipler";
 export * from "./sozluk";
 export * from "./ekiBul";
+export * from "./karakterler";
 export * from "./gramerRehberi";
 
 /** A1 müfredatı: 14 ünite, ~50 ders. Yazılmış üniteler UNITELER'de, diğerleri taslak. */

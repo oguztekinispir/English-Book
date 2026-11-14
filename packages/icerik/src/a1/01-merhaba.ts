@@ -47,7 +47,7 @@ export const A1_01: Unite = {
     "0'dan 20'ye kadar sayar, yaşını söylersin.",
     "Karşındakine adını, nereli olduğunu ve yaşını sorarsın.",
   ],
-  ozelIsimler: ["Anna", "Emre", "London", "Istanbul", "Lisa", "Deniz", "Zeynep", "Izmir", "Tom", "Oğuz", "Ankara", "Ece", "John"],
+  ozelIsimler: ["Anna", "Emre", "London", "Istanbul", "Lisa", "Deniz", "Izmir", "Oğuz", "Ankara", "Ece", "John", "Berlin", "Kerem", "Moda"],
 
   dersler: [
     // ================================================================ 1.1
@@ -128,7 +128,10 @@ export const A1_01: Unite = {
       diyaloglar: [
         {
           baslik: "Sabah, apartmanda",
-          sahne: "Ece ile komşusu John sabah merdivenlerde karşılaşıyor.",
+          sahne: "Moda Apartmanı. Ece ile yeni komşusu John sabah merdivenlerde karşılaşıyor.",
+          bolum: 1,
+          yer: "apartman",
+          anahtar: ["morning", "how", "fine", "thank", "goodbye"],
           kisiler: { E: { ad: "Ece", ses: "kadin" }, J: { ad: "John", ses: "erkek" } },
           satirlar: [
             { kim: "E", en: "Good morning, John!", tr: "Günaydın John!" },
@@ -137,6 +140,42 @@ export const A1_01: Unite = {
             { kim: "J", en: "Fine, thanks.", tr: "İyiyim, sağ ol." },
             { kim: "E", en: "Goodbye, John!", tr: "Hoşça kal John!" },
             { kim: "J", en: "Bye, Ece! See you!", tr: "Güle güle Ece! Görüşürüz!" },
+          ],
+        },
+      ],
+      miniDiyaloglar: [
+        {
+          baslik: "İlk tanışma",
+          sahne: "Bir gün önce. John apartmana yeni taşınıyor.",
+          kisiler: { E: { ad: "Ece", ses: "kadin" }, J: { ad: "John", ses: "erkek" } },
+          satirlar: [
+            { kim: "E", en: "Hello! I'm Ece.", tr: "Merhaba! Ben Ece." },
+            { kim: "J", en: "Hi, Ece! I'm John.", tr: "Selam Ece! Ben John." },
+            { kim: "E", en: "Welcome, John! Nice to meet you.", tr: "Hoş geldin John! Tanıştığımıza memnun oldum." },
+            { kim: "J", en: "Nice to meet you too. Thank you!", tr: "Ben de memnun oldum. Teşekkür ederim!" },
+          ],
+        },
+        {
+          baslik: "Akşam",
+          sahne: "Akşam, apartmanın kapısında.",
+          kisiler: { J: { ad: "John", ses: "erkek" }, E: { ad: "Ece", ses: "kadin" } },
+          satirlar: [
+            { kim: "J", en: "Good evening, Ece!", tr: "İyi akşamlar Ece!" },
+            { kim: "E", en: "Good evening, John! How are you?", tr: "İyi akşamlar John! Nasılsın?" },
+            { kim: "J", en: "Fine, thanks. And you?", tr: "İyiyim, sağ ol. Ya sen?" },
+            { kim: "E", en: "I'm fine too. Good night!", tr: "Ben de iyiyim. İyi geceler!" },
+            { kim: "J", en: "Good night!", tr: "İyi geceler!" },
+          ],
+        },
+        {
+          baslik: "Pardon",
+          sahne: "John, Ece'nin kapısını çalıyor ama kapıyı başka biri açıyor.",
+          kisiler: { J: { ad: "John", ses: "erkek" }, K: { ad: "Kerem", ses: "erkek" } },
+          satirlar: [
+            { kim: "J", en: "Excuse me. Ece?", tr: "Affedersiniz. Ece?" },
+            { kim: "K", en: "No, sorry. I'm Kerem.", tr: "Hayır, kusura bakma. Ben Kerem." },
+            { kim: "J", en: "Hello, Kerem! I'm John.", tr: "Merhaba Kerem! Ben John." },
+            { kim: "K", en: "Hi, John! Nice to meet you.", tr: "Selam John! Tanıştığımıza memnun oldum." },
           ],
         },
       ],
@@ -276,19 +315,48 @@ export const A1_01: Unite = {
       diyaloglar: [
         {
           baslik: "Dil kafesinde",
-          sahne: "Bir dil kafesinde Anna ve Emre ilk kez karşılaşıyor.",
-          kisiler: { A: { ad: "Anna", ses: "kadin" }, E: { ad: "Emre", ses: "erkek" } },
+          sahne: "Köşedeki dil kafesi. Anna ile Emre ilk kez karşılaşıyor; sonra Emre'nin arkadaşı Lisa geliyor.",
+          bolum: 2,
+          yer: "kafe",
+          onceki: "Ece ile John apartmanda tanıştı. Şimdi köşedeki dil kafesindeyiz.",
+          anahtar: ["from", "where", "my", "student", "teacher"],
+          kisiler: { A: { ad: "Anna", ses: "kadin" }, E: { ad: "Emre", ses: "erkek" }, L: { ad: "Lisa", ses: "kadin" } },
           satirlar: [
             { kim: "A", en: "Hello! I'm Anna.", tr: "Merhaba! Ben Anna." },
             { kim: "E", en: "Hi, Anna. My name is Emre.", tr: "Selam Anna. Benim adım Emre." },
             { kim: "A", en: "Nice to meet you, Emre.", tr: "Tanıştığımıza memnun oldum Emre." },
             { kim: "E", en: "Nice to meet you too. Where are you from?", tr: "Ben de memnun oldum. Nerelisin?" },
-            { kim: "A", en: "I'm from England. I'm from London. And you?", tr: "İngiltere'denim. Londralıyım. Ya sen?" },
+            { kim: "A", en: "I'm from Germany. I'm from Berlin. And you?", tr: "Almanya'danım. Berlinliyim. Ya sen?" },
             { kim: "E", en: "I'm from Turkey. I'm from Istanbul.", tr: "Türkiye'denim. İstanbulluyum." },
-            { kim: "A", en: "I'm a teacher. And you?", tr: "Ben öğretmenim. Ya sen?" },
-            { kim: "E", en: "I'm a student.", tr: "Ben öğrenciyim." },
-            { kim: "A", en: "Goodbye, Emre. See you!", tr: "Hoşça kal Emre. Görüşürüz!" },
-            { kim: "E", en: "Bye, Anna!", tr: "Güle güle Anna!" },
+            { kim: "A", en: "I'm a student.", tr: "Ben öğrenciyim." },
+            { kim: "E", en: "Anna, this is my friend, Lisa. She's a teacher.", tr: "Anna, bu arkadaşım Lisa. O öğretmen." },
+            { kim: "L", en: "Hi, Anna! I'm from England. I'm English.", tr: "Selam Anna! Ben İngiltere'denim. İngilizim." },
+            { kim: "A", en: "Nice to meet you, Lisa!", tr: "Tanıştığımıza memnun oldum Lisa!" },
+          ],
+        },
+      ],
+      miniDiyaloglar: [
+        {
+          baslik: "Kafede",
+          sahne: "John da dil kafesine geliyor ve Anna ile tanışıyor.",
+          kisiler: { J: { ad: "John", ses: "erkek" }, A: { ad: "Anna", ses: "kadin" } },
+          satirlar: [
+            { kim: "J", en: "Hello! What's your name?", tr: "Merhaba! Adın ne?" },
+            { kim: "A", en: "My name is Anna.", tr: "Benim adım Anna." },
+            { kim: "J", en: "Where are you from, Anna?", tr: "Nerelisin Anna?" },
+            { kim: "A", en: "I'm from Germany. And you?", tr: "Almanya'danım. Ya sen?" },
+            { kim: "J", en: "I'm from England. I'm English.", tr: "İngiltere'denim. İngilizim." },
+          ],
+        },
+        {
+          baslik: "Kim bu?",
+          sahne: "Anna, kafeye giren adamı soruyor.",
+          kisiler: { A: { ad: "Anna", ses: "kadin" }, E: { ad: "Emre", ses: "erkek" } },
+          satirlar: [
+            { kim: "A", en: "Emre, who is he?", tr: "Emre, o kim?" },
+            { kim: "E", en: "He's my friend, John. He's from England.", tr: "O arkadaşım John. İngiltere'den." },
+            { kim: "A", en: "Where is he from? London?", tr: "Nereli? Londra mı?" },
+            { kim: "E", en: "Yes. He's from London.", tr: "Evet. Londralı." },
           ],
         },
       ],
@@ -305,7 +373,7 @@ export const A1_01: Unite = {
           { cumle: "She is ___ teacher.", tr: "O bir öğretmen.", secenekler: ["a", "from", "is"], cevap: "a" },
         ],
         siralama: [
-          { cevap: "My name is Zeynep.", tr: "Benim adım Zeynep." },
+          { cevap: "My name is Deniz.", tr: "Benim adım Deniz." },
           { cevap: "I am from Turkey.", tr: "Türkiye'denim." },
           { cevap: "Where are you from?", tr: "Nerelisin?" },
           { cevap: "She is a teacher.", tr: "O bir öğretmen." },
@@ -409,7 +477,11 @@ export const A1_01: Unite = {
       diyaloglar: [
         {
           baslik: "İlk ders",
-          sahne: "Sabah. Öğretmen Lisa, yeni öğrencisi Deniz ile tanışıyor.",
+          sahne: "Dil kafesinde sabah dersi. Lisa, yeni öğrencisi Deniz ile tanışıyor.",
+          bolum: 3,
+          yer: "sinif",
+          onceki: "Lisa dil kafesinde İngilizce öğretiyor. Bugün yeni bir öğrencisi var: Moda Apartmanı'na yeni taşınan Deniz.",
+          anahtar: ["name", "how", "old", "nineteen", "years"],
           kisiler: { L: { ad: "Lisa", ses: "kadin" }, D: { ad: "Deniz", ses: "erkek" } },
           satirlar: [
             { kim: "L", en: "Good morning!", tr: "Günaydın!" },
@@ -422,6 +494,30 @@ export const A1_01: Unite = {
             { kim: "D", en: "I'm nineteen years old.", tr: "On dokuz yaşındayım." },
             { kim: "L", en: "Welcome, Deniz!", tr: "Hoş geldin Deniz!" },
             { kim: "D", en: "Thank you!", tr: "Teşekkür ederim!" },
+          ],
+        },
+      ],
+      miniDiyaloglar: [
+        {
+          baslik: "Merdivende",
+          sahne: "Dersten dönen Deniz, merdivende yeni komşusu John ile karşılaşıyor.",
+          kisiler: { J: { ad: "John", ses: "erkek" }, D: { ad: "Deniz", ses: "erkek" } },
+          satirlar: [
+            { kim: "J", en: "Hi! I'm John. What's your name?", tr: "Selam! Ben John. Adın ne?" },
+            { kim: "D", en: "I'm Deniz. Nice to meet you.", tr: "Ben Deniz. Tanıştığımıza memnun oldum." },
+            { kim: "J", en: "Where are you from, Deniz?", tr: "Nerelisin Deniz?" },
+            { kim: "D", en: "I'm from Turkey. I'm from Izmir.", tr: "Türkiye'denim. İzmirliyim." },
+          ],
+        },
+        {
+          baslik: "Kerem kaç yaşında?",
+          sahne: "Ece, kardeşi Kerem'i John ile tanıştırıyor.",
+          kisiler: { E: { ad: "Ece", ses: "kadin" }, J: { ad: "John", ses: "erkek" }, K: { ad: "Kerem", ses: "erkek" } },
+          satirlar: [
+            { kim: "E", en: "John, this is Kerem.", tr: "John, bu Kerem." },
+            { kim: "J", en: "Hi, Kerem! How old are you?", tr: "Selam Kerem! Kaç yaşındasın?" },
+            { kim: "K", en: "I'm fifteen.", tr: "On beş yaşındayım." },
+            { kim: "J", en: "Fifteen? Nice!", tr: "On beş mi? Ne güzel!" },
           ],
         },
       ],
@@ -482,36 +578,35 @@ export const A1_01: Unite = {
       ],
       diyaloglar: [],
       okuma: {
-        baslik: "Zeynep ve Tom",
+        baslik: "Deniz",
         satirlar: [
-          { en: "Hello! My name is Zeynep.", tr: "Merhaba! Benim adım Zeynep." },
-          { en: "I am twenty years old.", tr: "Yirmi yaşındayım." },
+          { en: "Hello! My name is Deniz.", tr: "Merhaba! Benim adım Deniz." },
+          { en: "I am nineteen years old.", tr: "On dokuz yaşındayım." },
           { en: "I am from Turkey. I am from Izmir.", tr: "Türkiye'denim. İzmirliyim." },
           { en: "I am a student.", tr: "Öğrenciyim." },
-          { en: "This is my friend Tom.", tr: "Bu benim arkadaşım Tom." },
-          { en: "He is from England.", tr: "O İngiltere'den." },
-          { en: "He is a teacher.", tr: "O bir öğretmen." },
+          { en: "This is my teacher, Lisa. She is from England.", tr: "Bu benim öğretmenim Lisa. O İngiltere'den." },
+          { en: "This is my friend John. He is from England too.", tr: "Bu benim arkadaşım John. O da İngiltere'den." },
           { en: "He is English, and I am Turkish.", tr: "O İngiliz, ben de Türk'üm." },
           { en: "We are friends.", tr: "Biz arkadaşız." },
         ],
         sorular: [
-          { en: "Zeynep is twenty years old.", tr: "Zeynep yirmi yaşında.", dogru: true },
-          { en: "Zeynep is from Germany.", tr: "Zeynep Almanya'dan.", dogru: false },
-          { en: "Zeynep is a teacher.", tr: "Zeynep öğretmen.", dogru: false },
-          { en: "Tom is from England.", tr: "Tom İngiltere'den.", dogru: true },
-          { en: "Tom and Zeynep are friends.", tr: "Tom ve Zeynep arkadaş.", dogru: true },
+          { en: "Deniz is nineteen years old.", tr: "Deniz on dokuz yaşında.", dogru: true },
+          { en: "Deniz is from Germany.", tr: "Deniz Almanya'dan.", dogru: false },
+          { en: "Deniz is a teacher.", tr: "Deniz öğretmen.", dogru: false },
+          { en: "Lisa is from England.", tr: "Lisa İngiltere'den.", dogru: true },
+          { en: "John and Deniz are friends.", tr: "John ve Deniz arkadaş.", dogru: true },
         ],
       },
       alistirmalar: {
         bosluk: [
           { cumle: "Good ___! How are you?", tr: "Günaydın! Nasılsın?", secenekler: ["morning", "night", "bye"], cevap: "morning" },
-          { cumle: "My name ___ Tom.", tr: "Benim adım Tom.", secenekler: ["am", "is", "are"], cevap: "is" },
+          { cumle: "My name ___ John.", tr: "Benim adım John.", secenekler: ["am", "is", "are"], cevap: "is" },
           { cumle: "We ___ from Turkey.", tr: "Biz Türkiye'deniz.", secenekler: ["am", "is", "are"], cevap: "are" },
           { cumle: "I am ___ student.", tr: "Ben öğrenciyim.", secenekler: ["a", "from", "to"], cevap: "a" },
           { cumle: "She is ___ years old. (18)", tr: "O on sekiz yaşında.", secenekler: ["eight", "eighteen", "eleven"], cevap: "eighteen" },
         ],
         siralama: [
-          { cevap: "This is my friend Tom.", tr: "Bu benim arkadaşım Tom." },
+          { cevap: "This is my friend John.", tr: "Bu benim arkadaşım John." },
           { cevap: "He is from England.", tr: "O İngiltere'den." },
           { cevap: "Nice to meet you too.", tr: "Ben de memnun oldum." },
         ],

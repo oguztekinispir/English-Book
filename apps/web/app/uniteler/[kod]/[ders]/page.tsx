@@ -5,7 +5,8 @@ import { dersBul, dersKelimeleri } from "@ti/icerik";
 import { Ust } from "@/components/Ust";
 import { Kelimeler } from "@/components/unite/Kelimeler";
 import { Gramer, Kaliplar } from "@/components/unite/Gramer";
-import { DiyalogOkuyucu, OkumaOkuyucu } from "@/components/unite/Metin";
+import { OkumaOkuyucu } from "@/components/unite/Metin";
+import { DiyalogCalis, MiniDiyaloglar } from "@/components/unite/Diyalog";
 import { BoslukDoldur, Eslestir, SiraylaKur } from "@/components/unite/Alistirmalar";
 import { Konusma, UniteMotoru, UniteTesti } from "@/components/unite/Digerleri";
 import { DersGezgin } from "@/components/unite/UniteGezgin";
@@ -86,11 +87,12 @@ export default async function DersSayfasi({ params }: P) {
             {d.diyaloglar.length > 0 && (
               <section id="diyaloglar" className="ub">
                 <Baslik id="diyaloglar" />
-                <p className="not ub-giris">Önce dinle, sonra oku. Anlamadığın satırda Çöz'e bas: her kelimenin altında Türkçesi çıkar.</p>
+                <p className="not ub-giris">Her diyaloğu dört adımda çalış: önce sadece dinle, sonra oku, sonra boşlukları doldur, en son bir kişinin yerine sen konuş.</p>
                 <div className="ub-yigin">
                   {d.diyaloglar.map((x) => (
-                    <DiyalogOkuyucu key={x.baslik} u={u} d={x} />
+                    <DiyalogCalis key={x.baslik} u={u} d={d} x={x} />
                   ))}
+                  <MiniDiyaloglar u={u} d={d} />
                 </div>
               </section>
             )}

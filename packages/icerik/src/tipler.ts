@@ -51,16 +51,35 @@ export interface Satir {
   tr: string;
 }
 
+/** Diyalog dışında kalan, altında Türkçesi verilen küçük kelime (kartlara girmez) */
+export interface Bonus {
+  en: string;
+  tr: string;
+}
+
+/** Sahne çizimi */
+export type Yer = "apartman" | "kafe" | "sinif" | "okul" | "telefon" | "dugun";
+
 export interface Diyalog {
   baslik: string;
   /** Sahne: "Bir dil kafesinde iki kişi tanışıyor." */
   sahne: string;
   kisiler: Record<string, { ad: string; ses: "kadin" | "erkek" }>;
   satirlar: Satir[];
+  /** Hikâyedeki bölüm numarası (ana diyaloglar) */
+  bolum?: number;
+  /** "Geçen bölümde…" */
+  onceki?: string;
+  yer?: Yer;
+  /** Boşluklu adımda gizlenecek kelimeler (dersin hedef kelimeleri) */
+  anahtar?: string[];
+  /** En fazla 2 bonus kelime */
+  bonus?: Bonus[];
 }
 
 export interface Okuma {
   baslik: string;
+  bonus?: Bonus[];
   satirlar: Satir[];
   /** Doğru / yanlış soruları */
   sorular: { en: string; tr: string; dogru: boolean }[];
@@ -111,6 +130,8 @@ export interface Ders {
   kaliplar: HazirKalip[];
   gramer: GramerBolum[];
   diyaloglar: Diyalog[];
+  /** Aynı kalıp, başka sahne: 2–4 satırlık kısa diyaloglar */
+  miniDiyaloglar?: Diyalog[];
   okuma?: Okuma;
   alistirmalar: { bosluk: Bosluk[]; siralama: Siralama[] };
   /** Motor pratiği (yoksa bu derste "Cümle kur" bölümü olmaz) */

@@ -13,6 +13,8 @@ export interface SesAyar {
   kim?: "kadin" | "erkek";
   hiz?: number;
   bitince?: () => void;
+  /** Okunan kelimenin metindeki yeri (tarayıcı destekliyorsa; karaoke için) */
+  kelime?: (charIndex: number) => void;
 }
 
 function sesSec(kim?: "kadin" | "erkek") {
@@ -48,6 +50,7 @@ export function konus(t: string, a: SesAyar = {}) {
     const v = sesSec(a.kim);
     if (v) u.voice = v;
     if (a.kim) u.pitch = a.kim === "kadin" ? 1.15 : 0.85;
+    if (a.kelime) u.onboundary = (e) => e.name === "word" && a.kelime?.(e.charIndex);
     if (a.bitince) {
       u.onend = () => a.bitince?.();
       u.onerror = () => a.bitince?.();

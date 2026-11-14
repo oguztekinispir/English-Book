@@ -70,7 +70,7 @@ export const A1_02: Unite = {
     "“Değilim” dersin ve “… misin?” diye sorarsın.",
     "Kısa cevap verirsin: Yes, I am. No, she isn't.",
   ],
-  ozelIsimler: ["Ayşe", "Murat", "Ela", "Ali", "Deniz", "Lisa", "Selin", "Mark", "Anna", "Emre", "Mert", "Kemal", "Elif", "Ankara", "Izmir"],
+  ozelIsimler: ["Ayşe", "Murat", "Ela", "Ali", "Deniz", "Lisa", "Selin", "Mark", "Anna", "Emre", "Mert", "Kemal", "Elif", "Ankara", "Izmir", "Sarah", "Efe", "Kerem", "Ece", "John", "Tom", "Mary"],
 
   dersler: [
     // ================================================================ 2.1
@@ -182,7 +182,11 @@ export const A1_02: Unite = {
       diyaloglar: [
         {
           baslik: "Aile fotoğrafı",
-          sahne: "Dersten sonra Deniz, öğretmeni Lisa'ya ailesinin fotoğrafını gösteriyor.",
+          sahne: "Dersten sonra Deniz, öğretmeni Lisa'ya telefonundaki aile fotoğrafını gösteriyor.",
+          bolum: 4,
+          yer: "sinif",
+          onceki: "Deniz ilk dersinde Lisa ile tanıştı ve yaşını söyledi. Bugün ikinci dersi var.",
+          anahtar: ["my", "her", "his", "family", "mother", "father"],
           kisiler: { L: { ad: "Lisa", ses: "kadin" }, D: { ad: "Deniz", ses: "erkek" } },
           satirlar: [
             { kim: "L", en: "Deniz, who is this?", tr: "Deniz, bu kim?" },
@@ -195,6 +199,31 @@ export const A1_02: Unite = {
             { kim: "D", en: "He's my brother, Ali. He's twelve.", tr: "O erkek kardeşim Ali. On iki yaşında." },
             { kim: "L", en: "Your family is very nice, Deniz!", tr: "Ailen çok hoş Deniz!" },
             { kim: "D", en: "Thank you!", tr: "Teşekkür ederim!" },
+          ],
+        },
+      ],
+      miniDiyaloglar: [
+        {
+          baslik: "Ece'nin ailesi",
+          sahne: "Ece, John'a annesiyle babasının fotoğrafını gösteriyor.",
+          kisiler: { J: { ad: "John", ses: "erkek" }, E: { ad: "Ece", ses: "kadin" } },
+          satirlar: [
+            { kim: "J", en: "Ece, who is this?", tr: "Ece, bu kim?" },
+            { kim: "E", en: "This is my mother. And this is my father.", tr: "Bu annem. Bu da babam." },
+            { kim: "J", en: "Your family is very nice!", tr: "Ailen çok hoş!" },
+            { kim: "E", en: "Thank you, John!", tr: "Teşekkürler John!" },
+          ],
+        },
+        {
+          baslik: "Büyükanne",
+          sahne: "Dil kafesinde Emre, Anna'ya bir fotoğraf gösteriyor.",
+          bonus: [{ en: "really", tr: "gerçekten mi?" }],
+          kisiler: { E: { ad: "Emre", ses: "erkek" }, A: { ad: "Anna", ses: "kadin" } },
+          satirlar: [
+            { kim: "E", en: "Look! This is my grandmother.", tr: "Bak! Bu benim büyükannem." },
+            { kim: "A", en: "Really? How old is she?", tr: "Gerçekten mi? Kaç yaşında?" },
+            { kim: "E", en: "She's very old!", tr: "Çok yaşlı!" },
+            { kim: "A", en: "She's very nice!", tr: "Çok tatlı!" },
           ],
         },
       ],
@@ -327,7 +356,11 @@ export const A1_02: Unite = {
       diyaloglar: [
         {
           baslik: "Okulda tanışma",
-          sahne: "Selin ve Mark, çocuklarının okulundaki veli toplantısında tanışıyor.",
+          sahne: "Akşam, okulda veli toplantısı. Selin'in oğlu Efe ile Mark'ın oğlu aynı sınıfta.",
+          bolum: 5,
+          yer: "okul",
+          onceki: "Deniz, ailesini Lisa'ya tanıttı. Şimdi şehrin öbür ucunda, bir okuldayız: Emre'nin kız kardeşi Selin veli toplantısında.",
+          anahtar: ["job", "nurse", "an", "engineer", "at"],
           kisiler: { M: { ad: "Mark", ses: "erkek" }, S: { ad: "Selin", ses: "kadin" } },
           satirlar: [
             { kim: "M", en: "Hello! I'm Mark. My son is a student at this school.", tr: "Merhaba! Ben Mark. Oğlum bu okulda öğrenci." },
@@ -340,6 +373,40 @@ export const A1_02: Unite = {
             { kim: "S", en: "My husband is a cook. He's at work now too.", tr: "Eşim aşçı. O da şu an işte." },
             { kim: "M", en: "Nice! See you, Selin!", tr: "Ne güzel! Görüşürüz Selin!" },
             { kim: "S", en: "Bye, Mark!", tr: "Hoşça kal Mark!" },
+          ],
+        },
+      ],
+      miniDiyaloglar: [
+        {
+          baslik: "Kafede",
+          sahne: "Anna, Emre'ye işini soruyor.",
+          kisiler: { A: { ad: "Anna", ses: "kadin" }, E: { ad: "Emre", ses: "erkek" } },
+          satirlar: [
+            { kim: "A", en: "Emre, what's your job?", tr: "Emre, ne iş yapıyorsun?" },
+            { kim: "E", en: "I'm an engineer. And you?", tr: "Mühendisim. Ya sen?" },
+            { kim: "A", en: "I'm a student.", tr: "Ben öğrenciyim." },
+          ],
+        },
+        {
+          baslik: "John'un işi",
+          sahne: "Apartmanda Deniz, Ece'ye John'u soruyor.",
+          bonus: [{ en: "secret", tr: "sır" }],
+          kisiler: { D: { ad: "Deniz", ses: "erkek" }, E: { ad: "Ece", ses: "kadin" } },
+          satirlar: [
+            { kim: "D", en: "Ece, what's John's job?", tr: "Ece, John ne iş yapıyor?" },
+            { kim: "E", en: "John's job? A secret!", tr: "John'un işi mi? Sır!" },
+            { kim: "D", en: "A secret?", tr: "Sır mı?" },
+            { kim: "E", en: "Yes! A secret!", tr: "Evet! Sır!" },
+          ],
+        },
+        {
+          baslik: "Nerdesin?",
+          sahne: "Mark, eşi Sarah'yı arıyor.",
+          kisiler: { M: { ad: "Mark", ses: "erkek" }, S: { ad: "Sarah", ses: "kadin" } },
+          satirlar: [
+            { kim: "M", en: "Hi, Sarah! Where are you now?", tr: "Selam Sarah! Şu an neredesin?" },
+            { kim: "S", en: "I'm at work. I'm at a hospital.", tr: "İşteyim. Bir hastanedeyim." },
+            { kim: "M", en: "I'm at home. See you!", tr: "Ben evdeyim. Görüşürüz!" },
           ],
         },
       ],
@@ -475,7 +542,11 @@ export const A1_02: Unite = {
       diyaloglar: [
         {
           baslik: "Telefonda",
-          sahne: "Anna, Emre'yi arıyor.",
+          sahne: "Anna, dil değişimi için Emre'yi arıyor.",
+          bolum: 6,
+          yer: "telefon",
+          onceki: "Selin ile Mark veli toplantısında tanıştı. Selin'in ağabeyi Emre'yi hatırlıyor musun? Dil kafesindeki Emre.",
+          anahtar: ["are", "not", "isn't", "busy"],
           kisiler: { A: { ad: "Anna", ses: "kadin" }, E: { ad: "Emre", ses: "erkek" } },
           satirlar: [
             { kim: "A", en: "Hello, Emre! Are you at home?", tr: "Merhaba Emre! Evde misin?" },
@@ -483,7 +554,7 @@ export const A1_02: Unite = {
             { kim: "A", en: "Are you busy?", tr: "Meşgul müsün?" },
             { kim: "E", en: "Yes, I am. Sorry, Anna.", tr: "Evet. Kusura bakma Anna." },
             { kim: "A", en: "OK. Is your sister at home?", tr: "Tamam. Kız kardeşin evde mi?" },
-            { kim: "E", en: "No, she isn't. She's at school today.", tr: "Hayır, değil. Bugün okulda." },
+            { kim: "E", en: "No, she isn't. She's at work. She's a nurse.", tr: "Hayır, değil. İşte. O hemşire." },
             { kim: "A", en: "Is your mother there?", tr: "Annen orada mı?" },
             { kim: "E", en: "Yes, she is. She's at home.", tr: "Evet. O evde." },
             { kim: "A", en: "Thank you, Emre! Bye!", tr: "Teşekkürler Emre! Hoşça kal!" },
@@ -492,7 +563,11 @@ export const A1_02: Unite = {
         },
         {
           baslik: "Kim bu?",
-          sahne: "Selin ve Mark bir düğünde. Mark birini gösteriyor.",
+          sahne: "Hafta sonu bir düğün. Selin ile Mark yine karşılaşıyor; Mark birini gösteriyor.",
+          bolum: 7,
+          yer: "dugun",
+          onceki: "Emre işte ve çok meşgul. Hafta sonu ise bir düğün var.",
+          anahtar: ["that", "isn't", "married", "single"],
           kisiler: { M: { ad: "Mark", ses: "erkek" }, S: { ad: "Selin", ses: "kadin" } },
           satirlar: [
             { kim: "M", en: "Selin, who's that?", tr: "Selin, şu kim?" },
@@ -501,6 +576,30 @@ export const A1_02: Unite = {
             { kim: "S", en: "No, he isn't. He's an engineer.", tr: "Hayır, değil. Mühendis." },
             { kim: "M", en: "Is he married?", tr: "Evli mi?" },
             { kim: "S", en: "No, he isn't. He's single. And he's very busy!", tr: "Hayır, değil. Bekâr. Ve çok meşgul!" },
+          ],
+        },
+      ],
+      miniDiyaloglar: [
+        {
+          baslik: "Kapıda",
+          sahne: "Deniz, John'un işini tahmin etmeye çalışıyor.",
+          kisiler: { D: { ad: "Deniz", ses: "erkek" }, J: { ad: "John", ses: "erkek" } },
+          satirlar: [
+            { kim: "D", en: "John, are you a teacher?", tr: "John, öğretmen misin?" },
+            { kim: "J", en: "No, I'm not.", tr: "Hayır, değilim." },
+            { kim: "D", en: "Are you a doctor?", tr: "Doktor musun?" },
+            { kim: "J", en: "No, I'm not. Sorry, Deniz. I'm very busy today!", tr: "Hayır, değilim. Kusura bakma Deniz. Bugün çok meşgulüm!" },
+          ],
+        },
+        {
+          baslik: "Sınıfta",
+          sahne: "Lisa, Deniz'e kardeşlerini soruyor.",
+          kisiler: { L: { ad: "Lisa", ses: "kadin" }, D: { ad: "Deniz", ses: "erkek" } },
+          satirlar: [
+            { kim: "L", en: "Deniz, is your brother a student?", tr: "Deniz, erkek kardeşin öğrenci mi?" },
+            { kim: "D", en: "Yes, he is. He's twelve.", tr: "Evet. On iki yaşında." },
+            { kim: "L", en: "And your sister? Is she a student?", tr: "Ya kız kardeşin? O da öğrenci mi?" },
+            { kim: "D", en: "No, she isn't. She's a baby!", tr: "Hayır, değil. O bir bebek!" },
           ],
         },
       ],
@@ -572,22 +671,23 @@ export const A1_02: Unite = {
       ],
       diyaloglar: [],
       okuma: {
-        baslik: "Mert'in ailesi",
+        baslik: "John'un ailesi",
+        bonus: [{ en: "secret", tr: "sır" }],
         satirlar: [
-          { en: "Hi! I'm Mert. I'm sixteen years old.", tr: "Selam! Ben Mert. On altı yaşındayım." },
+          { en: "Hi! I'm John. I'm from England. I'm from London.", tr: "Selam! Ben John. İngiltere'denim. Londralıyım." },
           { en: "This is my family.", tr: "Bu benim ailem." },
-          { en: "My father is a driver. His name is Kemal.", tr: "Babam şoför. Onun adı Kemal." },
-          { en: "My mother is a nurse at a hospital. Her name is Elif.", tr: "Annem bir hastanede hemşire. Onun adı Elif." },
-          { en: "My sister is twenty. She's a student. She isn't married.", tr: "Ablam yirmi yaşında. Öğrenci. Evli değil." },
-          { en: "My grandmother is very old. She's at home today.", tr: "Babaannem çok yaşlı. Bugün evde." },
-          { en: "We are from Ankara.", tr: "Biz Ankaralıyız." },
+          { en: "My father is a driver. His name is Tom.", tr: "Babam şoför. Onun adı Tom." },
+          { en: "My mother is a nurse at a hospital. Her name is Mary.", tr: "Annem bir hastanede hemşire. Onun adı Mary." },
+          { en: "My sister is twenty. She's a student. She isn't married.", tr: "Kız kardeşim yirmi yaşında. Öğrenci. Evli değil." },
+          { en: "My grandmother is very old. She's at home today.", tr: "Büyükannem çok yaşlı. Bugün evde." },
+          { en: "And my job? Sorry. That's a secret!", tr: "Ya benim işim? Kusura bakmayın. O bir sır!" },
         ],
         sorular: [
-          { en: "Mert is sixteen years old.", tr: "Mert on altı yaşında.", dogru: true },
+          { en: "John is from England.", tr: "John İngiltere'den.", dogru: true },
           { en: "His father is a doctor.", tr: "Babası doktor.", dogru: false },
           { en: "His mother is a nurse.", tr: "Annesi hemşire.", dogru: true },
-          { en: "His sister is married.", tr: "Ablası evli.", dogru: false },
-          { en: "His grandmother is at home today.", tr: "Babaannesi bugün evde.", dogru: true },
+          { en: "His sister is married.", tr: "Kız kardeşi evli.", dogru: false },
+          { en: "His grandmother is at home today.", tr: "Büyükannesi bugün evde.", dogru: true },
         ],
       },
       alistirmalar: {
@@ -619,7 +719,7 @@ export const A1_02: Unite = {
         { en: "What's your father's job?", tr: "Babanın işi ne?", ornek: "He's a driver.", ornekTr: "O şoför." },
         { en: "Are you married?", tr: "Evli misin?", ornek: "No, I'm not. I'm single.", ornekTr: "Hayır, değilim. Bekârım." },
         { en: "Is your mother at work today?", tr: "Annen bugün işte mi?", ornek: "No, she isn't. She's at home.", ornekTr: "Hayır, değil. Evde." },
-        { en: "Hello! Who are you?", tr: "Merhaba! Sen kimsin? (Kendini ve aileni tanıt.)", ornek: "Hi! I'm Mert. I'm sixteen. I'm a student. My father is a driver and my mother is a nurse.", ornekTr: "Selam! Ben Mert. On altı yaşındayım. Öğrenciyim. Babam şoför, annem hemşire." },
+        { en: "Hello! Who are you?", tr: "Merhaba! Sen kimsin? (Kendini ve aileni tanıt.)", ornek: "Hi! I'm Deniz. I'm nineteen. I'm a student. My father is a doctor and my mother is a teacher.", ornekTr: "Selam! Ben Deniz. On dokuz yaşındayım. Öğrenciyim. Babam doktor, annem öğretmen." },
       ],
       test: [
         { soru: "“Babam” İngilizcede hangisi?", secenekler: ["my father", "your father", "his father"], dogru: 0, aciklama: "-m eki = my." },

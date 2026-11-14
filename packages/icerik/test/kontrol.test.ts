@@ -35,8 +35,8 @@ describe.each(UNITELER.map((u, i) => [u.kod, u, UNITELER.slice(0, i)] as const))
   });
 
   describe.each(u.dersler.map((d) => [d.kod, d] as const))("ders %s", (_dk, d) => {
-    const bak = (yer: string, metin: string) => {
-      const b = bilinmeyenler(u, metin, onceki, d.no);
+    const bak = (yer: string, metin: string, bonus: string[] = []) => {
+      const b = bilinmeyenler(u, metin, onceki, d.no).filter((w) => !bonus.includes(w.toLowerCase()));
       expect(b, `${d.kod} ${yer}: “${metin}” içinde bu derse kadar görülmemiş kelime`).toEqual([]);
     };
 
@@ -46,13 +46,21 @@ describe.each(UNITELER.map((u, i) => [u.kod, u, UNITELER.slice(0, i)] as const))
     });
 
     it("diyalog, okuma, kalıp, alıştırma ve konuşmada bilinmeyen kelime yok", () => {
-      d.diyaloglar.forEach((x) =>
+      [...d.diyaloglar, ...(d.miniDiyaloglar ?? [])].forEach((x) => {
+        const bonus = (x.bonus ?? []).map((b) => b.en.toLowerCase());
+        expect(bonus.length, `${x.baslik}: en fazla 2 bonus kelime`).toBeLessThanOrEqual(2);
         x.satirlar.forEach((s) => {
           expect(x.kisiler[s.kim!], `konuşan: ${s.kim}`).toBeDefined();
-          bak(x.baslik, s.en);
-        }),
-      );
-      d.okuma?.satirlar.forEach((s) => bak("okuma", s.en));
+          bak(x.baslik, s.en, bonus);
+        });
+        // Boşluklu adımın anahtar kelimeleri diyalogda geçmeli
+        const metin = x.satirlar.map((s) => s.en.toLowerCase()).join(" ");
+        (x.anahtar ?? []).forEach((a) => expect(metin, `${x.baslik}: anahtar “${a}”`).toMatch(new RegExp(`\\b${a.toLowerCase()}\\b`)));
+        // Kısa diyalog gerçekten kısa
+        if (d.miniDiyaloglar?.includes(x)) expect(x.satirlar.length, x.baslik).toBeLessThanOrEqual(6);
+      });
+      const okumaBonus = (d.okuma?.bonus ?? []).map((b) => b.en.toLowerCase());
+      d.okuma?.satirlar.forEach((s) => bak("okuma", s.en, okumaBonus));
       d.okuma?.sorular.forEach((s) => bak("okuma sorusu", s.en));
       d.kaliplar.forEach((k) => bak("kalıp", k.en));
       d.alistirmalar.bosluk.forEach((b) => bak("boşluk", b.cumle.replace("___", b.cevap).replace(/\(.*?\)/g, "")));
@@ -130,6 +138,24 @@ describe("bilinmeyen kelime kontrolü kendisi çalışıyor mu", () => {
     const u = UNITELER[0];
     expect(bilinmeyenler(u, "I am a teacher.", [], 1)).toEqual(["a", "teacher"]);
     expect(bilinmeyenler(u, "I am a teacher.", [], 2)).toEqual([]);
+  });
+});
+
+describe("hikâye", () => {
+  it("ana diyaloglar bölüm numarasıyla sıralı ve kesintisiz", () => {
+    const b = UNITELER.flatMap((u) => u.dersler.flatMap((d) => d.diyaloglar.map((x) => x.bolum))).filter((x): x is number => x !== undefined);
+    expect(b.length).toBeGreaterThan(4);
+    b.forEach((x, i) => expect(x, `bölüm sırası`).toBe(i === 0 ? 1 : b[i - 1] + 1));
+  });
+  it("her ana diyaloğun bölümü, yeri ve anahtar kelimeleri var", () => {
+    UNITELER.forEach((u) => u.dersler.forEach((d) => d.diyaloglar.forEach((x) => {
+      expect(x.bolum, x.baslik).toBeDefined();
+      expect(x.yer, x.baslik).toBeDefined();
+      expect(x.anahtar?.length ?? 0, x.baslik).toBeGreaterThanOrEqual(3);
+    })));
+  });
+  it("ders başına en az 2 kısa diyalog (tekrar dersleri hariç)", () => {
+    UNITELER.forEach((u) => u.dersler.filter((d) => !d.tekrar).forEach((d) => expect(d.miniDiyaloglar?.length ?? 0, d.kod).toBeGreaterThanOrEqual(2)));
   });
 });
 
