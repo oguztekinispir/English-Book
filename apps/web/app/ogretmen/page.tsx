@@ -6,7 +6,10 @@ import { Ust } from "@/components/Ust";
 import { KodKarti } from "@/components/PanelParcalari";
 import { oturum } from "@/lib/supabase/sunucu";
 import { once, yuzde } from "@/lib/zaman";
+import { dersler, gunluk, kartOzeti } from "@/lib/analiz";
+import { cevaplariGetir } from "@/lib/ogrenci-veri";
 import "../hesap.css";
+import "./ogretmen.css";
 
 export const metadata: Metadata = { title: "Öğrencilerim" };
 
@@ -36,6 +39,16 @@ export default async function OgretmenPaneli() {
     if (!enZor.has(z.ogrenci_id as string)) enZor.set(z.ogrenci_id as string, { kural: z.kural as string, hata: z.hata as number });
   });
   const aktif = liste.filter((o) => o.hafta_cevap > 0).length;
+  const [{ satirlar }, kartSorgu] = await Promise.all([
+    cevaplariGetir(sb, ids, 30, 8000),
+    ids.length ? sb.from("tekrar_kartlari").select("ogrenci_id, kutu, sonraki").in("ogrenci_id", ids) : Promise.resolve({ data: [] }),
+  ]);
+  const ogrenciIcin = (oid: string) => {
+    const c = satirlar.filter((x) => x.ogrenci_id === oid);
+    const ds = dersler(c).filter((d) => d.cevap > 0);
+    const k = kartOzeti(((kartSorgu.data ?? []) as { ogrenci_id: string; kutu: number; sonraki: string }[]).filter((x) => x.ogrenci_id === oid));
+    return { gunler: gunluk(c, 7), sonDers: ds.sort((a, b) => (b.son ?? "").localeCompare(a.son ?? ""))[0], kart: k };
+  };
 
   return (
     <div className="sayfa">
@@ -57,7 +70,10 @@ export default async function OgretmenPaneli() {
                     <tr>
                       <th>Öğrenci</th>
                       <th>Son çalışma</th>
+                      <th>Son 7 gün</th>
                       <th>Bu hafta</th>
+                      <th>Son ders</th>
+                      <th>Kartlar</th>
                       <th>Cümle yolu</th>
                       <th>En çok zorlandığı</th>
                     </tr>
@@ -65,6 +81,7 @@ export default async function OgretmenPaneli() {
                   <tbody>
                     {liste.map((o) => {
                       const z = enZor.get(o.ogrenci_id);
+                      const e = ogrenciIcin(o.ogrenci_id);
                       const pasif = !o.son_calisma || Date.now() - new Date(o.son_calisma).getTime() > 4 * 86400000;
                       return (
                         <tr key={o.ogrenci_id}>
@@ -73,8 +90,34 @@ export default async function OgretmenPaneli() {
                           </td>
                           <td className={pasif ? "uyari" : ""}>{once(o.son_calisma)}</td>
                           <td>
-                            {o.hafta_cevap} cümle
-                            {o.hafta_cevap > 0 && <small>, %{yuzde(o.hafta_dogru, o.hafta_cevap)} doğru</small>}
+                            <span className="yedi-gun" aria-label={`Son 7 günde ${e.gunler.filter((g) => g.toplam).length} gün çalıştı`}>
+                              {e.gunler.map((g) => (
+                                <i key={g.gun} className={g.toplam >= 20 ? "cok" : g.toplam ? "az" : ""} title={`${g.gun}: ${g.toplam}`} />
+                              ))}
+                            </span>
+                          </td>
+                          <td>
+                            {o.hafta_cevap} cevap
+                            {o.hafta_cevap > 0 && <small>%{yuzde(o.hafta_dogru, o.hafta_cevap)} doğru</small>}
+                          </td>
+                          <td>
+                            {e.sonDers ? (
+                              <>
+                                {e.sonDers.etiket} <small>{e.sonDers.baslik}</small>
+                              </>
+                            ) : (
+                              <span className="not">—</span>
+                            )}
+                          </td>
+                          <td>
+                            {e.kart.toplam ? (
+                              <>
+                                {e.kart.ogrenildi}/{e.kart.toplam}
+                                {e.kart.bugun > 0 && <small className={e.kart.bugun > 25 ? "hata-sayi" : ""}> {e.kart.bugun} bekliyor</small>}
+                              </>
+                            ) : (
+                              <span className="not">—</span>
+                            )}
                           </td>
                           <td>
                             {(o.yol_en_ust ?? 0) + 1} / {CAMP_L.length}

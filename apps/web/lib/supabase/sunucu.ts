@@ -34,6 +34,10 @@ export interface Profil {
 /** Giriş yapan kullanıcı ve profili (yoksa null) */
 export async function oturum() {
   const sb = await supabaseSunucu();
+  if (process.env.NODE_ENV !== "production" && process.env.TI_ONIZLEME === "1") {
+    const s = (await import("./onizleme")).sahteOturum();
+    return { sb: s.sb as typeof sb, user: s.user as Awaited<ReturnType<typeof sb.auth.getUser>>["data"]["user"], profil: s.profil as Profil | null };
+  }
   const {
     data: { user },
   } = await sb.auth.getUser();

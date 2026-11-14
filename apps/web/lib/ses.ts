@@ -25,6 +25,16 @@ function sesSec(kim?: "kadin" | "erkek") {
   return havuz.find((v) => (kim === "kadin" ? kadinAd : erkekAd).test(v.name) && !(kim === "erkek" && /female/i.test(v.name))) ?? havuz[0];
 }
 
+/** Hesabım > Tercihler'deki okuma hızı (bu cihazda) */
+function kayitliHiz(): number {
+  try {
+    const v = Number(JSON.parse(localStorage.getItem("ti:ses-hizi") || "0.82"));
+    return v >= 0.5 && v <= 1.2 ? v : 0.82;
+  } catch {
+    return 0.82;
+  }
+}
+
 export function konus(t: string, a: SesAyar = {}) {
   if (!sesVar()) {
     a.bitince?.();
@@ -34,7 +44,7 @@ export function konus(t: string, a: SesAyar = {}) {
     speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(t);
     u.lang = "en-US";
-    u.rate = a.hiz ?? 0.82;
+    u.rate = a.hiz ?? kayitliHiz();
     const v = sesSec(a.kim);
     if (v) u.voice = v;
     if (a.kim) u.pitch = a.kim === "kadin" ? 1.15 : 0.85;

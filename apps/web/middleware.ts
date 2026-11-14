@@ -2,9 +2,11 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { SUPABASE_KEY, SUPABASE_URL } from "./lib/supabase/config";
 
-const KORUMALI = ["/panel", "/ogrenci", "/ogretmen"];
+const KORUMALI = ["/panel", "/ogrenci", "/ogretmen", "/hesap"];
 
 export async function middleware(req: NextRequest) {
+  // Sadece geliştirmede, sahte verili önizleme (bkz. lib/supabase/onizleme.ts)
+  if (process.env.NODE_ENV !== "production" && process.env.TI_ONIZLEME === "1") return NextResponse.next();
   let res = NextResponse.next({ request: req });
   const sb = createServerClient(SUPABASE_URL, SUPABASE_KEY, {
     cookies: {

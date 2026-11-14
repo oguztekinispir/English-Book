@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { oturum } from "@/lib/supabase/sunucu";
 
-type Aktif = "ana" | "uniteler" | "tekrar" | "oyun" | "gramer" | "pratik" | "panel" | "giris" | "kayit";
+type Aktif = "ana" | "uniteler" | "tekrar" | "oyun" | "gramer" | "pratik" | "panel" | "hesap" | "giris" | "kayit";
 
 export async function Ust({ aktif }: { aktif: Aktif }) {
   const { user, profil } = await oturum().catch(() => ({ user: null, profil: null }));
@@ -39,11 +39,9 @@ export async function Ust({ aktif }: { aktif: Aktif }) {
             <Link href="/panel" aria-current={aktif === "panel" ? "page" : undefined}>
               {panelAd}
             </Link>
-            <form action="/cikis" method="post" className="ust-cikis">
-              <button type="submit" title={profil?.ad ? `${profil.ad} olarak giriş yaptın` : undefined}>
-                Çıkış
-              </button>
-            </form>
+            <Link href="/hesap" aria-current={aktif === "hesap" ? "page" : undefined} className="ust-hesap" title={profil?.ad ? `${profil.ad} olarak giriş yaptın` : undefined}>
+              Hesabım
+            </Link>
           </>
         ) : (
           <Link href="/giris" aria-current={aktif === "giris" || aktif === "kayit" ? "page" : undefined}>

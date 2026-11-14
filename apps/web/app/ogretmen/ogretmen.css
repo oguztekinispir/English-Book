@@ -1,0 +1,75 @@
+/* Öğretmen: öğrenci listesi ve öğrenci detayı */
+.yedi-gun { display: inline-flex; gap: 3px; vertical-align: middle; }
+.yedi-gun i { width: 11px; height: 11px; border-radius: 3px; background: #eef1f9; }
+.yedi-gun i.az { background: #9fb4f5; }
+.yedi-gun i.cok { background: var(--kobalt); }
+
+.ogr-kapak h1 { font-size: clamp(32px, 4vw, 44px); font-weight: 800; letter-spacing: -0.03em; }
+.ogr-kunye { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 6px 0 0; color: var(--soluk); font-size: 14.5px; }
+.etiket-iyi, .etiket-uyari { font-weight: 600; border-radius: 999px; padding: 1px 10px; }
+.etiket-iyi { background: var(--tamam-acik); color: #0b5e3c; }
+.etiket-uyari { background: var(--ek-yumusak); color: var(--ek-koyu); }
+.oneri-kutusu { margin: 0; background: var(--kobalt-acik); border-left: 4px solid var(--kobalt); border-radius: 0 14px 14px 0; padding: 12px 16px; font-size: 15.5px; max-width: 90ch; }
+
+.ozet-seridi { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.ozet-seridi div { background: var(--yuzey); border: 1.5px solid var(--cizgi); border-radius: 16px; padding: 12px 14px; display: flex; flex-direction: column; box-shadow: var(--golge); }
+.ozet-seridi b { font-family: var(--f-baslik); font-size: 32px; font-weight: 800; line-height: 1.05; color: var(--kobalt); font-variant-numeric: tabular-nums; }
+.ozet-seridi span { color: var(--soluk); font-size: 13.5px; }
+
+.gun-cubuk { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(14, minmax(0, 1fr)); gap: 6px; align-items: end; }
+.gun-cubuk li { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.gc-kutu { width: 100%; height: 90px; display: flex; align-items: flex-end; background: #f4f6fc; border-radius: 8px; overflow: hidden; }
+.gc-kutu i { display: block; width: 100%; background: var(--kobalt); border-radius: 8px 8px 0 0; min-height: 3px; }
+.gc-kutu i.bos { background: transparent; }
+.gc-sayi { font-size: 12px; font-weight: 600; color: var(--soluk); min-height: 15px; font-variant-numeric: tabular-nums; }
+.gc-gun { font-size: 11.5px; color: var(--soluk); }
+@media (max-width: 560px) { .gc-kutu { height: 64px; } .gun-cubuk { gap: 3px; } .gc-sayi { font-size: 10.5px; } }
+.kaynak-liste { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.kaynak-liste li { background: var(--kagit); border: 1.5px solid var(--cizgi); border-radius: 999px; padding: 4px 12px; font-size: 14px; }
+.kaynak-liste small { color: var(--soluk); }
+
+.ders-tablo { width: 100%; border-collapse: collapse; font-size: 14.5px; min-width: 520px; }
+.ders-tablo th, .ders-tablo td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--cizgi); }
+.ders-tablo thead th { font-size: 12.5px; color: var(--soluk); font-weight: 600; }
+.ders-tablo tbody th { font-weight: 600; }
+.ders-tablo tr.soluk { color: var(--soluk); }
+.ders-tablo tr.soluk th { font-weight: 500; }
+.dt-no { font-family: var(--f-baslik); font-weight: 800; color: var(--kobalt); margin-right: 4px; }
+.ders-tablo .iyi { color: var(--tamam); font-weight: 700; }
+.ders-tablo .orta { color: #b76e00; font-weight: 700; }
+
+.kutu-cubuk { list-style: none; margin: 0; padding: 0; display: flex; height: 26px; border-radius: 8px; overflow: hidden; gap: 2px; }
+.kutu-cubuk li { display: grid; place-items: center; font-size: 12px; font-weight: 700; min-width: 0; overflow: hidden; }
+.kutu-cubuk .k0 { background: #ffd0d1; color: #8c1d21; }
+.kutu-cubuk .k1 { background: #ffe1b8; color: #7a4300; }
+.kutu-cubuk .k2 { background: #fff0a6; color: var(--ek-koyu); }
+.kutu-cubuk .k3 { background: #d6f2c4; color: #2f5d12; }
+.kutu-cubuk .k4 { background: #b5ead2; color: #0b5e3c; }
+.kutu-cubuk .k5 { background: #8fd9b6; color: #0b5e3c; }
+
+.zor-liste { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.zor-liste li { display: flex; gap: 8px; align-items: baseline; }
+.zor-liste b { font-family: var(--f-baslik); font-size: 17px; }
+.zor-liste span { color: var(--soluk); flex: 1; }
+
+.not-formu { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+.not-formu textarea { font: inherit; font-size: 15px; width: 100%; border: 2px solid var(--cizgi); border-radius: 12px; padding: 10px 12px; background: var(--kagit); resize: vertical; }
+.not-formu textarea:focus { outline: none; border-color: var(--kobalt); box-shadow: 0 0 0 4px var(--kobalt-acik); background: #fff; }
+.not-liste { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.not-liste li { background: var(--ek-yumusak); border-radius: 12px; padding: 8px 12px; }
+.not-liste p { margin: 0; white-space: pre-wrap; font-size: 14.5px; }
+.not-liste small { color: var(--soluk); display: flex; align-items: center; justify-content: space-between; }
+
+.sc-baslik { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+.sc-baslik nav { display: flex; gap: 4px; }
+.sc-baslik nav a { text-decoration: none; font-size: 14px; font-weight: 600; padding: 5px 10px; border-radius: 8px; color: var(--murekkep); }
+.sc-baslik nav a[aria-current="page"] { background: var(--murekkep); color: #fff; }
+.sc-yan small { display: block; }
+
+/* Öğrenci listesi: tablo tam genişlik, kod kartı altta */
+.ogretmen-izgara { grid-template-columns: minmax(0, 1fr) !important; }
+.ogretmen-izgara > * { min-width: 0; }
+.ogretmen-izgara .kod-karti { max-width: 560px; }
+.ogrenci-tablo { min-width: 860px; }
+.ogrenci-tablo td { white-space: nowrap; }
+.ogrenci-tablo td small { display: block; }
