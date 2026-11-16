@@ -3,7 +3,7 @@
  * Rastgelelik dışarıdan verilir (rng), böylece testlerde aynı sonuç alınır.
  */
 import { M_ADJ, M_SUBJ, M_VERB } from "./veri";
-import { aorQ, aorTR, canQ, canTR, copPast, copPres, dogalDurum, pastQ, pastTR, v4 as v4q, willQ, willTR } from "./turkce";
+import { aorQ, aorTR, canQ, canTR, copPast, copPres, dogalDurum, endsV, pastQ, pastTR, v4 as v4q, willQ, willTR } from "./turkce";
 import type { Ayar, Cip, Ikili, Kalip, Kutup, Malzeme, Meta, Rng, Soru } from "./tipler";
 
 export const pick = <T>(a: T[], rng: Rng = Math.random): T => a[Math.floor(rng() * a.length)];
@@ -34,6 +34,11 @@ export function genItem(set: Ayar, force?: Zorla | null, rng: Rng = Math.random,
   if (pol === "q" && (s.p === 0 || s.p === 3)) {
     const uygun = SUBJ.filter((x) => x.p !== 0 && x.p !== 3);
     if (uygun.length) s = pick(uygun, rng);
+  }
+  // Soruda "benim" yerine "senin": "Annem evli mi?" değil "Annen evli mi?" (insan kendi annesini sormaz)
+  if (pol === "q" && s.nz && /^My /.test(s.en)) {
+    const kok = s.kok ?? (s.tr === "Arkadaşım" ? "Arkadaş" : null);
+    if (kok) s = { ...s, en: "Your " + s.en.slice(3), tr: kok + (endsV(kok) ? "n" : v4q(kok) + "n"), kok };
   }
   const p = s.p,
     third = p === 2,

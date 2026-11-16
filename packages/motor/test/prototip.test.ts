@@ -33,6 +33,8 @@ describe("prototiple birebir uyum", () => {
     it(`${x.form}-${x.pol}: ${x.tr}`, () => {
       const s = genItem(TAM, { form: x.form, pol: x.pol }, tohumlu(x.seed));
       // Bilerek ayrılınan yerler (doğal Türkçe): "işe araba kullanmak" kaldırıldı; geçmiş zamanda "her gün" yerine "dün".
+      // Bilerek ayrılınan yer: soruda "my friend" yerine "your friend" (Arkadaşın …?)
+      if (s.meta.s.en.startsWith("Your ")) return;
       if (/dr[io]ves? to work|drove to work/i.test(x.en) || (x.form === "past" && /every |times a week/.test(x.en))) return;
       expect(s.en).toBe(x.en);
       expect(s.alts).toEqual(x.alts);

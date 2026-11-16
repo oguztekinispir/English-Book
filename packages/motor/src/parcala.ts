@@ -39,8 +39,8 @@ export function trSeg(m: Meta | null | undefined): Parcalanmis | null {
         ? [["Arkadaş", "arkadaş → friend", "root"], ["ım", "-ım: benim → my", "pers"]]
         : m.s.kok && m.s.tr.startsWith(m.s.kok)
           ? [
-              [m.s.kok, `${m.s.kok.toLocaleLowerCase("tr")} → ${m.s.en.replace(/^my /i, "")}`, "root"],
-              [m.s.tr.slice(m.s.kok.length), `-${m.s.tr.slice(m.s.kok.length)}: benim → my`, "pers"],
+              [m.s.kok, `${m.s.kok.toLocaleLowerCase("tr")} → ${m.s.en.replace(/^(my|your) /i, "")}`, "root"],
+              [m.s.tr.slice(m.s.kok.length), `-${m.s.tr.slice(m.s.kok.length)}: ${/^your /i.test(m.s.en) ? "senin → your" : "benim → my"}`, "pers"],
             ]
           : m.gizli
             ? [[`(${m.s.tr.toLocaleLowerCase("tr")})`, `gizli özne: Türkçede söylenmez, fiilin sonundaki ek gösterir → ${m.s.en}`, "pers"]]
