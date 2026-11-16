@@ -7,6 +7,7 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { A1_PLAN, SEVIYE_GECME, SEVIYE_TESTI, UNITELER, seviyeSonucu, type SeviyeSoru, type SeviyeSonucu } from "@ti/icerik";
 import { konus, sesVar } from "@/lib/ses";
+import { durumGuncelle } from "@/lib/kayit";
 
 const ANAHTAR = "ti:seviye";
 const TOPLAM = SEVIYE_TESTI.reduce((t, b) => t + b.sorular.length, 0);
@@ -74,9 +75,12 @@ export function SeviyeTesti({ girisli }: { girisli: boolean }) {
     // Basamak bitti: geçemediyse ya da son basamaksa sonuç
     if (p[b] < SEVIYE_GECME || b + 1 === SEVIYE_TESTI.length) {
       const sonuc = seviyeSonucu(p);
+      const tarih = new Date().toISOString();
       try {
-        localStorage.setItem(ANAHTAR, JSON.stringify({ unite: sonuc.unite, puanlar: p, tarih: new Date().toISOString() }));
+        localStorage.setItem(ANAHTAR, JSON.stringify({ unite: sonuc.unite, puanlar: p, tarih }));
       } catch {}
+      // Giriş yapılmışsa öğretmen de görsün
+      if (girisli) durumGuncelle({ seviye_unite: sonuc.unite, seviye_puanlar: p, seviye_tarih: tarih });
       return setDurum({ asama: "sonuc", sonuc });
     }
     setDurum({ asama: "soru", b: b + 1, s: 0, puanlar: [...p, 0] });

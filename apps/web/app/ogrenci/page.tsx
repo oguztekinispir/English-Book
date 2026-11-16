@@ -4,6 +4,8 @@ import { redirect } from "next/navigation";
 import { CAMP_L, RULES } from "@ti/motor";
 import { Ust } from "@/components/Ust";
 import { BaglanFormu } from "@/components/PanelParcalari";
+import { Bugun } from "@/components/Bugun";
+import { seriHesapla } from "@/lib/seri";
 import { oturum } from "@/lib/supabase/sunucu";
 import { once, yuzde } from "@/lib/zaman";
 import "../hesap.css";
@@ -16,13 +18,22 @@ export default async function OgrenciPaneli() {
   if (profil?.rol === "ogretmen") redirect("/ogretmen");
 
   const hafta = new Date(Date.now() - 7 * 86400000).toISOString();
-  const [bag, cev, zayif, durum, atama] = await Promise.all([
+  const donem = new Date(Date.now() - 120 * 86400000).toISOString();
+  const [bag, cev, zayif, durum, atama, tumZaman, bugunDurum] = await Promise.all([
     sb.from("baglantilar").select("ogretmen_id, olusturma").eq("ogrenci_id", user.id).eq("durum", "aktif"),
     sb.from("cevaplar").select("dogru, zaman").eq("ogrenci_id", user.id).gte("zaman", hafta),
     sb.from("zayif_kurallar").select("kural, hata, toplam").eq("ogrenci_id", user.id).order("hata", { ascending: false }).limit(3),
     sb.from("ogrenci_durumu").select("yol_en_ust").eq("ogrenci_id", user.id).maybeSingle(),
     sb.from("odev_atamalari").select("odev_id, durum").eq("ogrenci_id", user.id).neq("durum", "bitti"),
+    // Seri için son 120 günün cevap zamanları
+    sb.from("cevaplar").select("zaman").eq("ogrenci_id", user.id).gte("zaman", donem).order("zaman", { ascending: false }).limit(8000),
+    // 0006 göçü çalıştırılmadıysa bu sorgu hata verir; o zaman hedef tarayıcıda tutulur
+    sb.from("ogrenci_durumu").select("gunluk_hedef, seviye_unite, seviye_tarih").eq("ogrenci_id", user.id).maybeSingle(),
   ]);
+  const seri = seriHesapla((tumZaman.data || []).map((c) => c.zaman as string));
+  const bd = bugunDurum.error ? null : (bugunDurum.data as { gunluk_hedef: number; seviye_unite: number | null; seviye_tarih: string | null } | null);
+  const hedef = bugunDurum.error ? null : (bd?.gunluk_hedef ?? 20);
+  const seviye = bd?.seviye_unite && bd.seviye_tarih ? { unite: bd.seviye_unite, tarih: bd.seviye_tarih } : null;
   const ogretmenIds = (bag.data || []).map((b) => b.ogretmen_id as string);
   const ogretmenler = ogretmenIds.length ? ((await sb.from("profiller").select("id, ad").in("id", ogretmenIds)).data ?? []) : [];
   const odevIds = (atama.data || []).map((a) => a.odev_id as string);
@@ -48,14 +59,18 @@ export default async function OgrenciPaneli() {
         <div className="panel-baslik">
           <h1>Merhaba {profil?.ad?.split(" ")[0] || ""}</h1>
           <div className="dugmeler">
-            <Link href="/tekrar" className="dugme buyuk">
-              Günlük tekrar
-            </Link>
-            <Link href="/uniteler" className="dugme ana buyuk">
-              Derse devam et
+            <Link href="/uniteler" className="dugme">
+              Bütün üniteler
             </Link>
           </div>
         </div>
+
+        <Bugun
+          seri={seri}
+          hedef={hedef}
+          seviye={seviye}
+          odevler={odevler.map((o) => ({ id: o.id as string, baslik: o.baslik as string, son_tarih: (o.son_tarih as string | null) ?? null }))}
+        />
 
         {kucuk && !profil?.veli_onayi_at && (
           <p className="form-bilgi">Velinin onayı bekleniyor ({profil?.veli_eposta}). Bu sırada çalışmaya devam edebilirsin.</p>

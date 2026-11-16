@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { CAMP_L, RULES } from "@ti/motor";
+import { A1_PLAN } from "@ti/icerik";
 import { Ust } from "@/components/Ust";
 import { NotFormu, NotSil } from "@/components/OgretmenNotlari";
 import { oturum } from "@/lib/supabase/sunucu";
@@ -27,14 +28,18 @@ export default async function OgrenciDetayi({ params, searchParams }: { params: 
   const { data: ogr } = await sb.from("profiller").select("id, ad, dogum_tarihi, dogum_yili, veli_eposta, veli_onayi_at, olusturma").eq("id", id).maybeSingle();
   if (!ogr) notFound();
 
-  const [{ satirlar, dersVar }, zayif, durum, bag, kart, notlar] = await Promise.all([
+  const [{ satirlar, dersVar }, zayif, durum, bag, kart, notlar, bugun] = await Promise.all([
     cevaplariGetir(sb, [id], 30),
     sb.from("zayif_kurallar").select("kural, hata, toplam").eq("ogrenci_id", id).order("hata", { ascending: false }),
     sb.from("ogrenci_durumu").select("yol_en_ust").eq("ogrenci_id", id).maybeSingle(),
     sb.from("baglantilar").select("olusturma").eq("ogretmen_id", user.id).eq("ogrenci_id", id).maybeSingle(),
     sb.from("tekrar_kartlari").select("kutu, sonraki").eq("ogrenci_id", id),
     sb.from("ogretmen_notlari").select("id, metin, olusturma").eq("ogrenci_id", id).order("olusturma", { ascending: false }).limit(20),
+    // 0006 göçü yoksa hata verir, o zaman gösterilmez
+    sb.from("ogrenci_durumu").select("gunluk_hedef, seviye_unite, seviye_tarih").eq("ogrenci_id", id).maybeSingle(),
   ]);
+  const bd = bugun.error ? null : (bugun.data as { gunluk_hedef: number; seviye_unite: number | null; seviye_tarih: string | null } | null);
+  const seviyePlan = bd?.seviye_unite ? A1_PLAN.find((u) => u.sira === bd.seviye_unite) : undefined;
 
   const c = satirlar;
   const hafta = c.filter((x) => Date.now() - new Date(x.zaman).getTime() < 7 * 86400_000);
@@ -83,6 +88,13 @@ export default async function OgrenciDetayi({ params, searchParams }: { params: 
               {ogrYas !== null && <span>{ogrYas} yaş</span>}
               {bag.data?.olusturma && <span>{tarih(bag.data.olusturma as string)} tarihinden beri öğrencin</span>}
               <span>Son çalışma: {once(son)}</span>
+              {bd && <span>Günlük hedefi: {bd.gunluk_hedef} cevap</span>}
+              {bd?.seviye_unite && (
+                <span>
+                  Seviye testi: {seviyePlan ? `Ünite ${seviyePlan.sira} (${seviyePlan.baslik})` : "A1'i geçti"} önerildi
+                  {bd.seviye_tarih ? `, ${tarih(bd.seviye_tarih)}` : ""}
+                </span>
+              )}
               {kucuk && <span className={ogr.veli_onayi_at ? "etiket-iyi" : "etiket-uyari"}>{ogr.veli_onayi_at ? "Veli onayı var" : "Veli onayı bekleniyor"}</span>}
             </p>
           </div>

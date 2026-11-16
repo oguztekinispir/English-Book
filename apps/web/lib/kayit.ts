@@ -62,3 +62,14 @@ export async function yolYaz(y: YolDurumu): Promise<void> {
     .upsert({ ogrenci_id: id, yol_seviye: y.lvl, yol_en_ust: y.max, guncelleme: new Date().toISOString() });
   if (error) console.warn("Seviye kaydedilemedi:", error.message);
 }
+
+/** Öğrenci durumu satırına kısmi yazma (günlük hedef, seviye testi). Giriş yoksa ya da 0006 göçü yoksa false döner. */
+export async function durumGuncelle(alanlar: Record<string, unknown>): Promise<boolean> {
+  const id = await kullaniciId();
+  if (!id) return false;
+  const { error } = await supabaseTarayici()
+    .from("ogrenci_durumu")
+    .upsert({ ogrenci_id: id, ...alanlar, guncelleme: new Date().toISOString() });
+  if (error) console.warn("Durum kaydedilemedi:", error.message);
+  return !error;
+}

@@ -98,3 +98,53 @@
 .dogum-satir { display: grid; grid-template-columns: 0.8fr 1.4fr 1fr; gap: 8px; }
 .dogum select { font: inherit; font-size: 16.5px; width: 100%; border: 2px solid var(--cizgi); border-radius: 12px; padding: 11px 10px; background: var(--kagit); color: var(--murekkep); appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--soluk) 50%), linear-gradient(135deg, var(--soluk) 50%, transparent 50%); background-position: calc(100% - 16px) 50%, calc(100% - 11px) 50%; background-size: 5px 5px; background-repeat: no-repeat; }
 .dogum select:focus { outline: none; border-color: var(--kobalt); box-shadow: 0 0 0 4px var(--kobalt-acik); background-color: #fff; }
+
+/* Bugün */
+.bugun { padding: 22px 24px; margin-bottom: 16px; display: flex; flex-direction: column; gap: 16px; }
+.bugun-ust { display: flex; gap: 20px; align-items: center; }
+.bugun-hedef { position: relative; width: 96px; height: 96px; flex: none; }
+.halka { width: 100%; height: 100%; transform: rotate(-90deg); }
+.halka circle { fill: none; stroke-width: 9; }
+.halka-iz { stroke: var(--kok); }
+.halka-dolu { stroke: var(--kobalt); stroke-linecap: round; transition: stroke-dashoffset 0.6s ease; }
+.halka-dolu.tamam { stroke: var(--tamam); }
+.halka-yazi { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1; }
+.halka-yazi b { font-family: var(--f-baslik); font-size: 26px; font-weight: 800; }
+.halka-yazi span { font-size: 13px; color: var(--soluk); margin-top: 2px; }
+.bugun-metin { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.bugun-metin h2 { margin: 0; font-family: var(--f-baslik); font-size: 26px; }
+.bugun-durum, .bugun-seri { margin: 0; }
+.bugun-seri { display: flex; align-items: flex-start; gap: 6px; }
+.bugun-seri .alev { margin-top: 3px; }
+.alev { width: 18px; height: 18px; fill: var(--kok); stroke: var(--soluk); stroke-width: 1; flex: none; }
+.alev.yanik { fill: #ff8a1f; stroke: #c25400; }
+.metin-dugme { font: inherit; font-size: 14px; background: none; border: 0; padding: 0; color: var(--kobalt); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+
+.hedef-sec { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 8px; }
+.hedef-secenek { font: inherit; text-align: left; border: 1.5px solid var(--cizgi); background: var(--yuzey); border-radius: 10px; padding: 10px 12px; cursor: pointer; display: flex; flex-direction: column; gap: 2px; }
+.hedef-secenek small { color: var(--soluk); }
+.hedef-secenek.secili { border-color: var(--kobalt); background: var(--kobalt-acik); }
+
+.yedi { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.yedi li { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 12px; color: var(--soluk); }
+.yedi .nokta { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--cizgi); background: var(--yuzey); }
+.yedi .yari .nokta { background: linear-gradient(to top, var(--kobalt) 50%, var(--kobalt-acik) 50%); border-color: var(--kobalt); }
+.yedi .dolu .nokta { background: var(--kobalt); border-color: var(--kobalt); }
+.yedi .simdi { color: var(--murekkep); font-weight: 700; }
+
+.plan-baslik { margin: 4px 0 0; font-size: 17px; }
+.plan { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.plan-oge { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; border: 1.5px solid var(--cizgi); border-radius: 12px; background: var(--yuzey); }
+.plan-oge > div { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.plan-oge small { color: var(--soluk); }
+.plan-oge .dugme { flex: none; }
+.plan-oge.bitti b::after { content: " ✓"; color: var(--tamam); }
+.plan-oge.odev { border-color: var(--ek); background: var(--ek-yumusak); }
+.plan-oge.kucuk { border-style: dashed; }
+
+@media (max-width: 560px) {
+  .bugun { padding: 18px 16px; }
+  .bugun-ust { gap: 14px; align-items: flex-start; }
+  .bugun-hedef { width: 80px; height: 80px; }
+}
+.hedef-not { grid-column: 1 / -1; margin: 0; font-size: 14px; }

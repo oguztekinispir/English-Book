@@ -45,7 +45,7 @@ const TABLO: Record<string, any[]> = {
     { ogrenci_id: OGRENCI, kural: "simple-pos", hata: 3, toplam: 8 },
     { ogrenci_id: OGRENCI, kural: "be-pos", hata: 1, toplam: 12 },
   ],
-  ogrenci_durumu: [{ ogrenci_id: OGRENCI, yol_en_ust: 3 }],
+  ogrenci_durumu: [{ ogrenci_id: OGRENCI, yol_en_ust: 3, gunluk_hedef: 20, seviye_unite: 3, seviye_puanlar: [4, 2], seviye_tarih: z(5) }],
   tekrar_kartlari: [...Array(42)].map((_, i) => ({ ogrenci_id: OGRENCI, kutu: [0, 1, 1, 2, 2, 3, 3, 3, 4, 5][i % 10], sonraki: gun((i % 6) - 2) })),
   ogretmen_notlari: [{ id: 1, ogretmen_id: OGRETMEN, ogrenci_id: OGRENCI, metin: "Ders 1.2 bitti. He/she ile is'i bazen karıştırıyor.", olusturma: z(3) }],
   cevaplar: cevaplar(),
