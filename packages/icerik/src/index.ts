@@ -8,7 +8,7 @@ export * from "./sozluk";
 export * from "./ekiBul";
 export * from "./karakterler";
 export * from "./ipa";
-export * from "./gramerRehberi";
+export * from "./gramerKonulari";
 export * from "./seviye";
 
 /** A1 müfredatı: 14 ünite, ~50 ders. Yazılmış üniteler UNITELER'de, diğerleri taslak. */

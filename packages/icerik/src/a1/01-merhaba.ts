@@ -113,16 +113,14 @@ export const A1_01: Unite = {
       ],
       gramer: [
         {
-          baslik: "I'm fine: “iyi-yim”deki -im = am",
-          metin: [
-            "“İyiyim” tek kelime ama içinde iki parça var: iyi + -yim. İngilizcede -yim eki ayrı bir kelimedir: am. Ben de ayrıca söylenir: I.",
-            "Konuşurken I am kısalır ve I'm olur. İkisi de doğru. Bir sonraki derste bunun bütün kuralını göreceksin; şimdilik kalıp olarak kullan.",
-          ],
+          baslik: "I'm fine: kalıp olarak öğren",
+          metin: ["“Nasılsın?” sorusuna İngilizcede en sık verilen cevap I'm fine. Bunu tek parça bir kalıp olarak öğren: I'm fine, thank you.", "I'm, I am'in kısa hali; konuşurken hep I'm denir. Kuralını bir sonraki derste göreceksin, şimdilik kalıbı kullan."],
           ornekler: [
-            { tr: ["(Ben) iyi", "-yim"], en: "I [am] fine." },
-            { tr: ["(Ben) iyi", "-yim"], en: "[I'm] fine." },
-            { tr: ["Nasıl", "-sın?"], en: "How [are] you?" },
+            { tr: ["İyiyim."], en: "[I'm fine.]" },
+            { tr: ["İyiyim, teşekkürler."], en: "[I'm fine], thank you." },
+            { tr: ["Nasılsın?"], en: "[How are you?]" },
           ],
+          notlar: ["Dikkat: “I fine” eksik kalır. 'm (am) olmadan olmaz: I'm fine."],
         },
       ],
       diyaloglar: [
@@ -267,20 +265,17 @@ export const A1_01: Unite = {
       ],
       gramer: [
         {
-          baslik: "Türkçedeki -im, -sin, -dir İngilizcede ayrı kelimedir",
-          metin: [
-            "Türkçede “öğrenci-yim” derken “ben” anlamını kelimenin sonundaki ek taşır. İngilizcede bu ek ayrı bir kelimedir ve kişiye göre değişir: am, are, is.",
-            "Bu kelime olmadan İngilizce cümle kurulmaz. “I student” yanlıştır; “I am a student” doğrudur.",
-          ],
+          baslik: "I am a student: kim olduğunu söyleme kalıbı",
+          metin: ["Kendini ve başkalarını tanıtırken İngilizcede hep aynı kalıp kullanılır: kişi + am / is / are + kim ya da ne olduğu.", "Hangisinin geleceği kişiye bağlı: I ile am, he ve she ile is, you, we ve they ile are. Tabloyu ezberlemek yerine örnek cümleleri sesli tekrar et; kalıp kulağına yerleşir."],
           ornekler: [
-            { tr: ["Ben öğrenci", "-yim"], en: "I [am] a student." },
-            { tr: ["Sen öğretmen", "-sin"], en: "You [are] a teacher." },
-            { tr: ["O Türk", "(-tür)"], en: "He [is] Turkish." },
-            { tr: ["O İngiliz", "(-dir)"], en: "She [is] English." },
-            { tr: ["Biz arkadaş", "-ız"], en: "We [are] friends." },
-            { tr: ["Onlar Alman", "(-dır)"], en: "They [are] German." },
+            { tr: ["Öğrenciyim."], en: "[I am] a student." },
+            { tr: ["Öğretmensin."], en: "[You are] a teacher." },
+            { tr: ["O Türk."], en: "[He is] Turkish." },
+            { tr: ["O İngiliz."], en: "[She is] English." },
+            { tr: ["Arkadaşız."], en: "[We are] friends." },
+            { tr: ["Onlar Alman."], en: "[They are] German." },
           ],
-          notlar: ["I → am", "he, she → is", "you, we, they → are", "friends: sondaki -s, Türkçedeki -ler eki (arkadaş-lar). Çoğulu Ünite 4'te göreceksin."],
+          notlar: ["I am", "he / she is", "you / we / they are", "Dikkat: Türkçede “Öğrenciyim” tek kelime, ama İngilizcede “I student” eksik kalır. am / is / are her zaman gerekir."],
         },
         {
           baslik: "Kısa hali: I'm, you're, he's",
@@ -293,22 +288,20 @@ export const A1_01: Unite = {
           ],
         },
         {
-          baslik: "-den eki = from (ve öne geçer)",
-          metin: [
-            "Türkçede “nereden?” sorusunu kelimenin sonundaki -den / -dan eki cevaplar: Türkiye'den, Almanya'dan.",
-            "İngilizcede bu ek “from” kelimesidir ve yerin önüne gelir. Türkçede ek sonda, İngilizcede kelime başta.",
-          ],
+          baslik: "Nerelisin? I'm from Turkey.",
+          metin: ["Nereli olduğunu söylerken kalıp: I'm from + ülke. Sorusu: Where are you from?", "from, ülkenin önüne gelir: from Turkey. Türkçedeki sıraya bakıp “Turkey from” deme."],
           ornekler: [
-            { tr: ["Ben Türkiye", "-den", "-im"], en: "I [am] [from] Turkey." },
-            { tr: ["O Almanya", "-dan"], en: "She [is] [from] Germany." },
+            { tr: ["Türkiye'denim."], en: "[I'm from] Turkey." },
+            { tr: ["O Almanya'dan."], en: "[She's from] Germany." },
+            { tr: ["Nerelisin?"], en: "[Where are you from?]" },
           ],
         },
         {
           baslik: "Meslekten önce a",
-          metin: ["Tek bir kişinin mesleğini söylerken önüne “a” gelir. Türkçede karşılığı yok; “bir öğrenciyim” gibi düşünebilirsin.", "Milliyette a gelmez: I am Turkish (a yok)."],
+          metin: ["Tek bir kişinin mesleğini söylerken önüne a gelir: I'm a teacher. Türkçede karşılığı yok; kalıbın parçası olarak öğren.", "Milliyette a gelmez: I'm Turkish."],
           ornekler: [
-            { tr: ["Ben öğretmen", "-im"], en: "I [am] [a] teacher." },
-            { tr: ["Ben Türk", "-üm"], en: "I [am] Turkish." },
+            { tr: ["Öğretmenim."], en: "I am [a] teacher." },
+            { tr: ["Türk'üm."], en: "I am Turkish." },
           ],
         },
       ],
@@ -454,16 +447,14 @@ export const A1_01: Unite = {
       ],
       gramer: [
         {
-          baslik: "Yaş söylerken de am / is / are",
-          metin: [
-            "Türkçede “yirmi yaşında-yım” deriz; sondaki -yım eki yine am olur. İngilizcede yaş “yıl” ile söylenir: twenty years old (yirmi yıl yaşlı).",
-            "years old'u atıp sadece sayıyı da söyleyebilirsin: I'm twenty.",
-          ],
+          baslik: "Yaş: I'm twenty.",
+          metin: ["Yaşını söylerken de aynı kalıp: I'm + sayı. Uzun hali I'm twenty years old; günlük konuşmada çoğunlukla sadece I'm twenty denir.", "Sorusu: How old are you?"],
           ornekler: [
-            { tr: ["Ben yirmi yaşında", "-yım"], en: "I [am] twenty years old." },
-            { tr: ["O on beş yaşında"], en: "She [is] fifteen." },
-            { tr: ["Kaç yaşında", "-sın?"], en: "How old [are] you?" },
+            { tr: ["Yirmi yaşındayım."], en: "[I'm twenty] years old." },
+            { tr: ["O on beş yaşında."], en: "[She's fifteen]." },
+            { tr: ["Kaç yaşındasın?"], en: "[How old are you?]" },
           ],
+          notlar: ["Dikkat: “I have twenty years” yanlış. İngilizcede yaş am / is / are ile söylenir."],
         },
         {
           baslik: "13–19: sonu -teen",
@@ -568,14 +559,14 @@ export const A1_01: Unite = {
       gramer: [
         {
           baslik: "Ünitenin özeti",
-          metin: ["Bu ünitede tek bir kural öğrendin: Türkçedeki -im, -sin, -dir ekleri İngilizcede am, are, is olur. Geri kalan her şey bu kuralın üstüne kuruldu."],
+          metin: ["Bu ünitede tek bir kalıp öğrendin: kişi + am / is / are. Kendini tanıtmak, nereli olduğunu ve yaşını söylemek hep bu kalıpla olur."],
           ornekler: [
-            { tr: ["(Ben) iyi", "-yim"], en: "I['m] fine." },
-            { tr: ["Ben Türkiye", "-den", "-im"], en: "I [am] [from] Turkey." },
-            { tr: ["O öğretmen", "(-dir)"], en: "She [is] [a] teacher." },
-            { tr: ["Yirmi yaşında", "-yım"], en: "I [am] twenty years old." },
+            { tr: ["İyiyim."], en: "[I'm] fine." },
+            { tr: ["Türkiye'denim."], en: "[I'm from] Turkey." },
+            { tr: ["O öğretmen."], en: "[She's a] teacher." },
+            { tr: ["Yirmi yaşındayım."], en: "[I'm] twenty." },
           ],
-          notlar: ["I → am", "he, she → is", "you, we, they → are"],
+          notlar: ["I am", "he / she is", "you / we / they are"],
         },
       ],
       diyaloglar: [],

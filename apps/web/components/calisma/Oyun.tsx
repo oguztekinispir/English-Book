@@ -43,7 +43,7 @@ export function Oyunlar() {
       ) : (
         <HenuzDersYok ne="Eşleştirme ve dinle-bul oyunları" />
       )}
-      <EkiBul acilan={acilan} />
+      <KalipBul acilan={acilan} />
     </>
   );
 }
@@ -293,14 +293,17 @@ function DinleBul({ kelimeler, rekorAnahtar }: { kelimeler: Kart[]; rekorAnahtar
   );
 }
 
-/* ---------- Eki bul ---------- */
+/* ---------- Kalıp bul ---------- */
 
+/** "We [are] hungry." → "are" */
+const kelimesi = (t: string) => t.match(/\[(.+?)\]/)?.[1] ?? "";
 
-function EkiBul({ acilan }: { acilan: string[] }) {
+/** Türkçe cümle verilir, İngilizce kalıptaki boşluğa doğru kelime seçilir. Yanlış şıklar önce aynı aileden (am / is / are gibi). */
+function KalipBul({ acilan }: { acilan: string[] }) {
   const enUst = Math.max(0, ...UNITELER.filter((u) => u.dersler.some((d) => acilan.includes(d.kod))).map((u) => u.sira));
   const [hepsi, setHepsi] = useKalici("eki-bul-hepsi", false);
   const havuz = ekiBulHavuzu(hepsi || enUst === 0 ? 14 : enUst);
-  const siklar = [...new Set(havuz.map((x) => x.a))];
+  const tumKelimeler = [...new Set(havuz.map((x) => kelimesi(x.s)))];
   const TUR = Math.min(10, havuz.length);
   const [rekor, setRekor] = useKalici<number | null>(`rekor-eki-bul-${hepsi ? "hepsi" : enUst}`, null);
   const [deste, setDeste] = useState<EkiBulSorusu[] | null>(null);
@@ -309,7 +312,17 @@ function EkiBul({ acilan }: { acilan: string[] }) {
   const [secim, setSecim] = useState<string | null>(null);
   const [son, setSon] = useState<number | null>(null);
   const s = deste?.[i];
-  const secenekler = useMemo(() => (s ? karistir([s.a, ...karistir(siklar.filter((x) => x !== s.a)).slice(0, 3)]) : []), [s]); // eslint-disable-line react-hooks/exhaustive-deps
+  const dogruKelime = s ? kelimesi(s.s) : "";
+  const secenekler = useMemo(() => {
+    if (!s) return [];
+    const aile = [...new Set(havuz.filter((x) => x.a === s.a).map((x) => kelimesi(x.s)))].filter((x) => x.toLowerCase() !== dogruKelime.toLowerCase());
+    const diger = tumKelimeler.filter((x) => x.toLowerCase() !== dogruKelime.toLowerCase() && !aile.includes(x));
+    // Boşluk cümle başındaysa büyük harf, ortadaysa küçük harf (I hariç)
+    const basta = s.s.startsWith("[");
+    const bicim = (x: string) => (/^I\b|^I'/.test(x) ? x : basta ? x.charAt(0).toUpperCase() + x.slice(1) : x.toLowerCase());
+    const yanlis = [...new Set([...karistir(aile), ...karistir(diger)].map(bicim))].filter((x) => x !== bicim(dogruKelime)).slice(0, 3);
+    return karistir([bicim(dogruKelime), ...yanlis]);
+  }, [s]); // eslint-disable-line react-hooks/exhaustive-deps
   const kayit = useRef(0);
 
   const basla = () => {
@@ -323,9 +336,9 @@ function EkiBul({ acilan }: { acilan: string[] }) {
   const sec = (x: string) => {
     if (!s || secim) return;
     setSecim(x);
-    const ok = x === s.a;
+    const ok = x.toLowerCase() === dogruKelime.toLowerCase();
     if (ok) setPuan((p) => p + 1);
-    cevapKaydet({ kaynak: "oyun", kural: "eki-bul", dogru: ok, soru: s.s, cevap: x, beklenen: s.a });
+    cevapKaydet({ kaynak: "oyun", kural: "kalip-bul", dogru: ok, soru: s.s, cevap: x, beklenen: dogruKelime });
   };
   const ileri = () => {
     if (i + 1 >= TUR) {
@@ -337,12 +350,13 @@ function EkiBul({ acilan }: { acilan: string[] }) {
       setSecim(null);
     }
   };
-  const cumle = (t: string) => {
+  /** Boşluklu cümle; cevaplanınca doğru kelime yerine oturur */
+  const cumle = (t: string, dolu: boolean) => {
     const m = t.match(/^(.*?)\[(.+?)\](.*)$/);
     return m ? (
       <>
         {m[1]}
-        <mark>{m[2]}</mark>
+        <mark className="kb-bosluk">{dolu ? m[2] : "\u2003\u2003\u2003"}</mark>
         {m[3]}
       </>
     ) : (
@@ -352,14 +366,14 @@ function EkiBul({ acilan }: { acilan: string[] }) {
 
   return (
     <section className="calisma-blok yaprak" aria-labelledby="eb-baslik">
-      <h2 id="eb-baslik">Eki bul</h2>
+      <h2 id="eb-baslik">Kalıp bul</h2>
       <p className="not">
-        Türkçede ek olan şey İngilizcede ayrı bir kelimedir. İşaretli kelime Türkçede hangi ekin yerini tutuyor? {TUR} soru,{" "}
-        {hepsi || enUst === 0 ? "A1'in bütün ekleri (henüz görmediklerin de var)." : `Ünite ${enUst}'e kadar öğrendiğin ekler.`}
+        Türkçe cümleyi oku, İngilizce kalıptaki boşluğa doğru kelimeyi seç. {TUR} soru,{" "}
+        {hepsi || enUst === 0 ? "A1'in bütün kalıpları (henüz görmediklerin de var)." : `Ünite ${enUst}'e kadar öğrendiğin kalıplar.`}
       </p>
       {enUst > 0 && enUst < 14 && !deste && (
         <label className="alan yatay">
-          <input type="checkbox" checked={hepsi} onChange={(e) => setHepsi(e.target.checked)} /> Henüz görmediğim ekleri de sor
+          <input type="checkbox" checked={hepsi} onChange={(e) => setHepsi(e.target.checked)} /> Henüz görmediğim kalıpları da sor
         </label>
       )}
       {!deste || !s ? (
@@ -369,7 +383,7 @@ function EkiBul({ acilan }: { acilan: string[] }) {
               <b>
                 {son} / {TUR}
               </b>{" "}
-              <span>{son === TUR ? "Kusursuz." : "Yanlışların için Gramer sayfasındaki ek anahtarına bak."}</span>
+              <span>{son === TUR ? "Kusursuz." : "Yanlış yaptığın kalıplar için Gramer sayfasına bak."}</span>
             </p>
           )}
           <div className="dugmeler">
@@ -391,15 +405,17 @@ function EkiBul({ acilan }: { acilan: string[] }) {
             </span>
             <span>{puan} doğru</span>
           </p>
+          <p className="kb-tr">{s.tr}</p>
           <p className="eb-cumle" lang="en">
-            {cumle(s.s)}
+            {cumle(s.s, !!secim)}
           </p>
           <div className="secenekler">
             {secenekler.map((x) => (
               <button
                 key={x}
                 type="button"
-                className={`secenek${secim && x === s.a ? " dogru" : ""}${secim === x && x !== s.a ? " yanlis" : ""}`}
+                lang="en"
+                className={`secenek${secim && x.toLowerCase() === dogruKelime.toLowerCase() ? " dogru" : ""}${secim === x && x.toLowerCase() !== dogruKelime.toLowerCase() ? " yanlis" : ""}`}
                 disabled={!!secim}
                 onClick={() => sec(x)}
               >
@@ -410,7 +426,7 @@ function EkiBul({ acilan }: { acilan: string[] }) {
           {secim && (
             <div className="db-cevap">
               <p>
-                <b>{s.tr}</b> <SesDugmesi metin={s.s.replace(/[[\]]/g, "")} />
+                <b lang="en">{s.s.replace(/[[\]]/g, "")}</b> <SesDugmesi metin={s.s.replace(/[[\]]/g, "")} />
               </p>
               <button type="button" className="dugme ana" autoFocus onClick={ileri}>
                 {i + 1 < TUR ? "Sonraki" : "Sonucu gör"}

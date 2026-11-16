@@ -119,15 +119,15 @@ export function SoruKarti({ soru, seviye, formulGoster, malzeme, onSecim, onKont
           </form>
           <div className="dugmeler">
             <button type="button" className={`dugme${parcala ? " acik" : ""}`} aria-pressed={parcala} onClick={() => setParcala((x) => !x)}>
-              Türkçeyi parçala
+              İpucu: kelime sırası
             </button>
             <button type="button" className="dugme sade" onClick={() => kontrol(true)}>
               Bilmiyorum, göster
             </button>
           </div>
+          {/* İpucu kalıp üzerinden: İngilizce cümlenin sırası. Türkçe ek açıklaması sadece hatadan sonra. */}
           {parcala && (
             <div className="ipucu-alani">
-              <Parcalama soru={soru} />
               <KelimeSirasi soru={soru} gizli />
             </div>
           )}
@@ -164,9 +164,10 @@ export function SoruKarti({ soru, seviye, formulGoster, malzeme, onSecim, onKont
 
           {!sonuc.ok && <Ogretmen soru={soru} cevap={sonuc.cevap} malzeme={malzeme} bolum="teshis" />}
 
-          {/* Destek isteyince açılır: önce kendin düşün */}
+          {/* Türkçe karşılaştırma sadece hata anında, istenirse açılır */}
+          {!sonuc.ok && (
           <details className="daha-acikla">
-            <summary>{sonuc.ok ? "Neden böyle? Türkçeyi parçala, kuralı gör" : "Daha fazla açıkla: Türkçeyi parçala, kuralı ve örnekleri gör"}</summary>
+            <summary>Daha fazla açıkla: Türkçe cümleyle karşılaştır, kuralı ve örnekleri gör</summary>
           <Parcalama soru={soru} />
 
           <section className="bolum">
@@ -183,8 +184,9 @@ export function SoruKarti({ soru, seviye, formulGoster, malzeme, onSecim, onKont
             </div>
           </section>
 
-          {!sonuc.ok && <Ogretmen soru={soru} cevap={sonuc.cevap} malzeme={malzeme} bolum="kural" />}
+          <Ogretmen soru={soru} cevap={sonuc.cevap} malzeme={malzeme} bolum="kural" />
           </details>
+          )}
 
           <div className="dugmeler son">{aksiyonlar(sonuc.ok)}</div>
         </div>
@@ -197,7 +199,7 @@ function KalipSec({ seviye, onSec }: { seviye: Seviye; onSec: (k: string) => voi
   if (seviye.pk === "all")
     return (
       <div className="secim">
-        <p className="adim">Önce karar ver: bu hangi kalıp? Türkçedeki eke bak.</p>
+        <p className="adim">Önce karar ver: bu hangi kalıp?</p>
         <div className="secenekler alti">
           {PK_ALL.map(([k, t, ex]) => (
             <button key={k} type="button" className="secenek" onClick={() => onSec(k)}>

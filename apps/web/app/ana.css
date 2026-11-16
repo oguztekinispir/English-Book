@@ -101,3 +101,4 @@
 .sss details p { margin: 0 0 16px; max-width: 64ch; color: #39415c; }
 .sss > .dugme { margin-top: 24px; }
 @media (max-width: 560px) { .ogretmenlere { padding: 24px 20px; border-radius: 22px; } .ozellikler li { padding-right: 0; } }
+.gosteri-tr-duz { display: block; min-height: 0; }

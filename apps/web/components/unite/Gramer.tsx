@@ -30,14 +30,14 @@ export function Gramer({ bolumler, kesfet = false }: { bolumler: GramerBolum[]; 
   );
 }
 
-/** Önce örnekler: öğrenci kuralı kendisi tahmin eder, sonra açıklamayı açar. */
+/** Önce örnekler: öğrenci kalıbı kendisi fark eder, sonra açıklamayı açar. */
 function GramerBolumu({ g, kesfet }: { g: GramerBolum; kesfet: boolean }) {
   const tahmin = kesfet && !!g.ornekler?.length;
   const [acik, setAcik] = useState(!tahmin);
   return (
         <section className="gramer-bolum yaprak">
           <h3>{g.baslik}</h3>
-          {tahmin && !acik && <p className="gramer-soru">Önce örneklere bak. Sarı kısımlar neye dönüşüyor? Sence kural ne?</p>}
+          {tahmin && !acik && <p className="gramer-soru">Önce örneklere bak, dinle ve sesli tekrar et. İngilizcede hangi kalıp tekrar ediyor?</p>}
           {acik && !tahmin && g.metin.map((m, j) => <p key={j}>{m}</p>)}
           {g.ornekler && (
             <ul className="gramer-ornek">
@@ -45,9 +45,8 @@ function GramerBolumu({ g, kesfet }: { g: GramerBolum; kesfet: boolean }) {
                 const duz = o.en.replace(/[[\]]/g, "");
                 return (
                   <li key={j}>
-                    <span className="go-tr">
-                      {o.tr.map((p, k) => (k === 0 ? <span key={k}>{p}</span> : <mark key={k}>{p}</mark>))}
-                    </span>
+                    {/* Türkçe tek parça: ek ↔ kelime eşleştirmesi yapılmaz, kalıp bütün olarak öğrenilir */}
+                    <span className="go-tr">{o.tr.join(" ")}</span>
                     <span className="go-ok" aria-hidden="true">
                       →
                     </span>
@@ -62,7 +61,7 @@ function GramerBolumu({ g, kesfet }: { g: GramerBolum; kesfet: boolean }) {
           )}
           {tahmin && !acik && (
             <button type="button" className="dugme" onClick={() => setAcik(true)}>
-              Tahmin ettim, kuralı göster
+              Kuralı göster
             </button>
           )}
           {tahmin && acik && (

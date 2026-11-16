@@ -1,10 +1,10 @@
 "use client";
 /**
- * Ana sayfanın kalbi: Türkçe cümle parçalarına ayrılır, sarı ekler İngilizcede sarı kelimelere dönüşür.
+ * Ana sayfanın kalbi: Türkçe cümle bütün olarak verilir, İngilizce kalıp kutu kutu yerine oturur.
  * Cümleler gerçek motordan gelir.
  */
 import { useCallback, useEffect, useRef, useState } from "react";
-import { M_SUBJ, M_VERB, genItem, orderRows, trSeg, type Kalip, type Kutup, type Soru } from "@ti/motor";
+import { M_SUBJ, M_VERB, genItem, orderRows, type Kalip, type Kutup, type Soru } from "@ti/motor";
 import { SLOT_AD, TAM, turParca } from "@/lib/motor-yardim";
 import { SesDugmesi } from "./Kucukler";
 
@@ -78,11 +78,9 @@ export function Hero() {
     return () => clearTimeout(t);
   }, [faz, oynat, azHareket, yeni]);
 
-  const W = trSeg(soru.meta) || [];
   const { en } = orderRows(soru);
   const m = soru.meta;
   const ekli = (k: string) => k === "fiil" && m.pol === "pos" && (m.form === "past" || (m.form === "simple" && m.third));
-  const ek = soru.chips.find((c) => c[2]);
   const [tur] = turParca(soru.kind);
 
   return (
@@ -106,17 +104,8 @@ export function Hero() {
         </div>
       </div>
 
-      <p className="gosteri-tr" lang="tr" aria-label={soru.tr}>
-        {W.map((w, i) => (
-          <span className="g-kelime" key={soru.tr + i}>
-            {w.map(([t, l, k], j) => (
-              <span className={`g-parca ${k}`} key={j} title={l}>
-                <b>{t}</b>
-                <i>{k === "root" && l.includes("→") ? l.split("→")[1].trim() : l.split(":")[0].split(" → ")[0]}</i>
-              </span>
-            ))}
-          </span>
-        ))}
+      <p className="gosteri-tr gosteri-tr-duz" lang="tr">
+        {soru.tr}
       </p>
 
       <div className="gosteri-ok" aria-hidden="true">
@@ -138,15 +127,7 @@ export function Hero() {
       </p>
 
       <p className="gosteri-aciklama">
-        {ek && (
-          <>
-            Türkçedeki <span className="ek-isaret">{ek[0]}</span> eki, İngilizcede ayrı bir kelime olur:{" "}
-            <span className="ek-isaret" lang="en">
-              {ek[1].replace(/ başa$/, "")}
-            </span>
-            {/ başa$/.test(ek[1]) && " ve cümlenin başına geçer"}.
-          </>
-        )}
+        Kalıp: <b>{tur}</b>. Türkçede {soru.tr.replace(/[.?]$/, "").split(" ").length === 1 ? "tek kelime" : "kısa bir cümle"}, İngilizcede kelimeler hep aynı sırayla dizilir.
       </p>
     </div>
   );

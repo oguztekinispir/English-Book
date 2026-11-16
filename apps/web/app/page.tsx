@@ -41,10 +41,10 @@ export default async function Ana() {
       <main>
         <section className="kahraman" aria-labelledby="baslik">
           <div className="kahraman-metin">
-            <h1 id="baslik">Türkçedeki ek, İngilizcede ayrı bir kelimedir.</h1>
+            <h1 id="baslik">Türkçe konuşanlar için adım adım İngilizce.</h1>
             <p className="giris">
-              Türkçe düşünenler için sıfırdan İngilizce. Hikâyeli dersler, sesli diyaloglar ve günlük tekrar kartlarıyla öğrenirsin; yanlış yaptığında nedenini kendi
-              dilinin ekleriyle anlarsın.
+              Sıfırdan A1'e: hikâyeli dersler, sesli diyaloglar ve günlük tekrar kartları. Kalıpları önce dinler, sonra kullanırsın; yanlış yaptığında
+              Türkçe konuşanların neden o hatayı yaptığını kendi dilinde öğrenirsin.
             </p>
             <div className="cta">
               {user ? (
@@ -83,7 +83,7 @@ export default async function Ana() {
             <li>
               <span className="adim-no">2</span>
               <h3>İngilizcesini yazarsın</h3>
-              <p className="adim-metin">Takılırsan Türkçe cümleyi parçalarına ayırıp hangi ekin nereye gittiğine bakabilirsin.</p>
+              <p className="adim-metin">Takılırsan İngilizce cümlenin kelime sırasını ipucu olarak açabilirsin.</p>
               <div className="mini yaprak">
                 <p className="mini-girdi" lang="en">
                   {ORNEK_CEVAP}
@@ -94,7 +94,7 @@ export default async function Ana() {
             <li>
               <span className="adim-no">3</span>
               <h3>Nedenini kendi dilinle öğrenirsin</h3>
-              <p className="adim-metin">“Yanlış” demekle kalmaz. Hatayı Türkçedeki ekten yola çıkarak anlatır.</p>
+              <p className="adim-metin">“Yanlış” demekle kalmaz. Türkçe konuşanların sık yaptığı hatayı tanır, nedenini Türkçe anlatır.</p>
               <div className="mini yaprak">
                 <ul className="mini-teshis">
                   {ORNEK_TESHIS.map((d, i) => (
@@ -129,7 +129,7 @@ export default async function Ana() {
             </li>
             <li>
               <h3>Cümle motoru</h3>
-              <p>Türkçe cümleyi görür, İngilizcesini yazarsın. Yanlışında neyi neden yanlış yaptığını Türkçedeki eklerle açıklar.</p>
+              <p>Türkçe cümleyi görür, İngilizcesini yazarsın. Yanlışında neyi neden yanlış yaptığını Türkçe açıklar.</p>
             </li>
             <li>
               <h3>Okunuş ve sesler</h3>
@@ -144,7 +144,7 @@ export default async function Ana() {
 
         <section className="program" aria-labelledby="program-baslik">
           <h2 id="program-baslik">A1 programı: {A1_PLAN.length} ünite, {A1_PLAN.reduce((t, x) => t + x.dersSayisi, 0)} ders</h2>
-          <p className="giris">Her ünite bir konu ve Türkçedeki bir ekin İngilizce karşılığı. Program yazıldıkça açılıyor.</p>
+          <p className="giris">Her ünite bir konu ve birkaç yeni kalıp. Program yazıldıkça açılıyor.</p>
           <ol className="program-liste">
             {A1_PLAN.map((x) => {
               const hazir = UNITELER.some((u) => u.kod === x.kod);

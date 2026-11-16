@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Ust } from "@/components/Ust";
 import { Oyunlar } from "@/components/calisma/Oyun";
+import "../pratik/pratik.css";
 import "../uniteler/unite.css";
 import "../calisma.css";
 

@@ -2,9 +2,9 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Türkçeden İngilizce: ekler İngilizcede kelime olur",
+  title: "Türkçeden İngilizce: Türkçe konuşanlar için adım adım İngilizce",
   description:
-    "Türkçe cümleyi gör, İngilizcesini yaz. Yanlış yaparsan nedenini Türkçenin ekleriyle öğren. A1 seviyesi için cümle motoru ve 19 seviyelik cümle yolu.",
+    "Yetişkinler için sıfırdan A1 İngilizce: hikâyeli dersler, sesli diyaloglar, günlük tekrar ve Türkçe açıklamalı alıştırmalar.",
 };
 
 export const viewport: Viewport = { themeColor: "#fafbff", width: "device-width", initialScale: 1 };

@@ -7,7 +7,6 @@ import { bugun, useKalici } from "@/lib/depo";
 import { CumleYolu } from "@/components/CumleYolu";
 import { Serbest, type Zorla } from "@/components/Serbest";
 import { KelimeAra } from "@/components/KelimeAra";
-import { EkRehberi } from "@/components/EkRehberi";
 import { cevapKaydet } from "@/lib/kayit";
 
 type Mod = "yol" | "serbest";
@@ -96,7 +95,6 @@ export function Pratik() {
               window.history.replaceState(null, "", "/pratik");
             }}
           />}
-        <EkRehberi />
       </div>
 
       <aside className="pratik-kenar" aria-label="Yardımcılar">
