@@ -27,6 +27,9 @@ describe("doğal Türkçe: fiille söylenen durumlar", () => {
     expect(dogalDurum("korkmuş", 1, "q", true)).toBe("korkmuş muydun");
     expect(dogalDurum("üşümüş", 0, "pos", false)).toBe("üşüyorum");
     expect(dogalDurum("üşümüş", 0, "neg", false)).toBe("üşümüyorum");
+    expect(dogalDurum("sıcaklamış", 0, "pos", false)).toBe("sıcakladım");
+    expect(dogalDurum("sıcaklamış", 1, "q", false)).toBe("sıcakladın mı");
+    expect(dogalDurum("sıcaklamış", 5, "neg", false)).toBe("sıcaklamadılar");
   });
   it("sıradan sıfat değişmez", () => expect(dogalDurum("yorgun", 0, "neg", false)).toBeNull());
 

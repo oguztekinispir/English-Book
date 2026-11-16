@@ -144,6 +144,7 @@ export const DOGAL: Record<string, { tip: "di" | "yor"; kok: string }> = {
   yorulmuş: { tip: "di", kok: "yorul" },
   korkmuş: { tip: "yor", kok: "kork" },
   üşümüş: { tip: "yor", kok: "üşü" },
+  sıcaklamış: { tip: "di", kok: "sıcakla" },
 };
 
 /** Fiille söylenen durumun doğal Türkçesi (özne hariç). Sıradan sıfat için null döner. */

@@ -1,6 +1,7 @@
 import type { Ders, Kelime, Unite, UniteTaslak } from "./tipler";
 import { A1_01 } from "./a1/01-merhaba";
 import { A1_02 } from "./a1/02-ailem";
+import { A1_03 } from "./a1/03-nasilsin";
 
 export * from "./tipler";
 export * from "./sozluk";
@@ -29,7 +30,7 @@ export const A1_PLAN: UniteTaslak[] = [
 ];
 
 /** Yazılmış (tam) üniteler, sırayla */
-export const UNITELER: Unite[] = [A1_01, A1_02];
+export const UNITELER: Unite[] = [A1_01, A1_02, A1_03];
 
 export const uniteBul = (kod: string): Unite | undefined => UNITELER.find((u) => u.kod === kod);
 
