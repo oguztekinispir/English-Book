@@ -25,16 +25,19 @@ export function orderRows(it: Soru): { tr: Kutu[]; en: Kutu[] } {
     s = m.s,
     p = m.pol,
     sl = slotOf(m.comp),
-    trV = it.tr.replace(/[.?]$/, "").slice(s.tr.length).trim();
+    yalin = it.tr.replace(/[.?]$/, ""),
+    trV = (m.gizli ? yalin.charAt(0).toLocaleLowerCase("tr") + yalin.slice(1) : yalin.slice(s.tr.length)).trim(),
+    // Gizli özne kutuda parantezle gösterilir: (ben) → I
+    kim = m.gizli ? `(${s.tr.toLocaleLowerCase("tr")})` : s.tr;
   let en: Kutu[], tr: Kutu[];
   if (m.form === "be" || m.form === "bePast") {
-    tr = [[s.tr, "kim"], [trV, "durum"]];
+    tr = [[kim, "kim"], [trV, "durum"]];
     en = p === "q" ? [[cap(m.be!), "yar"], [subjLow(s), "kim"], [m.comp, "durum"]] : [[s.en, "kim"], [p === "neg" ? m.be + " not" : m.be!, "yar"], [m.comp, "durum"]];
   } else {
     const v = m.v!;
     let aux: string | null = null,
       vb = v.en;
-    tr = [[s.tr, "kim"], [m.compTr, sl], [trV.slice(m.compTr.length).trim(), "fiil"]];
+    tr = [[kim, "kim"], [m.compTr, sl], [trV.slice(m.compTr.length).trim(), "fiil"]];
     if (m.form === "simple") {
       if (p === "pos") vb = m.third ? v.en3 : v.en;
       else aux = p === "neg" ? (m.third ? "doesn't" : "don't") : m.third ? "Does" : "Do";

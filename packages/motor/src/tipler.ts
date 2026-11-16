@@ -57,6 +57,8 @@ export interface Meta {
   compTr: string;
   /** Durum Türkçede fiille söyleniyorsa yüklemin tamamı: "sıkılmadım" */
   dogal?: string;
+  /** Türkçede özne söylenmez, fiilin ekinde gizli: "Eve gidiyorum" (ben/sen/biz) */
+  gizli?: boolean;
   alt: string[];
 }
 

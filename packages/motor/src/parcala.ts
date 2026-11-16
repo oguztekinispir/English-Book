@@ -42,7 +42,9 @@ export function trSeg(m: Meta | null | undefined): Parcalanmis | null {
               [m.s.kok, `${m.s.kok.toLocaleLowerCase("tr")} → ${m.s.en.replace(/^my /i, "")}`, "root"],
               [m.s.tr.slice(m.s.kok.length), `-${m.s.tr.slice(m.s.kok.length)}: benim → my`, "pers"],
             ]
-          : [[m.s.tr, "kim → " + m.s.en, "pers"]];
+          : m.gizli
+            ? [[`(${m.s.tr.toLocaleLowerCase("tr")})`, `gizli özne: Türkçede söylenmez, fiilin sonundaki ek gösterir → ${m.s.en}`, "pers"]]
+            : [[m.s.tr, "kim → " + m.s.en, "pers"]];
   const cw: Parca[] = COMP_SPLIT[m.compTr] || [[m.compTr, m.compTr + " → " + m.comp, "root"]];
   const pc = (w: string, Q: number): Parca[] => {
     const y = endsV(w) ? "y" : "",

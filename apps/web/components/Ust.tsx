@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { oturum } from "@/lib/supabase/sunucu";
 
-type Aktif = "ana" | "uniteler" | "tekrar" | "oyun" | "gramer" | "pratik" | "panel" | "hesap" | "giris" | "kayit";
+type Aktif = "ana" | "uniteler" | "tekrar" | "oyun" | "gramer" | "pratik" | "panel" | "hesap" | "giris" | "kayit" | "deneme" | "seviye";
 
 export async function Ust({ aktif }: { aktif: Aktif }) {
   const { user, profil } = await oturum().catch(() => ({ user: null, profil: null }));
@@ -15,9 +15,14 @@ export async function Ust({ aktif }: { aktif: Aktif }) {
       </Link>
       <nav aria-label="Ana menü">
         {!user && (
-          <Link href="/" aria-current={aktif === "ana" ? "page" : undefined} className="ust-ikincil">
-            Nasıl çalışır
-          </Link>
+          <>
+            <Link href="/deneme" aria-current={aktif === "deneme" ? "page" : undefined} className="ust-ikincil">
+              Ücretsiz dene
+            </Link>
+            <Link href="/seviye-testi" aria-current={aktif === "seviye" ? "page" : undefined} className="ust-ikincil">
+              Seviye testi
+            </Link>
+          </>
         )}
         {user && (
           <>

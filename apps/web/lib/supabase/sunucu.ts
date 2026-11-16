@@ -35,6 +35,8 @@ export interface Profil {
 export async function oturum() {
   const sb = await supabaseSunucu();
   if (process.env.NODE_ENV !== "production" && process.env.TI_ONIZLEME === "1") {
+    // TI_ONIZLEME_ROL=misafir: giriş yapmamış ziyaretçi gibi göster
+    if (process.env.TI_ONIZLEME_ROL === "misafir") return { sb, user: null, profil: null as Profil | null };
     const s = (await import("./onizleme")).sahteOturum();
     return { sb: s.sb as typeof sb, user: s.user as Awaited<ReturnType<typeof sb.auth.getUser>>["data"]["user"], profil: s.profil as Profil | null };
   }

@@ -365,3 +365,10 @@ li.kotu .bosluk.dolu { background: var(--tamam-acik); border-color: var(--tamam)
 .dyl-anladin li.kotu { background: var(--hata-acik); border-color: #f3c2c4; }
 .dyl-anladin-dugme { display: inline-flex; gap: 6px; align-items: center; }
 .dyl-anladin-sonuc { font-size: 14px; }
+
+/* Ücretsiz deneme dersi */
+.deneme-not { margin: 12px 0 4px; padding: 10px 14px; border-left: 4px solid var(--ek); background: var(--ek-yumusak); border-radius: 0 8px 8px 0; font-size: 15px; max-width: 70ch; }
+.deneme-son { border: 2px solid var(--kobalt); border-radius: 14px; background: var(--kobalt-acik); padding: 22px 24px; display: flex; flex-direction: column; gap: 10px; }
+.deneme-son h2 { margin: 0; font-family: var(--f-baslik); font-size: 26px; }
+.deneme-son p { margin: 0; max-width: 62ch; }
+.deneme-son .cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }

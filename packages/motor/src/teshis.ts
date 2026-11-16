@@ -65,11 +65,16 @@ export function diagnose(it: Soru, user: string): Ipucu[] {
     const sw = tokz(m.s.en);
     if (!sw.every(has)) add(`Özne: “${m.s.tr}” = ${mk(m.s.en)}.${m.s.tr === "Arkadaşım" ? " (-ım eki burada “benim” demek → my)" : ""}`);
     sw.forEach((w) => seen.add(w));
-  } else if (!uSubj) add(`Özne (KİM?) eksik. “${m.s.tr}” = ${mk(m.s.en)}. Türkçede özneyi atabiliriz (“yorgunum”), İngilizcede özne her zaman yazılır.`);
+  } else if (!uSubj)
+    add(
+      m.gizli
+        ? `Özne (KİM?) eksik. Türkçe cümlede “${m.s.tr.toLocaleLowerCase("tr")}” yazmıyor ama fiilin sonundaki ek onu söylüyor. İngilizcede özne her zaman yazılır: ${mk(m.s.en)}.`
+        : `Özne (KİM?) eksik. “${m.s.tr}” = ${mk(m.s.en)}. Türkçede özneyi atabiliriz (“yorgunum”), İngilizcede özne her zaman yazılır.`,
+    );
   else if (uSubj !== subjE) {
     if (["he", "she"].includes(uSubj) && ["he", "she"].includes(subjE))
       add(`“O (erkek)” = ${mk("he")}, “O (kadın)” = ${mk("she")}. Türkçede ikisi de “o”, İngilizcede ayrı.`, [uSubj]);
-    else add(`Özne farklı: ${mk(uSubj)} = ${subjTr(uSubj)}. Burada “${m.s.tr}” var, yani ${mk(m.s.en)}.`, [uSubj]);
+    else add(`Özne farklı: ${mk(uSubj)} = ${subjTr(uSubj)}. ${m.gizli ? `Burada fiilin eki “${m.s.tr.toLocaleLowerCase("tr")}” diyor` : `Burada “${m.s.tr}” var`}, yani ${mk(m.s.en)}.`, [uSubj]);
   }
 
   // 2) soru sırası

@@ -5,7 +5,7 @@ import "../hesap.css";
 
 export const metadata: Metadata = { title: "Kayıt ol" };
 
-export default async function Kayit({ searchParams }: { searchParams: Promise<{ kod?: string }> }) {
+export default async function Kayit({ searchParams }: { searchParams: Promise<{ kod?: string; sonra?: string }> }) {
   const q = await searchParams;
   return (
     <div className="sayfa">
@@ -14,7 +14,7 @@ export default async function Kayit({ searchParams }: { searchParams: Promise<{ 
         <div className="hesap-kart yaprak">
           <h1>Hesap aç</h1>
           <p className="hesap-giris">Ücretsiz. İlerlemen kaydedilir, öğretmenin varsa çalışmalarını görebilir.</p>
-          <KayitFormu ilkKod={q.kod?.slice(0, 6).toUpperCase()} />
+          <KayitFormu ilkKod={q.kod?.slice(0, 6).toUpperCase()} sonra={q.sonra} />
         </div>
       </main>
     </div>

@@ -22,8 +22,10 @@ function tarihVeYas(g: string, a: string, y: string): { iso: string; yas: number
   return { iso: `${Y}-${String(A).padStart(2, "0")}-${String(G).padStart(2, "0")}`, yas };
 }
 
-export function KayitFormu({ ilkKod }: { ilkKod?: string }) {
+export function KayitFormu({ ilkKod, sonra }: { ilkKod?: string; sonra?: string }) {
   const router = useRouter();
+  // Kayıttan sonra gidilecek yer (deneme dersinden gelen sıradaki derse geçer)
+  const hedef = sonra && sonra.startsWith("/") && !sonra.startsWith("//") ? sonra : "/panel";
   const [rol, setRol] = useState<Rol>("ogrenci");
   const [ad, setAd] = useState("");
   const [eposta, setEposta] = useState("");
@@ -59,7 +61,7 @@ export function KayitFormu({ ilkKod }: { ilkKod?: string }) {
       email: eposta.trim(),
       password: sifre,
       options: {
-        emailRedirectTo: `${location.origin}/auth/callback?sonra=/panel`,
+        emailRedirectTo: `${location.origin}/auth/callback?sonra=${encodeURIComponent(hedef)}`,
         data: {
           ad: ad.trim(),
           rol,
@@ -73,7 +75,7 @@ export function KayitFormu({ ilkKod }: { ilkKod?: string }) {
     setBekle(false);
     if (error) return setHata(hataTr(error.message));
     if (data.session) {
-      router.replace("/panel");
+      router.replace(hedef);
       router.refresh();
     } else setBitti(true);
   };

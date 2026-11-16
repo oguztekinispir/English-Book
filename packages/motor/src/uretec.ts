@@ -8,6 +8,10 @@ import type { Ayar, Cip, Ikili, Kalip, Kutup, Malzeme, Meta, Rng, Soru } from ".
 
 export const pick = <T>(a: T[], rng: Rng = Math.random): T => a[Math.floor(rng() * a.length)];
 export const cap = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
+/** Türkçe büyük harf: "işte" → "İşte" */
+export const capTr = (s: string): string => s.charAt(0).toLocaleUpperCase("tr") + s.slice(1);
+/** Ben / Sen / Biz Türkçede genelde söylenmez; kişi fiilin ekinden anlaşılır. O ve Onlar kalır (he / she ayrımı için). */
+export const ozneGizli = (s: { p: number; nz?: 1 }): boolean => !s.nz && (s.p === 0 || s.p === 1 || s.p === 3);
 export const subjLow = (s: { en: string }): string => (s.en === "I" ? "I" : s.en.toLowerCase());
 
 export interface Zorla {
@@ -33,12 +37,14 @@ export function genItem(set: Ayar, force?: Zorla | null, rng: Rng = Math.random,
   }
   const p = s.p,
     third = p === 2,
-    chips: Cip[] = [[s.tr, s.en]];
+    gizli = ozneGizli(s),
+    chips: Cip[] = [[gizli ? `(${s.tr.toLocaleLowerCase("tr")})` : s.tr, s.en]];
   let tr = "",
     en = "",
     kind = "",
     ek: [string, string] = ["", ""];
   const meta = { form, pol, s, third } as Meta;
+  if (gizli) meta.gizli = true;
 
   if (form === "be" || form === "bePast") {
     const [ae, at, alt] = pick(ADJ, rng),
@@ -155,6 +161,8 @@ export function genItem(set: Ayar, force?: Zorla | null, rng: Rng = Math.random,
     chips.push([v.stem, v.en]);
   }
   chips.push([ek[0], ek[1], 1]);
+  // Özneyi düşür: "Ben eve giderim." → "Eve giderim."
+  if (gizli) tr = capTr(tr.slice(s.tr.length).trim());
   return {
     tr,
     en,

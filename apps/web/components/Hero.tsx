@@ -12,12 +12,12 @@ const ILK: Soru = (() => {
   const v = M_VERB.find((x) => x.en === "sleep")!,
     s = M_SUBJ.find((x) => x.en === "We")!;
   return {
-    tr: "Biz iyi uyumadık.",
+    tr: "İyi uyumadık.",
     en: "We didn't sleep well.",
     kind: "Geçmiş zaman · did / -ed · olumsuz",
-    chips: [["Biz", "We"], ["iyi", "well"], ["uyu", "sleep"], ["-medi (geçmiş olumsuz)", "didn't", 1]],
+    chips: [["(biz)", "We"], ["iyi", "well"], ["uyu", "sleep"], ["-medi (geçmiş olumsuz)", "didn't", 1]],
     alts: [],
-    meta: { form: "past", pol: "neg", s, third: false, v, comp: "well", compTr: "iyi", alt: [] },
+    meta: { form: "past", pol: "neg", s, third: false, gizli: true, v, comp: "well", compTr: "iyi", alt: [] },
   };
 })();
 

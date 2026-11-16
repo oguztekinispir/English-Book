@@ -11,12 +11,12 @@ const ORNEK: Soru = (() => {
   const v = M_VERB.find((x) => x.en === "drink")!,
     s = M_SUBJ.find((x) => x.en === "You")!;
   return {
-    tr: `Sen kahve ${aorTR(v, 1, true)}.`,
+    tr: `Kahve ${aorTR(v, 1, true)}.`,
     en: "You don't drink coffee.",
     kind: "Geniş zaman · olumsuz",
     chips: [],
     alts: [],
-    meta: { form: "simple", pol: "neg", s, third: false, v, comp: "coffee", compTr: "kahve", alt: [] },
+    meta: { form: "simple", pol: "neg", s, third: false, gizli: true, v, comp: "coffee", compTr: "kahve", alt: [] },
   };
 })();
 const ORNEK_CEVAP = "You not drink coffee";
@@ -47,14 +47,22 @@ export default async function Ana() {
               dilinin ekleriyle anlarsın.
             </p>
             <div className="cta">
-              <Link href={basla.href} className="dugme ana buyuk">
-                {basla.ad}
-              </Link>
-              <a href="#nasil" className="dugme buyuk">
-                Nasıl çalıştığını gör
-              </a>
+              {user ? (
+                <Link href={basla.href} className="dugme ana buyuk">
+                  {basla.ad}
+                </Link>
+              ) : (
+                <>
+                  <Link href="/deneme" className="dugme ana buyuk">
+                    İlk dersi ücretsiz dene
+                  </Link>
+                  <Link href="/seviye-testi" className="dugme buyuk">
+                    Seviyeni öğren
+                  </Link>
+                </>
+              )}
             </div>
-            {!user && <p className="not kahraman-not">Erken erişim: ücretsiz, kart gerekmez.</p>}
+            {!user && <p className="not kahraman-not">Kayıt gerekmez. İlk ders herkese açık; beğenirsen ücretsiz hesap açarsın.</p>}
           </div>
           <div className="kahraman-gosteri yaprak">
             <Hero />

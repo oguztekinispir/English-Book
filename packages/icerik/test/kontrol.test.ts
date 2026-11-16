@@ -115,11 +115,11 @@ describe("a1-01 Türkçe çekimler", () => {
   };
   it("1.2 kimlik cümleleri", () => {
     const l = hepsi(2);
-    for (const b of ["Ben Türkiye'denim.", "Sen öğrencisin.", "Ben Almanya'danım.", "Arkadaşım Alman.", "Ben öğretmenim.", "Sen İngilizsin."]) expect(l, b).toContain(b);
+    for (const b of ["Türkiye'denim.", "Öğrencisin.", "Almanya'danım.", "Arkadaşım Alman.", "Öğretmenim.", "İngilizsin."]) expect(l, b).toContain(b);
   });
   it("1.3 yaş cümleleri", () => {
     const l = hepsi(3);
-    for (const b of ["Ben yirmi yaşındayım.", "Sen on iki yaşındasın.", "O (kadın) on beş yaşında."]) expect(l, b).toContain(b);
+    for (const b of ["Yirmi yaşındayım.", "On iki yaşındasın.", "O (kadın) on beş yaşında."]) expect(l, b).toContain(b);
   });
   it("yaşta years old'suz cevap da doğru", () => {
     const d = UNITELER[0].dersler[2];

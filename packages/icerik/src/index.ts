@@ -8,6 +8,7 @@ export * from "./ekiBul";
 export * from "./karakterler";
 export * from "./ipa";
 export * from "./gramerRehberi";
+export * from "./seviye";
 
 /** A1 müfredatı: 14 ünite, ~50 ders. Yazılmış üniteler UNITELER'de, diğerleri taslak. */
 export const A1_PLAN: UniteTaslak[] = [

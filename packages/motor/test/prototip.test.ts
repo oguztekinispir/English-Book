@@ -39,6 +39,12 @@ describe("prototiple birebir uyum", () => {
       for (const [h, ok] of x.kontrol) expect(matchAns(s, h).ok, h).toBe(ok);
       // Bilerek ayrılınan yer: prototip "sıkılmış değilim" derdi, yeni motor doğal Türkçe kullanır ("sıkılmadım").
       if (s.meta.dogal) return;
+      // Bilerek ayrılınan yer: ben / sen / biz Türkçe cümlede söylenmez ("Eve giderim").
+      if (s.meta.gizli) {
+        const at = x.tr.slice(s.meta.s.tr.length).trim();
+        expect(s.tr).toBe(at.charAt(0).toLocaleUpperCase("tr") + at.slice(1));
+        return;
+      }
       expect(s.tr).toBe(x.tr);
       expect(trSeg(s.meta)).toEqual(x.seg);
       expect(orderRows(s)).toEqual(x.sira);
