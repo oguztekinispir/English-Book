@@ -17,6 +17,8 @@ export function Pratik() {
   const [zayif, setZayif] = useKalici<Record<string, number>>("zayif", {});
   const [gun, setGun] = useKalici("gun", { d: "", ok: 0, n: 0 });
   const [zorla, setZorla] = useState<Zorla | null>(null);
+  // Ödevden gelindiyse (/pratik?kural=simple-neg) sadece o kalıp
+  const [kilit, setKilit] = useState<{ form: Kalip; pol: Kutup; k: string } | null>(null);
   const [girisli, setGirisli] = useState<boolean | null>(null);
   useEffect(() => {
     supabaseTarayici()
@@ -48,6 +50,16 @@ export function Pratik() {
     .sort((a, b) => b[1] - a[1])
     .slice(0, 3);
 
+  useEffect(() => {
+    const k = new URLSearchParams(window.location.search).get("kural");
+    if (k && RULES[k]) {
+      const [form, pol] = k.split("-") as [Kalip, Kutup];
+      setKilit({ form, pol, k });
+      setMod("serbest");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const calis = (k: string) => {
     const [form, pol] = k.split("-") as [Kalip, Kutup];
     setMod("serbest");
@@ -74,7 +86,16 @@ export function Pratik() {
             ? "Basitten zora 19 seviye. Bir seviyede üst üste 5 doğru yapınca sıradaki açılır. Takıldığın yerde motor durur ve nedenini anlatır."
             : "Hangi kalıpları çalışmak istediğini sen seç. Yanlış yaptığın kural aynı kuraldan yeni bir cümleyle tekrar gelir."}
         </p>
-        {mod === "yol" ? <CumleYolu onSonuc={sonuc} /> : <Serbest onSonuc={sonuc} zorla={zorla} />}
+        {mod === "yol" ? <CumleYolu onSonuc={sonuc} /> : <Serbest
+            onSonuc={sonuc}
+            zorla={zorla}
+            kilit={kilit}
+            kilitAdi={kilit ? RULES[kilit.k].t : undefined}
+            kilidiAc={() => {
+              setKilit(null);
+              window.history.replaceState(null, "", "/pratik");
+            }}
+          />}
         <EkRehberi />
       </div>
 

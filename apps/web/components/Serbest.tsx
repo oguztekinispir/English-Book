@@ -25,7 +25,8 @@ export interface Zorla {
   n: number;
 }
 
-export function Serbest({ onSonuc, zorla }: { onSonuc: Sonuc; zorla: Zorla | null }) {
+/** kilit: ödevden gelindiğinde sadece bu kalıptan cümle gelir */
+export function Serbest({ onSonuc, zorla, kilit, kilitAdi, kilidiAc }: { onSonuc: Sonuc; zorla: Zorla | null; kilit?: { form: Kalip; pol: Kutup } | null; kilitAdi?: string; kilidiAc?: () => void }) {
   const [ayar, setAyar, hazir] = useKalici<Ayar>("serbest-ayar", { be: true, bePast: true, simple: true, past: true, neg: true, q: true });
   const gen = useRef<ReturnType<typeof createFreshGen> | null>(null);
   const [soru, setSoru] = useState<Soru | null>(null);
@@ -35,14 +36,14 @@ export function Serbest({ onSonuc, zorla }: { onSonuc: Sonuc; zorla: Zorla | nul
 
   const yeni = (a: Ayar, f?: { form: Kalip; pol: Kutup } | null) => {
     gen.current ??= createFreshGen();
-    setSoru(gen.current(a, f || null));
+    setSoru(gen.current(a, f || kilit || null));
     setTekrar(!!f);
     setN((x) => x + 1);
   };
   useEffect(() => {
     if (hazir) yeni(ayar);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hazir]);
+  }, [hazir, kilit?.form, kilit?.pol]);
   useEffect(() => {
     if (zorla && hazir) yeni(ayar, zorla);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -50,6 +51,17 @@ export function Serbest({ onSonuc, zorla }: { onSonuc: Sonuc; zorla: Zorla | nul
 
   return (
     <div className="serbest">
+      {kilit && (
+        <p className="odev-kilit" role="status">
+          <span>
+            Ödev: sadece <b>{kilitAdi}</b> cümleleri geliyor.
+          </span>
+          <button type="button" className="dugme sade kucuk" onClick={kilidiAc}>
+            Bütün kalıplara dön
+          </button>
+        </p>
+      )}
+      {!kilit && (
       <fieldset className="ayarlar">
         <legend>Hangi kalıplar gelsin?</legend>
         {KUTULAR.map(([k, l]) => (
@@ -67,7 +79,8 @@ export function Serbest({ onSonuc, zorla }: { onSonuc: Sonuc; zorla: Zorla | nul
           </label>
         ))}
       </fieldset>
-      <p className="not">Kutuların hepsi açıkken zordur. Cümle yolunda geçtiğin kalıpları burada aç. Kesme işaretsiz yazım (dont, didnt, im) da kabul edilir.</p>
+      )}
+      {!kilit && <p className="not">Kutuların hepsi açıkken zordur. Cümle yolunda geçtiğin kalıpları burada aç. Kesme işaretsiz yazım (dont, didnt, im) da kabul edilir.</p>}
       <p className="serbest-seri" aria-live="polite">
         Seri: <b>{seri}</b>
         {tekrar && <span className="pul">Aynı kuraldan yeni cümle</span>}

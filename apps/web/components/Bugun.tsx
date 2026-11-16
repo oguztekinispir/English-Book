@@ -15,6 +15,12 @@ export interface BugunOdev {
   id: string;
   baslik: string;
   son_tarih: string | null;
+  tarif: string;
+  not: string | null;
+  href: string;
+  yapilan: number;
+  gereken: number;
+  gecikti: boolean;
 }
 
 interface Props {
@@ -161,14 +167,28 @@ export function Bugun({ seri, hedef: dbHedef, seviye: dbSeviye, odevler }: Props
       <h3 className="plan-baslik">Bugünün planı</h3>
       <ol className="plan">
         {odevler.map((o) => (
-          <li key={o.id} className="plan-oge odev">
+          <li key={o.id} className={`plan-oge odev${o.gecikti ? " gecikti" : ""}`}>
             <div>
               <b>Ödev: {o.baslik}</b>
-              {o.son_tarih && <small>Son gün {new Date(o.son_tarih).toLocaleDateString("tr-TR", { day: "numeric", month: "long" })}</small>}
+              <small>
+                {o.tarif}{" "}
+                {o.son_tarih &&
+                  (o.gecikti ? "Son günü geçti." : `Son gün ${new Date(o.son_tarih + "T12:00:00Z").toLocaleDateString("tr-TR", { day: "numeric", month: "long" })}.`)}
+              </small>
+              {o.not && <small className="odev-ogretmen-notu">Öğretmenin notu: {o.not}</small>}
+              <span className="odev-cubuk" role="progressbar" aria-valuemin={0} aria-valuemax={o.gereken} aria-valuenow={o.yapilan} aria-label={`${o.yapilan} / ${o.gereken}`}>
+                <i style={{ width: `${(o.yapilan / o.gereken) * 100}%` }} />
+              </span>
+              <small>
+                {o.yapilan} / {o.gereken}
+              </small>
             </div>
+            <Link href={o.href} className="dugme ana">
+              {o.yapilan ? "Devam" : "Başla"}
+            </Link>
           </li>
         ))}
-        <li className={`plan-oge${kart === 0 ? " bitti" : ""}`}>
+        <li className={`plan-oge${kart === 0 && ders?.durum !== "yeni" ? " bitti" : ""}`}>
           <div>
             <b>Günlük tekrar</b>
             <small>

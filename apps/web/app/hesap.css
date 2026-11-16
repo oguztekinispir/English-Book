@@ -148,3 +148,7 @@
   .bugun-hedef { width: 80px; height: 80px; }
 }
 .hedef-not { grid-column: 1 / -1; margin: 0; font-size: 14px; }
+.plan-oge.odev .odev-cubuk { display: block; height: 6px; background: rgba(0,0,0,.08); border-radius: 99px; overflow: hidden; margin-top: 6px; max-width: 260px; }
+.plan-oge.odev .odev-cubuk i { display: block; height: 100%; background: var(--kobalt); }
+.plan-oge.odev.gecikti { border-color: var(--hata); background: var(--hata-acik); }
+.odev-ogretmen-notu { font-style: italic; }

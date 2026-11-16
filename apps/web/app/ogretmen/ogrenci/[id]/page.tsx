@@ -9,6 +9,8 @@ import { oturum } from "@/lib/supabase/sunucu";
 import { once, yuzde } from "@/lib/zaman";
 import { dersler, gunAnahtari, gunluk, kaynaklar, KAYNAK_AD, kartOzeti, seri, tahminiDakika, yas, zorKelimeler } from "@/lib/analiz";
 import { cevaplariGetir } from "@/lib/ogrenci-veri";
+import { ogretmenOdevleri } from "@/lib/odev-veri";
+import { OdevKarti } from "@/components/OdevKarti";
 import "../../../hesap.css";
 import "../../ogretmen.css";
 
@@ -38,6 +40,7 @@ export default async function OgrenciDetayi({ params, searchParams }: { params: 
     // 0006 göçü yoksa hata verir, o zaman gösterilmez
     sb.from("ogrenci_durumu").select("gunluk_hedef, seviye_unite, seviye_tarih").eq("ogrenci_id", id).maybeSingle(),
   ]);
+  const odevler = await ogretmenOdevleri(sb, user.id, id);
   const bd = bugun.error ? null : (bugun.data as { gunluk_hedef: number; seviye_unite: number | null; seviye_tarih: string | null } | null);
   const seviyePlan = bd?.seviye_unite ? A1_PLAN.find((u) => u.sira === bd.seviye_unite) : undefined;
 
@@ -98,6 +101,9 @@ export default async function OgrenciDetayi({ params, searchParams }: { params: 
               {kucuk && <span className={ogr.veli_onayi_at ? "etiket-iyi" : "etiket-uyari"}>{ogr.veli_onayi_at ? "Veli onayı var" : "Veli onayı bekleniyor"}</span>}
             </p>
           </div>
+          <Link href={`/ogretmen/odevler/yeni?ogrenci=${id}`} className="dugme ana">
+            Bu öğrenciye ödev ver
+          </Link>
         </header>
 
         <p className="oneri-kutusu">
@@ -130,6 +136,17 @@ export default async function OgrenciDetayi({ params, searchParams }: { params: 
             <span>/ {kartlar.toplam} kelime öğrenildi</span>
           </div>
         </div>
+
+        {odevler.length > 0 && (
+          <section className="panel-kutu yaprak" aria-labelledby="odev-b">
+            <h2 id="odev-b">Ödevleri</h2>
+            <ul className="odev-liste">
+              {odevler.slice(0, 6).map((o) => (
+                <OdevKarti key={o.id} o={o} tekOgrenci />
+              ))}
+            </ul>
+          </section>
+        )}
 
         <section className="panel-kutu yaprak" aria-labelledby="g-b">
           <h2 id="g-b">Son 14 gün</h2>

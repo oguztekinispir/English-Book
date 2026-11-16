@@ -6,6 +6,8 @@ import { Ust } from "@/components/Ust";
 import { BaglanFormu } from "@/components/PanelParcalari";
 import { Bugun } from "@/components/Bugun";
 import { seriHesapla } from "@/lib/seri";
+import { ogrenciOdevleri } from "@/lib/odev-veri";
+import { gecikti, odevBaglantisi, odevTarifi } from "@/lib/odev";
 import { oturum } from "@/lib/supabase/sunucu";
 import { once, yuzde } from "@/lib/zaman";
 import "../hesap.css";
@@ -24,7 +26,7 @@ export default async function OgrenciPaneli() {
     sb.from("cevaplar").select("dogru, zaman").eq("ogrenci_id", user.id).gte("zaman", hafta),
     sb.from("zayif_kurallar").select("kural, hata, toplam").eq("ogrenci_id", user.id).order("hata", { ascending: false }).limit(3),
     sb.from("ogrenci_durumu").select("yol_en_ust").eq("ogrenci_id", user.id).maybeSingle(),
-    sb.from("odev_atamalari").select("odev_id, durum").eq("ogrenci_id", user.id).neq("durum", "bitti"),
+    ogrenciOdevleri(sb, user.id),
     // Seri için son 120 günün cevap zamanları
     sb.from("cevaplar").select("zaman").eq("ogrenci_id", user.id).gte("zaman", donem).order("zaman", { ascending: false }).limit(8000),
     // 0006 göçü çalıştırılmadıysa bu sorgu hata verir; o zaman hedef tarayıcıda tutulur
@@ -36,8 +38,10 @@ export default async function OgrenciPaneli() {
   const seviye = bd?.seviye_unite && bd.seviye_tarih ? { unite: bd.seviye_unite, tarih: bd.seviye_tarih } : null;
   const ogretmenIds = (bag.data || []).map((b) => b.ogretmen_id as string);
   const ogretmenler = ogretmenIds.length ? ((await sb.from("profiller").select("id, ad").in("id", ogretmenIds)).data ?? []) : [];
-  const odevIds = (atama.data || []).map((a) => a.odev_id as string);
-  const odevler = odevIds.length ? ((await sb.from("odevler").select("id, baslik, son_tarih").in("id", odevIds)).data ?? []) : [];
+  const odevler = atama.map((o) => ({ ...o, il: o.atamalar[0]?.ilerleme ?? { yapilan: 0, gereken: 1, bitti: false } }));
+  const acikOdev = odevler.filter((o) => !o.il.bitti);
+  // En son biten 3 ödev "Ödevlerin" kutusunda görünür (açıklar Bugünün planında)
+  const yakinBiten = odevler.filter((o) => o.il.bitti).slice(0, 3);
 
   const cevaplar = cev.data || [];
   const dogru = cevaplar.filter((c) => c.dogru).length;
@@ -69,7 +73,17 @@ export default async function OgrenciPaneli() {
           seri={seri}
           hedef={hedef}
           seviye={seviye}
-          odevler={odevler.map((o) => ({ id: o.id as string, baslik: o.baslik as string, son_tarih: (o.son_tarih as string | null) ?? null }))}
+          odevler={acikOdev.map((o) => ({
+            id: o.id,
+            baslik: o.baslik,
+            son_tarih: o.son_tarih,
+            tarif: odevTarifi(o.hedef),
+            not: o.aciklama,
+            href: odevBaglantisi(o.hedef),
+            yapilan: o.il.yapilan,
+            gereken: o.il.gereken,
+            gecikti: gecikti(o.son_tarih),
+          }))}
         />
 
         {kucuk && !profil?.veli_onayi_at && (
@@ -100,17 +114,18 @@ export default async function OgrenciPaneli() {
 
           <section className="panel-kutu yaprak" aria-labelledby="odev-b">
             <h2 id="odev-b">Ödevlerin</h2>
-            {odevler.length ? (
+            <p className="not">
+              {acikOdev.length ? `${acikOdev.length} açık ödevin var; Bugünün planında en üstte.` : "Bekleyen ödevin yok."}
+            </p>
+            {yakinBiten.length > 0 && (
               <ul className="liste">
-                {odevler.map((o) => (
-                  <li key={o.id as string}>
-                    <b>{o.baslik as string}</b>
-                    {o.son_tarih && <small>Son gün: {new Date(o.son_tarih as string).toLocaleDateString("tr-TR", { day: "numeric", month: "long" })}</small>}
+                {yakinBiten.map((o) => (
+                  <li key={o.id}>
+                    <b>{o.baslik} ✓</b>
+                    <small>Bitirdin</small>
                   </li>
                 ))}
               </ul>
-            ) : (
-              <p className="not">Bekleyen ödevin yok.</p>
             )}
           </section>
 

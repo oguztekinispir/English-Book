@@ -55,10 +55,20 @@ export default async function OgretmenPaneli() {
       <Ust aktif="panel" />
       <main className="panel">
         <div className="panel-baslik">
-          <h1>Öğrencilerin</h1>
-          <p className="not">
-            {liste.length} öğrenci, bu hafta {aktif} tanesi çalıştı
-          </p>
+          <div>
+            <h1>Öğrencilerin</h1>
+            <p className="not">
+              {liste.length} öğrenci, bu hafta {aktif} tanesi çalıştı
+            </p>
+          </div>
+          <div className="dugmeler">
+            <Link href="/ogretmen/odevler" className="dugme">
+              Ödevler
+            </Link>
+            <Link href="/ogretmen/odevler/yeni" className="dugme ana">
+              Ödev ver
+            </Link>
+          </div>
         </div>
 
         <div className="ogretmen-izgara">
