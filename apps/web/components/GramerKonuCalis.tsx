@@ -9,6 +9,7 @@ import { dersBul, type GramerKonusu, type TestSorusu } from "@ti/icerik";
 import { Gramer } from "@/components/unite/Gramer";
 import { cevapKaydet } from "@/lib/kayit";
 import { oku, yaz } from "@/lib/depo";
+import { useKarisik } from "@/lib/karistir";
 
 type Adim = "on" | "aciklama" | "son" | "sonuc";
 export interface GramerKaydi {
@@ -18,14 +19,6 @@ export interface GramerKaydi {
 }
 export const gramerAnahtari = (kod: string) => `gramer:${kod}`;
 
-const karistir = <T,>(a: T[]): T[] => {
-  const b = [...a];
-  for (let i = b.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [b[i], b[j]] = [b[j], b[i]];
-  }
-  return b;
-};
 
 export function GramerKonuCalis({ k }: { k: GramerKonusu }) {
   const [adim, setAdim] = useState<Adim>("on");
@@ -188,7 +181,7 @@ function TestBlok({ sorular, etiket, bitince }: { sorular: TestSorusu[]; etiket:
   const [secim, setSecim] = useState<number | null>(null);
   const s = sorular[i];
   // Seçenekler karışık sırada; doğru cevap indeksini koru
-  const sira = useMemo(() => karistir(s.secenekler.map((_, j) => j)), [s]);
+  const sira = useKarisik(useMemo(() => s.secenekler.map((_, j) => j), [s]), s.soru);
   const cevaplandi = secim !== null;
   const bildi = secim === s.dogru;
 

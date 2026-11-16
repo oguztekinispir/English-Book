@@ -3,23 +3,16 @@
  * Seviye testi: basamak basamak ilerler, bir basamakta 3'ten az doğru yapılınca biter.
  * Sonuç tarayıcıda saklanır (ti:seviye). Girişsiz de çözülür.
  */
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { A1_PLAN, SEVIYE_GECME, SEVIYE_TESTI, UNITELER, seviyeSonucu, type SeviyeSoru, type SeviyeSonucu } from "@ti/icerik";
 import { konus, sesVar } from "@/lib/ses";
 import { durumGuncelle } from "@/lib/kayit";
+import { useKarisik } from "@/lib/karistir";
 
 const ANAHTAR = "ti:seviye";
 const TOPLAM = SEVIYE_TESTI.reduce((t, b) => t + b.sorular.length, 0);
 
-const karistir = <T,>(a: T[]): T[] => {
-  const b = [...a];
-  for (let i = b.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [b[i], b[j]] = [b[j], b[i]];
-  }
-  return b;
-};
 
 const YONERGE: Record<SeviyeSoru["tur"], string> = {
   cevir: "Bu cümlenin İngilizcesi hangisi?",
@@ -105,7 +98,7 @@ export function SeviyeTesti({ girisli }: { girisli: boolean }) {
 }
 
 function SoruKutusu({ soru, bitince }: { soru: SeviyeSoru; bitince: (dogru: boolean) => void }) {
-  const secenekler = useMemo(() => karistir(soru.secenekler), [soru]);
+  const secenekler = useKarisik(soru.secenekler, soru.soru);
   const dogru = soru.secenekler[0];
   const [secim, setSecim] = useState<string | null>(null);
   const [ses, setSes] = useState(false);

@@ -72,3 +72,4 @@ export function tumKartlar(): Kart[] {
     }
   return out;
 }
+export * from "./beceriler";

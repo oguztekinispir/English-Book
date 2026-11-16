@@ -11,6 +11,7 @@ import { dersler, gunAnahtari, gunluk, kaynaklar, KAYNAK_AD, kartOzeti, seri, ta
 import { cevaplariGetir } from "@/lib/ogrenci-veri";
 import { ogretmenOdevleri } from "@/lib/odev-veri";
 import { OdevKarti } from "@/components/OdevKarti";
+import { OgrenciYazilari, type YaziSatiri } from "@/components/beceri/OgrenciYazilari";
 import "../../../hesap.css";
 import "../../ogretmen.css";
 
@@ -41,6 +42,9 @@ export default async function OgrenciDetayi({ params, searchParams }: { params: 
     sb.from("ogrenci_durumu").select("gunluk_hedef, seviye_unite, seviye_tarih").eq("ogrenci_id", id).maybeSingle(),
   ]);
   const odevler = await ogretmenOdevleri(sb, user.id, id);
+  // 0008 göçü yoksa hata verir; o zaman bölüm görünmez
+  const yaziSorgu = await sb.from("yazilar").select("id, ders, metin, olusturma, ogretmen_notu").eq("ogrenci_id", id).order("olusturma", { ascending: false }).limit(20);
+  const yazilar = (yaziSorgu.error ? [] : yaziSorgu.data) as YaziSatiri[];
   const bd = bugun.error ? null : (bugun.data as { gunluk_hedef: number; seviye_unite: number | null; seviye_tarih: string | null } | null);
   const seviyePlan = bd?.seviye_unite ? A1_PLAN.find((u) => u.sira === bd.seviye_unite) : undefined;
 
@@ -136,6 +140,14 @@ export default async function OgrenciDetayi({ params, searchParams }: { params: 
             <span>/ {kartlar.toplam} kelime öğrenildi</span>
           </div>
         </div>
+
+        {yazilar.length > 0 && (
+          <section className="panel-kutu yaprak" aria-labelledby="yazi-b">
+            <h2 id="yazi-b">Yazdıkları</h2>
+            <p className="not">Yazma derslerinde kendi yazdığı metinler. Bıraktığınız not öğrencinin yazısının altında görünür.</p>
+            <OgrenciYazilari yazilar={yazilar} />
+          </section>
+        )}
 
         {odevler.length > 0 && (
           <section className="panel-kutu yaprak" aria-labelledby="odev-b">

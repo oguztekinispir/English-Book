@@ -49,6 +49,9 @@ const TABLO: Record<string, any[]> = {
   tekrar_kartlari: [...Array(42)].map((_, i) => ({ ogrenci_id: OGRENCI, kutu: [0, 1, 1, 2, 2, 3, 3, 3, 4, 5][i % 10], sonraki: gun((i % 6) - 2) })),
   ogretmen_notlari: [{ id: 1, ogretmen_id: OGRETMEN, ogrenci_id: OGRENCI, metin: "Ders 1.2 bitti. He/she ile is'i bazen karıştırıyor.", olusturma: z(3) }],
   cevaplar: cevaplar(),
+  yazilar: [
+    { id: "y1", ogrenci_id: OGRENCI, ders: "yazma-a1-gec-kalma-mesaji", metin: "Hi Ece! Sorry, I late. The bus is very slow because traffic is terrible. I'm there in ten minutes. See you!", olusturma: z(1), ogretmen_notu: null },
+  ],
   odevler: [
     { id: "o1", ogretmen_id: OGRETMEN, baslik: "Ders 1.2 (Kimsin, nerelisin?)", aciklama: "He / she ile is'e dikkat.", hedef: { tur: "ders", ders: "a1-01-2" }, son_tarih: gun(2), olusturma: z(3) },
     { id: "o2", ogretmen_id: OGRETMEN, baslik: "20 tekrar kartı", aciklama: null, hedef: { tur: "tekrar", adet: 20 }, son_tarih: gun(-1), olusturma: z(3) },

@@ -73,3 +73,12 @@ export async function durumGuncelle(alanlar: Record<string, unknown>): Promise<b
   if (error) console.warn("Durum kaydedilemedi:", error.message);
   return !error;
 }
+
+/** Yazma dersinde öğrencinin kendi metni (0008). Giriş yoksa ya da tablo yoksa false. */
+export async function yaziKaydet(ders: string, metin: string): Promise<boolean> {
+  const id = await kullaniciId();
+  if (!id) return false;
+  const { error } = await supabaseTarayici().from("yazilar").insert({ ders, metin });
+  if (error) console.warn("Yazı kaydedilemedi:", error.message);
+  return !error;
+}
